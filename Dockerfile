@@ -9,6 +9,13 @@ FROM python:3.12-slim AS base
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
+# libgomp1: GNU OpenMP runtime — xgboost/lightgbm's compiled tree-building
+# code needs it at import time (joblib.load() on a Booster triggers this),
+# but python:3.12-slim doesn't ship it and pip install won't catch the gap
+# since the wheel install itself doesn't need it.
+RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
 # Create non-root user
 RUN groupadd -r trader && useradd -r -g trader -d /app -s /sbin/nologin trader
 
