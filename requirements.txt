@@ -6,9 +6,11 @@ joblib>=1.3.0
 xgboost>=2.0.0
 lightgbm>=4.0.0
 tradingview-datafeed>=2.0.0    # TradingView data (pip install tradingview-datafeed)
-# Kotak Neo broker SDK v2 (TOTP flow). NOT on PyPI — install from GitHub:
-#   pip install --upgrade git+https://github.com/Kotak-Neo/kotak-neo-api.git
-neo_api_client @ git+https://github.com/Kotak-Neo/kotak-neo-api.git
+# Kotak Neo broker SDK v2 (TOTP flow). NOT on PyPI, and its GitHub repo is
+# not anonymously clonable from an isolated Docker build sandbox (no access
+# to host git credentials). Vendored instead — see vendor/neo_api_client/
+# and the corresponding COPY step in the Dockerfile. Do NOT add a
+# `neo_api_client @ git+...` line back here; pip install will fail.
 pyotp>=2.9.0                   # TOTP auto-generation for automated login
 python-dotenv>=1.0.0           # loads config/settings.env on startup
 feedparser>=6.0.10             # 24/7 news agent — RSS: MoneyControl, ET, LiveMint, BS

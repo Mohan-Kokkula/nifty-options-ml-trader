@@ -21,6 +21,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
+# Kotak Neo SDK is not on PyPI and its GitHub repo isn't anonymously
+# clonable from an isolated build sandbox (no access to host git
+# credentials — confirmed failing with an auth prompt during `docker
+# build`). Installed instead from a known-working copy vendored from the
+# host's existing venv (see vendor/neo_api_client/); the git-dependency
+# line was removed from requirements.txt accordingly.
+RUN cp -r vendor/neo_api_client /usr/local/lib/python3.12/site-packages/neo_api_client && \
+    find /usr/local/lib/python3.12/site-packages/neo_api_client -name '__pycache__' -type d -prune -exec rm -rf {} +
+
 # Ensure non-root ownership
 RUN chown -R trader:trader /app
 
