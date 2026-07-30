@@ -16,16 +16,19 @@ Pipeline:
   4. Send Telegram notification with training summary
 
 This script only trains/promotes/calibrates — it does NOT restart the bot
-service. If a model was promoted, restart manually (or via a separate cron
-job) to load it:  sudo systemctl restart openclaw-v9-kotak
+service. If the nightly stop/start cron cycle is running (stop ~23:45,
+start ~04:00), a promoted model loads automatically at the next start —
+no manual action needed. Otherwise restart manually:
+  docker compose -f /home/trader/openclaw-v9-docker/docker-compose.yml restart
 
-Cron setup on Hostinger (as trader user):
+Cron setup on Hostinger (as trader user), Docker deployment:
   crontab -e
-  # Daily at 3:30 AM IST (Mon–Fri)
   # — NSE bhavcopy from previous trading day is ready (published ~7:30 PM)
-  # — Training finishes ~3:45 AM, well before bot starts at 4:00 AM
-  # — Bot loads fresh model on its 4:00 AM startup
-  30 3 * * 2-6  cd /home/trader/openclaw-v9-kotak && venv/bin/python scripts/retrain_weekly.py >> logs/retrain.log 2>&1
+  # — Training finishes well before the bot's 04:00 restart
+  # — Bot loads the fresh model automatically on that startup
+  # `docker compose run` reuses the live image's own Python env — no
+  # separate venv to keep in sync with what's actually scoring live.
+  30 2 * * 2-6  cd /home/trader/openclaw-v9-docker && docker compose run --rm -T --name nifty-trader-retrain --entrypoint python nifty-trader scripts/retrain_weekly.py >> logs/retrain.log 2>&1
   # Note: 2-6 = Tue–Sat (trains Mon–Fri session data the next morning)
 
 Usage:
@@ -229,8 +232,9 @@ def main():
     if args.rollback:
         ok = _do_rollback(args.rollback)
         if ok:
-            log.info("Rollback complete — restart manually to load it: "
-                      "sudo systemctl restart openclaw-v9-kotak")
+            log.info("Rollback complete — loads automatically at the next "
+                      "04:00 bot restart, or restart manually: "
+                      "docker compose -f /home/trader/openclaw-v9-docker/docker-compose.yml restart")
         sys.exit(0 if ok else 1)
 
     start = time.time()
@@ -383,7 +387,7 @@ def main():
         _pline("V10", trained_v10, promoted_v10, promote_reason_v10, "v10"),
         _pline("V9",  trained_v9,  promoted_v9,  promote_reason_v9,  "v9"),
         f"<b>Calibrator:</b> {'Refreshed' if recalibrated else ('Refresh FAILED' if any_promoted else 'Not needed')}",
-        f"<b>Restart needed:</b> {'YES — sudo systemctl restart openclaw-v9-kotak' if any_promoted else 'No'}",
+        f"<b>Restart:</b> {'Auto-loads at next 04:00 bot restart' if any_promoted else 'No'}",
         f"<b>Duration:</b> {elapsed/60:.1f} min",
         "",
         "<b>Model files:</b>",
