@@ -1,0 +1,44 @@
+{
+  "ensemble_type": "stacking",
+  "fold_id": 5,
+  "n_trades": 0,
+  "n_test_bars": 4800,
+  "n_bars_traded": 2,
+  "brains_used": [
+    "cat",
+    "lgb",
+    "mlp",
+    "xgb"
+  ],
+  "input_source": "calibrated_isotonic",
+  "weights_summary": {
+    "kind": "stacking",
+    "n_meta_features": 12,
+    "classes": [
+      0,
+      1,
+      2
+    ],
+    "coef_shape": [
+      3,
+      12
+    ],
+    "coef_first_row_head": [
+      4.04793566243813,
+      -2.3237561096649753,
+      -1.5635672218500607,
+      0.8289251431138196,
+      -0.5628672565143285,
+      -0.10544555567651803
+    ],
+    "intercept": [
+      0.19807471694999795,
+      0.06475458069192833,
+      -0.26282929764386453
+    ]
+  },
+  "fit_elapsed_s": 0.468,
+  "transform_elapsed_s": 0.0,
+  "simulate_elapsed_s": 0.033,
+  "n_oof_bars": 86678
+}

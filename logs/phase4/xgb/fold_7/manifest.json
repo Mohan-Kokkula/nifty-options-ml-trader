@@ -1,0 +1,43 @@
+{
+  "brain": "xgb",
+  "phase4_version": "1.0",
+  "fold_idx": 7,
+  "test_start": "2026-01-01",
+  "test_end": "2026-04-01",
+  "cutoff_train_before": "2025-12-29",
+  "embargo_days": 3,
+  "call_thr": 0.32,
+  "put_thr": 0.25,
+  "skip_ceil": 0.65,
+  "k_inner": 3,
+  "seed": 42,
+  "n_oof": 90965,
+  "n_outer_test": 4350,
+  "source_sha256": {
+    "backtest_threshold_sweep.py": "d698ab202dd29c5b24c45321ee631e37ea8a37dc0fc5d0108d0035c1bd1bda02",
+    "backtest_options.py": "f47f390b73d00050721321c93dae68c65f430ff9a91a6729ed5a16ef07ec5438",
+    "phase4_run_single_fold.py": "d435f38a02e4af85f5d47cf7a43e08ce8dcb22268a67d70dd65f079473d7bba6",
+    "brains/__init__.py": "e26ebe1d84c4bec82adced6159d162a73e3d87ccf153cfe74dd335b0076aa8c2",
+    "brains/_base.py": "fb5d128764351899efba4f71d3fc23b40064041c1ecf25eafff72d7ba8dd0cfc",
+    "brains/_hpo.py": "a8d18c10cdaafd8ffe344f823c3865ec5cd686c57ea5ddfa6d5f1d319fdbfd3f",
+    "brains/xgb_adapter.py": "f66a0a74827635c55b0cf5a5846c2105e693793532cf057447493a4ac1fb7f05",
+    "brains/lgb_adapter.py": "124c7996148db1fc1531dc644b4ad9f66d2e6808ed6e7bf23c905813f0e3d55e",
+    "brains/cat_adapter.py": "147dfae3785298cf6f0186a2ba0039377d744823af8946ef893e6880bd56feb6",
+    "brains/mlp_adapter.py": "499344fdd18b28cad793569b9c9755fcd314cb3a51e25d5a9ac5cf5357a83844",
+    "calibrators/__init__.py": "cd326b41ae3eacce9620646bedecead5bf18ac02115bcfaf43fd38192a7a5984",
+    "calibrators/_base.py": "acde3fad59c2c9e5774cda3fd8eb55beffcb361e8f844d27a94561238a55be12",
+    "calibrators/_metrics.py": "7b47911f627ae21b31b6498e28740bb47b9b2717c1959dcc4dffd035f2911d35",
+    "calibrators/noop.py": "70d55d61b369fc28d2ed93ce75e375205547c776d37fecdcdffe2e68c3bd5622",
+    "calibrators/platt.py": "dc6ab3bf638a9eab2f1ad6ed0e01a86cdb1471e31e02037a9f1e43ce65d9aebd",
+    "calibrators/isotonic.py": "80dedd2ab8216208bd18f57b0b8de3ffa339877ac41efede6805b696870aa338"
+  },
+  "preregistration_frozen_at": "2026-07-08T18:51:22+00:00",
+  "preregistration_version": "2.3",
+  "calibrators_evaluated": [
+    "uncal",
+    "noop",
+    "platt",
+    "isotonic"
+  ],
+  "executed_at_utc": "2026-07-10T10:58:41.496932+00:00"
+}

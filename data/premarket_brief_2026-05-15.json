@@ -1,0 +1,76 @@
+{
+  "date": "2026-05-15",
+  "regime": "event_day",
+  "bias": "neutral",
+  "risk_appetite": 0.5,
+  "max_trades_today": 3,
+  "min_confidence_boost": 3,
+  "avoid_otm2_otm3": true,
+  "key_levels": {
+    "support": 23539.6,
+    "resistance": 23839.6
+  },
+  "rationale": "Heuristic: VIX=18.6, US overnight=+0.81%, Asia=-1.20%, FII net=+0cr, news_bias=+0.08, events=[]",
+  "_payload": {
+    "date": "2026-05-15",
+    "global": {
+      "dow": {
+        "last": 50063.46,
+        "change_pct": 0.75
+      },
+      "nasdaq": {
+        "last": 26635.22,
+        "change_pct": 0.88
+      },
+      "sp500": {
+        "last": 7501.24,
+        "change_pct": 0.77
+      },
+      "nikkei": {
+        "last": 61849.81,
+        "change_pct": -1.28
+      },
+      "hangseng": {
+        "last": 26096.72,
+        "change_pct": -1.11
+      },
+      "ftse": {
+        "last": 10372.9,
+        "change_pct": 0.46
+      },
+      "dax": {
+        "last": 24456.26,
+        "change_pct": 1.32
+      },
+      "crude": {
+        "last": 102.66,
+        "change_pct": 1.62
+      },
+      "dxy": {
+        "last": 99.03,
+        "change_pct": 0.56
+      },
+      "us10y": {
+        "last": 4.46,
+        "change_pct": -0.45
+      },
+      "gift_nifty": {
+        "last": 23689.6,
+        "change_pct": 1.18
+      },
+      "india_vix": {
+        "last": 18.61,
+        "change_pct": -4.22
+      }
+    },
+    "fii_dii": {},
+    "news": {
+      "bias_score": 0.077,
+      "confidence": 0.084,
+      "event_count": 6,
+      "dominant_type": "other",
+      "hot_title": "Soy, Corn Rise as US Says China to Buy More American Crops"
+    },
+    "events": []
+  }
+}

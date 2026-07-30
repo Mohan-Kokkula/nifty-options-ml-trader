@@ -1,0 +1,69 @@
+10:43:29 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+10:43:29 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+10:43:29 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+10:43:29 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+10:43:29 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+10:43:31 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+10:43:31 [V9]   5-min features computed: 98 cols
+10:43:32 [V9]   15-min features: 14 cols
+10:43:32 [V9]   30-min features: 7 cols
+10:43:33 [V9]   60-min features: 13 cols
+10:43:34 [V9]   Daily features: 17 cols
+10:43:34 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+10:43:34 [V9]   VIX features: 15 cols (with options-pricing additions)
+10:43:34 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+10:43:37 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+10:43:37 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+10:43:38 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+10:43:38 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+10:43:38 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+10:43:38 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+10:43:38 [V9]   VIX>35 forced SKIP: 3,225 bars
+10:43:38 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+10:43:38 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+11:04:29 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+11:04:30 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+11:04:30 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+11:04:30 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+11:04:30 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+11:04:32 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+11:04:32 [V9]   5-min features computed: 98 cols
+11:04:32 [V9]   15-min features: 14 cols
+11:04:33 [V9]   30-min features: 7 cols
+11:04:34 [V9]   60-min features: 13 cols
+11:04:35 [V9]   Daily features: 17 cols
+11:04:35 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+11:04:35 [V9]   VIX features: 15 cols (with options-pricing additions)
+11:04:35 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+11:04:37 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+11:04:37 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+11:04:38 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+11:04:38 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+11:04:39 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+11:04:39 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+11:04:39 [V9]   VIX>35 forced SKIP: 3,225 bars
+11:04:39 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+11:04:39 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+11:30:57 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+11:30:57 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+11:30:57 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+11:30:57 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+11:30:57 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+11:31:00 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+11:31:00 [V9]   5-min features computed: 98 cols
+11:31:00 [V9]   15-min features: 14 cols
+11:31:00 [V9]   30-min features: 7 cols
+11:31:01 [V9]   60-min features: 13 cols
+11:31:02 [V9]   Daily features: 17 cols
+11:31:02 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+11:31:02 [V9]   VIX features: 15 cols (with options-pricing additions)
+11:31:02 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+11:31:04 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+11:31:04 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+11:31:05 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+11:31:05 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+11:31:06 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+11:31:06 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+11:31:06 [V9]   VIX>35 forced SKIP: 3,225 bars
+11:31:06 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+11:31:06 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980

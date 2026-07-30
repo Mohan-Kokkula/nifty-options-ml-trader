@@ -1,0 +1,41 @@
+{
+  "brain": "cat",
+  "brain_adapter_version": "1.0",
+  "fold_idx": 7,
+  "test_start": "2026-01-01",
+  "test_end": "2026-04-01",
+  "cutoff_train_before": "2025-12-29",
+  "embargo_days": 3,
+  "call_thr": 0.32,
+  "put_thr": 0.25,
+  "skip_ceil": 0.65,
+  "hpo_enabled": false,
+  "n_trials": 0,
+  "k_inner": 0,
+  "seed": 42,
+  "source_sha256": {
+    "backtest_threshold_sweep.py": "d698ab202dd29c5b24c45321ee631e37ea8a37dc0fc5d0108d0035c1bd1bda02",
+    "backtest_options.py": "f47f390b73d00050721321c93dae68c65f430ff9a91a6729ed5a16ef07ec5438",
+    "phase3_run_single_fold.py": "534da6c8f92de353d2c570b1b4c8702047bb0371d2daee4bd1859336b4492683",
+    "brains/__init__.py": "e26ebe1d84c4bec82adced6159d162a73e3d87ccf153cfe74dd335b0076aa8c2",
+    "brains/_base.py": "fb5d128764351899efba4f71d3fc23b40064041c1ecf25eafff72d7ba8dd0cfc",
+    "brains/_hpo.py": "a8d18c10cdaafd8ffe344f823c3865ec5cd686c57ea5ddfa6d5f1d319fdbfd3f",
+    "brains/xgb_adapter.py": "f66a0a74827635c55b0cf5a5846c2105e693793532cf057447493a4ac1fb7f05",
+    "brains/lgb_adapter.py": "124c7996148db1fc1531dc644b4ad9f66d2e6808ed6e7bf23c905813f0e3d55e",
+    "brains/cat_adapter.py": "147dfae3785298cf6f0186a2ba0039377d744823af8946ef893e6880bd56feb6",
+    "brains/mlp_adapter.py": "499344fdd18b28cad793569b9c9755fcd314cb3a51e25d5a9ac5cf5357a83844"
+  },
+  "preregistration_frozen_at": "2026-07-08T18:51:22+00:00",
+  "preregistration_version": "2.3",
+  "params_used": {
+    "iterations": 700,
+    "depth": 5,
+    "learning_rate": 0.03,
+    "l2_leaf_reg": 3.0,
+    "loss_function": "MultiClass",
+    "classes_count": 3,
+    "verbose": false,
+    "early_stopping_rounds": 50
+  },
+  "executed_at_utc": "2026-07-09T14:41:32.680094+00:00"
+}

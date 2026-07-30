@@ -1,0 +1,147 @@
+{
+  "n_bars": 209076,
+  "date_range": [
+    "2015-01-21",
+    "2026-06-04"
+  ],
+  "frozen_strategy_params": {
+    "tp_mult_atr10": 2.0,
+    "sl_mult_atr10": 6.0,
+    "max_hold_bars": 7
+  },
+  "current_label_params": {
+    "fwd_bars": 3
+  },
+  "diagnostics": {
+    "0_Current": {
+      "class_balance": {
+        "CALL(0)": 0.08627006447416251,
+        "PUT(1)": 0.09297576001071381,
+        "SKIP(2)": 0.8207541755151236
+      },
+      "noise_proxy_mae_gt_mfe": NaN,
+      "stability_bar_to_bar_flip_rate": 0.18218342699988044,
+      "tp_sl_overlap": NaN,
+      "ambiguity_near_boundary": NaN,
+      "n_directional_labels": 37476,
+      "pct_directional": 0.1792458244848763
+    },
+    "1_TripleBarrier": {
+      "class_balance": {
+        "CALL(0)": 0.42763875337197954,
+        "PUT(1)": 0.4300254452926209,
+        "SKIP(2)": 0.14233580133539958
+      },
+      "noise_proxy_mae_gt_mfe": 0.1286827238912094,
+      "stability_bar_to_bar_flip_rate": 0.26768862848260194,
+      "tp_sl_overlap": 0.2154363857664495,
+      "ambiguity_near_boundary": NaN,
+      "n_directional_labels": 179317,
+      "pct_directional": 0.8576641986646004,
+      "stability_param_perturbation": NaN
+    },
+    "2_ATRBarrier": {
+      "class_balance": {
+        "CALL(0)": 0.24007537928791445,
+        "PUT(1)": 0.24972737186477645,
+        "SKIP(2)": 0.5101972488473091
+      },
+      "noise_proxy_mae_gt_mfe": 0.00012694568677616545,
+      "stability_bar_to_bar_flip_rate": 0.2326820518952529,
+      "tp_sl_overlap": 0.004790204164566969,
+      "ambiguity_near_boundary": NaN,
+      "n_directional_labels": 102406,
+      "pct_directional": 0.4898027511526909,
+      "stability_param_perturbation": 0.9313574967954237
+    },
+    "3_VolAdjustedForwardReturn": {
+      "class_balance": {
+        "CALL(0)": 0.22105358816889553,
+        "PUT(1)": 0.2129799690064857,
+        "SKIP(2)": 0.5659664428246188
+      },
+      "noise_proxy_mae_gt_mfe": NaN,
+      "stability_bar_to_bar_flip_rate": 0.35481525768264977,
+      "tp_sl_overlap": NaN,
+      "ambiguity_near_boundary": 0.10054388121672495,
+      "n_directional_labels": 90746,
+      "pct_directional": 0.4340335571753812
+    },
+    "4_MetaLabeling": {
+      "class_balance": {
+        "win(1)": 0.13274120415542673,
+        "loss(0)": 0.046504620329449575,
+        "excluded(-1)": 0.8207541755151236
+      },
+      "noise_proxy_mae_gt_mfe": 0.009980902965445177,
+      "stability_bar_to_bar_flip_rate": 0.1924955159631711,
+      "tp_sl_overlap": NaN,
+      "ambiguity_near_boundary": NaN,
+      "n_directional_labels": 37476,
+      "pct_directional": 0.1792458244848763
+    },
+    "5_TrendConditioned": {
+      "class_balance": {
+        "CALL(0)": 0.15826780692188486,
+        "PUT(1)": 0.0,
+        "SKIP(2)": 0.8417321930781151
+      },
+      "noise_proxy_mae_gt_mfe": NaN,
+      "stability_bar_to_bar_flip_rate": 0.14278608154968314,
+      "tp_sl_overlap": NaN,
+      "ambiguity_near_boundary": NaN,
+      "n_directional_labels": 33090,
+      "pct_directional": 0.15826780692188486
+    },
+    "6_POP": {
+      "class_balance": {
+        "CALL(0)": 0.07989439246972393,
+        "PUT(1)": 0.08627963037364403,
+        "SKIP(2)": 0.8338259771566321
+      },
+      "noise_proxy_mae_gt_mfe": 0.0003166105402527128,
+      "stability_bar_to_bar_flip_rate": 0.08604567738849696,
+      "tp_sl_overlap": 0.002685167089904221,
+      "ambiguity_near_boundary": NaN,
+      "n_directional_labels": 34743,
+      "pct_directional": 0.16617402284336796,
+      "stability_param_perturbation_note": "shares ATR-barrier core with method 2; see 2_ATRBarrier for the direct TP/SL/hold perturbation result"
+    },
+    "7_RiskReward": {
+      "class_balance": {
+        "CALL(0)": 0.23487152996996308,
+        "PUT(1)": 0.2446000497426773,
+        "SKIP(2)": 0.5205284202873596
+      },
+      "noise_proxy_mae_gt_mfe": 0.0,
+      "stability_bar_to_bar_flip_rate": 0.23651799593447329,
+      "tp_sl_overlap": 0.004790204164566969,
+      "ambiguity_near_boundary": NaN,
+      "n_directional_labels": 100246,
+      "pct_directional": 0.47947157971264037,
+      "stability_param_perturbation_note": "shares ATR-barrier core with method 2; see 2_ATRBarrier for the direct TP/SL/hold perturbation result"
+    },
+    "8_AdaptiveHolding": {
+      "class_balance": {
+        "CALL(0)": 0.2832223688993476,
+        "PUT(1)": 0.29053071610323516,
+        "SKIP(2)": 0.4262469149974172
+      },
+      "noise_proxy_mae_gt_mfe": 0.00020840627552976874,
+      "stability_bar_to_bar_flip_rate": 0.22980270237952888,
+      "tp_sl_overlap": 0.008353546506375674,
+      "ambiguity_near_boundary": NaN,
+      "n_directional_labels": 119958,
+      "pct_directional": 0.5737530850025828,
+      "stability_param_perturbation_note": "shares ATR-barrier core with method 2; see 2_ATRBarrier for the direct TP/SL/hold perturbation result"
+    }
+  },
+  "current_vs_real_strategy_mismatch": {
+    "current_directional_bars": 37476,
+    "real_strategy_directional_bars": 102406,
+    "pct_current_calls_matching_real_exit_direction": 0.7272654498879283,
+    "pct_agreement_when_BOTH_fire": 0.9862493215125746,
+    "pct_both_fire_together": 0.13217681608601656
+  },
+  "wall_time_s": 132.2
+}

@@ -1,0 +1,21 @@
+{
+  "fold_idx": 1,
+  "test_start": "2024-07-01",
+  "test_end": "2024-10-01",
+  "cutoff_train_before": "2024-06-28",
+  "embargo_days": 3,
+  "ablate_lookahead_weights": false,
+  "call_thr": 0.32,
+  "put_thr": 0.25,
+  "skip_ceil": 0.65,
+  "source_sha256": {
+    "backtest_threshold_sweep.py": "d698ab202dd29c5b24c45321ee631e37ea8a37dc0fc5d0108d0035c1bd1bda02",
+    "backtest_multibrain.py": "e05292955165d354904e98497cba067017eb4c27bba459d2df3274a23f5b5d1a",
+    "backtest_multibrain_v2.py": "f0823be03ef168a998f5027d191d72769280a9b44a00183e898b7d279b23bdd6",
+    "backtest_options.py": "f47f390b73d00050721321c93dae68c65f430ff9a91a6729ed5a16ef07ec5438",
+    "phase1_run_single_fold.py": "f7436de398ff779174ff5e6727901ca2c912b6ef23b81cde611e9476a07a8d2f"
+  },
+  "preregistration_frozen_at": "2026-07-08T15:25:41+00:00",
+  "preregistration_version": "2.1",
+  "executed_at_utc": "2026-07-08T15:54:21.346925+00:00"
+}

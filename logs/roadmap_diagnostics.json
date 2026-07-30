@@ -1,0 +1,171 @@
+{
+  "wall_time_s": 1390.4,
+  "per_fold_metrics": {
+    "1": {
+      "test_range": [
+        "2024-07-01",
+        "2024-10-01"
+      ],
+      "n_trades": 92,
+      "pf": 0.7202686972380111
+    },
+    "2": {
+      "test_range": [
+        "2024-10-01",
+        "2025-01-01"
+      ],
+      "n_trades": 116,
+      "pf": 1.209294572692529
+    },
+    "3": {
+      "test_range": [
+        "2025-01-01",
+        "2025-04-01"
+      ],
+      "n_trades": 104,
+      "pf": 0.736457436084764
+    },
+    "4": {
+      "test_range": [
+        "2025-04-01",
+        "2025-07-01"
+      ],
+      "n_trades": 83,
+      "pf": 1.2091183302475679
+    },
+    "5": {
+      "test_range": [
+        "2025-07-01",
+        "2025-10-01"
+      ],
+      "n_trades": 57,
+      "pf": 0.9264913013520848
+    },
+    "6": {
+      "test_range": [
+        "2025-10-01",
+        "2026-01-01"
+      ],
+      "n_trades": 51,
+      "pf": 0.8274450464829679
+    },
+    "7": {
+      "test_range": [
+        "2026-01-01",
+        "2026-04-01"
+      ],
+      "n_trades": 88,
+      "pf": 0.551674694923611
+    },
+    "8": {
+      "test_range": [
+        "2026-04-01",
+        "2026-05-01"
+      ],
+      "n_trades": 35,
+      "pf": 0.3582143403036202
+    }
+  },
+  "ensemble_diversity": {
+    "corr_p_call": 0.9852116213513825,
+    "corr_p_put": 0.9840658334947417,
+    "signal_agreement_rate": 0.8868215216876036,
+    "n_traded_agree": 552,
+    "pf_when_agree": 0.8217933290213326,
+    "n_traded_disagree": 74,
+    "pf_when_disagree": 0.8701918745102423
+  },
+  "fp_clusters": {
+    "trend_high_adx": {
+      "n": 311,
+      "pct": 74.2
+    },
+    "lunchtime_midday": {
+      "n": 257,
+      "pct": 61.3
+    },
+    "vix_spike": {
+      "n": 115,
+      "pct": 27.4
+    },
+    "expiry_day": {
+      "n": 84,
+      "pct": 20.0
+    },
+    "squeeze_context": {
+      "n": 82,
+      "pct": 19.6
+    },
+    "low_vol_regime": {
+      "n": 61,
+      "pct": 14.6
+    },
+    "unclassified": {
+      "n": 8,
+      "pct": 1.9
+    }
+  },
+  "fn_clusters": {
+    "trend_high_adx": {
+      "n": 1557,
+      "pct": 51.9
+    },
+    "lunchtime_midday": {
+      "n": 1193,
+      "pct": 39.8
+    },
+    "squeeze_context": {
+      "n": 1023,
+      "pct": 34.1
+    },
+    "low_vol_regime": {
+      "n": 932,
+      "pct": 31.1
+    },
+    "vix_spike": {
+      "n": 600,
+      "pct": 20.0
+    },
+    "expiry_day": {
+      "n": 581,
+      "pct": 19.4
+    },
+    "range_low_adx": {
+      "n": 554,
+      "pct": 18.5
+    },
+    "unclassified": {
+      "n": 141,
+      "pct": 4.7
+    }
+  },
+  "regime_segmented_pf": {
+    "range_low_vol": {
+      "n": 7,
+      "pf": null,
+      "note": "too few trades (<10) for a reliable PF"
+    },
+    "range_normal_vol": {
+      "n": 65,
+      "pf": 0.7580888868553419,
+      "net": -8551.682103258874,
+      "win_rate": 0.2923076923076923
+    },
+    "trend_low_vol": {
+      "n": 98,
+      "pf": 0.959905139421149,
+      "net": -2009.4501343000313,
+      "win_rate": 0.42857142857142855
+    },
+    "trend_normal_vol": {
+      "n": 456,
+      "pf": 0.820697196282491,
+      "net": -49816.00320364792,
+      "win_rate": 0.3157894736842105
+    }
+  },
+  "overall_pooled_pf": 0.8282458837730778,
+  "n_fp": 419,
+  "n_fn_sampled": 3000,
+  "n_fn_total": 9790
+}

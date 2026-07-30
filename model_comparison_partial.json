@@ -1,0 +1,68 @@
+{
+  "Existing Ensemble (XGB+LGB)": {
+    "auc": 0.7708825835575398,
+    "precision": 0.4530279682012997,
+    "recall": 0.44104232922559145,
+    "trades": 1937,
+    "win_rate": 0.6974703149199794,
+    "pf": 1.1527303754266212,
+    "expectancy": 2.3102736189984494,
+    "fit_time_s": 58.783154010772705,
+    "importance_stability_spearman": 0.8401664272119816
+  },
+  "XGBoost-only": {
+    "auc": 0.7727461028446142,
+    "precision": 0.45705109807807326,
+    "recall": 0.45037297151239347,
+    "trades": 2034,
+    "win_rate": 0.7099311701081613,
+    "pf": 1.223728813559322,
+    "expectancy": 3.2448377581120997,
+    "fit_time_s": 38.957053422927856,
+    "importance_stability_spearman": 0.8401664272119816
+  },
+  "LightGBM-only": {
+    "auc": 0.7663068219682216,
+    "precision": 0.44844791910353726,
+    "recall": 0.4376453260571569,
+    "trades": 1923,
+    "win_rate": 0.6957878315132605,
+    "pf": 1.1435897435897435,
+    "expectancy": 2.1840873634945375,
+    "fit_time_s": 15.968628168106079,
+    "importance_stability_spearman": 0.9646662768342973
+  },
+  "CatBoost": {
+    "auc": 0.7745832571439414,
+    "precision": 0.45775755797588796,
+    "recall": 0.47002278577373885,
+    "trades": 2302,
+    "win_rate": 0.7145960034752389,
+    "pf": 1.251902587519026,
+    "expectancy": 3.5947002606429166,
+    "fit_time_s": 39.06777572631836,
+    "importance_stability_spearman": 0.933650968712884
+  },
+  "HistGradientBoosting": {
+    "auc": 0.7584005413424029,
+    "precision": 0.4366369510233478,
+    "recall": 0.42819708686355257,
+    "trades": 1839,
+    "win_rate": 0.6998368678629691,
+    "pf": 1.1657608695652173,
+    "expectancy": 2.4877650897226786,
+    "fit_time_s": 37.68027210235596,
+    "importance_stability_spearman": null
+  },
+  "Random Forest": {
+    "auc": 0.7581254867796376,
+    "precision": 0.4579007381037838,
+    "recall": 0.43484482997516133,
+    "trades": 1694,
+    "win_rate": 0.7166469893742621,
+    "pf": 1.2645833333333334,
+    "expectancy": 3.748524203069657,
+    "fit_time_s": 43.77545785903931,
+    "importance_stability_spearman": 0.994178825001818
+  }
+}

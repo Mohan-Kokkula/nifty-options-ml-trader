@@ -1,0 +1,2 @@
+time,year,dir,reason,net_option,gross_option,cost,delta_model,prem_entry,prem_exit,iv,sl_pts,trail,entry_time,hold_min,fold,brain,calibrator
+2026-04-02 11:25:00,2026,PUT,FLOOD_EXIT,973.181426366916,1137.6096870787387,164.42826071182276,1173.250000000071,259.3566343614548,276.85832185497384,0.2501,90.0,False,2026-04-02 10:55:00,30.0,8,cat,isotonic

@@ -1,0 +1,58 @@
+{
+  "protocol_version": "2.5",
+  "code_hash": {
+    "backtest_threshold_sweep.py": "d698ab202dd29c5b24c45321ee631e37ea8a37dc0fc5d0108d0035c1bd1bda02",
+    "backtest_options.py": "f47f390b73d00050721321c93dae68c65f430ff9a91a6729ed5a16ef07ec5438",
+    "phase6_threshold_optimizer.py": "d21b6f4e583ef07d687ce35383cbbaca55e90669f230fc0bd0cd2a5405d6127d",
+    "threshold_opt/__init__.py": "568894696978b7c408b2e0ffac69feb5c36758e1e9ffdfce32364caec46f1e79",
+    "threshold_opt/_base.py": "91c2ddd70ce9c3fba6d1067adeafd71f1e5b985e5ef7710902947f6c1e101f6e",
+    "threshold_opt/_grid.py": "f1469fd211c3e68204515e449d7631ee90b1e1e34f0adbab44f5b7dde62570dd",
+    "threshold_opt/_evaluate.py": "169d7beeba35d6871baf3d37df2927f18c64ca546d08304e26e6e057891dcb45",
+    "threshold_opt/_ranking.py": "85801d05c8fc208be72ab98aea9d9f5a079b6dabd7ea8764e585552d33b53b63",
+    "threshold_opt/_manifest.py": "e4c9d41d5552431e439351cea819c1fd308a61cdde967a84616533fe2c04f83b",
+    "threshold_opt/_stats.py": "e2876142b839b247b0b1d7941c52a3637623d222f3a4b77af2d05aa157d19cf0",
+    "threshold_opt/_visualize.py": "e10471f7c02cbb3ecd85adc49977f04f2a78849174b87af673149a9d34ac83a4"
+  },
+  "data_hash": {
+    "phase5_stacking_fold_1_predictions": "d818c4d863eaffd60ecfcd787d832d73d432a1d874920f62bbdf12a62ce9dab9",
+    "phase5_stacking_fold_2_predictions": "914d91ba984f53022a40cc88049e4bda541b5f6bcb15d5bb96ff134253afc1b2",
+    "phase5_stacking_fold_3_predictions": "67b25a3b01f807254bd0a0c2c6647ab95dab52642afc131c9b00344eb8889d5c",
+    "phase5_stacking_fold_4_predictions": "c68a4bbebc680c59d0128fdf222e6d5e8bf0926bfc6b05db7f0f8b88bd06163f",
+    "phase5_stacking_fold_5_predictions": "f4b6c35fa9ba1f188ead5032ae6682e8859f53703e7ec66bdc0fefa26f4f8ffe",
+    "phase5_stacking_fold_6_predictions": "9d007ecfaedff344385626b13e5ce9f36fcdc0935d1d94730855213c51acdc96",
+    "phase5_stacking_fold_7_predictions": "7c22f60636ffd569bdc23919b9976ddf17f64a83ebc461813b5b6b728c754309",
+    "phase5_stacking_fold_8_predictions": "930cc34f44c31e451a5c520e97f8ed59cb7fae3c0054c0aa820c2ee2fcb19de6"
+  },
+  "random_seed": 42,
+  "timestamp_utc": "2026-07-12T09:01:26+00:00",
+  "target_ensemble": "stacking",
+  "input_source": "calibrated_isotonic",
+  "threshold_values": {
+    "call_thr": 0.4,
+    "put_thr": 0.25,
+    "skip_ceil": 0.6,
+    "min_edge": 0.03
+  },
+  "folds_evaluated": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "n_trades_per_fold": [
+    1,
+    2,
+    4,
+    15,
+    0,
+    0,
+    17,
+    4
+  ],
+  "min_trades_requirement": 50,
+  "passes_min_trades_filter": false
+}

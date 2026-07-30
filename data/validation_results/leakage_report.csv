@@ -1,0 +1,171 @@
+feature,source_timeframe,first_available,future_information_can_enter,verdict
+body_pct,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+body_ratio,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+upper_wick,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+lower_wick,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+is_bullish,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+hl_range,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+close_pos,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+is_doji,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+is_marubozu,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+prev_cp,5m,2015-01-09 09:20:00,NO,clean — rolling/backward on closed 5m bars
+prev_br,5m,2015-01-09 09:20:00,NO,clean — rolling/backward on closed 5m bars
+log_ret,5m,2015-01-09 09:20:00,NO,clean — rolling/backward on closed 5m bars
+gap_up,5m,2015-01-09 09:20:00,NO,clean — rolling/backward on closed 5m bars
+gap_dn,5m,2015-01-09 09:20:00,NO,clean — rolling/backward on closed 5m bars
+consec_bull,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+consec_bear,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+bull_eng,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+bear_eng,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+inside_bar,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+rl1,5m,2015-01-09 09:25:00,NO,clean — rolling/backward on closed 5m bars
+rl2,5m,2015-01-09 09:30:00,NO,clean — rolling/backward on closed 5m bars
+rl3,5m,2015-01-09 09:35:00,NO,clean — rolling/backward on closed 5m bars
+rl5,5m,2015-01-09 09:45:00,NO,clean — rolling/backward on closed 5m bars
+rl8,5m,2015-01-09 10:00:00,NO,clean — rolling/backward on closed 5m bars
+rl13,5m,2015-01-09 10:25:00,NO,clean — rolling/backward on closed 5m bars
+m3,5m,2015-01-09 09:30:00,NO,clean — rolling/backward on closed 5m bars
+m6,5m,2015-01-09 09:45:00,NO,clean — rolling/backward on closed 5m bars
+m9,5m,2015-01-09 10:00:00,NO,clean — rolling/backward on closed 5m bars
+m12,5m,2015-01-09 10:15:00,NO,clean — rolling/backward on closed 5m bars
+m24,5m,2015-01-09 11:15:00,NO,clean — rolling/backward on closed 5m bars
+roc,5m,2015-01-09 09:45:00,NO,clean — rolling/backward on closed 5m bars
+dh5,5m,2015-01-09 09:35:00,NO,clean — rolling/backward on closed 5m bars
+dl5,5m,2015-01-09 09:35:00,NO,clean — rolling/backward on closed 5m bars
+dh10,5m,2015-01-09 10:00:00,NO,clean — rolling/backward on closed 5m bars
+dl10,5m,2015-01-09 10:00:00,NO,clean — rolling/backward on closed 5m bars
+dh20,5m,2015-01-09 10:50:00,NO,clean — rolling/backward on closed 5m bars
+dl20,5m,2015-01-09 10:50:00,NO,clean — rolling/backward on closed 5m bars
+de5,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+de9,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+de13,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+de21,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+de50,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+e9a21,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+e9s,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+e13s,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+eslp,5m,2015-01-09 09:30:00,NO,clean — rolling/backward on closed 5m bars
+a10,5m,2015-01-09 10:00:00,NO,clean — rolling/backward on closed 5m bars
+a14,5m,2015-01-09 10:20:00,NO,clean — rolling/backward on closed 5m bars
+ar,5m,2015-01-09 10:20:00,NO,clean — rolling/backward on closed 5m bars
+ava,5m,2015-01-09 13:20:00,NO,clean — rolling/backward on closed 5m bars
+rsi7,5m,2015-01-09 09:20:00,NO,clean — rolling/backward on closed 5m bars
+rsi14,5m,2015-01-09 09:20:00,NO,clean — rolling/backward on closed 5m bars
+rsis,5m,2015-01-09 09:35:00,NO,clean — rolling/backward on closed 5m bars
+mh,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+mx,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+mslp,5m,2015-01-09 09:25:00,NO,clean — rolling/backward on closed 5m bars
+st5,5m,2015-01-09 09:35:00,NO,clean — rolling/backward on closed 5m bars
+st14,5m,2015-01-09 10:20:00,NO,clean — rolling/backward on closed 5m bars
+stx,5m,2015-01-09 10:20:00,NO,clean — rolling/backward on closed 5m bars
+wr14,5m,2015-01-09 10:20:00,NO,clean — rolling/backward on closed 5m bars
+cci20,5m,2015-01-09 10:50:00,NO,clean — rolling/backward on closed 5m bars
+rv5,5m,2015-01-09 09:40:00,NO,clean — rolling/backward on closed 5m bars
+rv10,5m,2015-01-09 10:05:00,NO,clean — rolling/backward on closed 5m bars
+rv20,5m,2015-01-09 10:55:00,NO,clean — rolling/backward on closed 5m bars
+bbw,5m,2015-01-09 10:50:00,NO,clean — rolling/backward on closed 5m bars
+bbp,5m,2015-01-09 10:50:00,NO,clean — rolling/backward on closed 5m bars
+bbsq,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+park,5m,2015-01-09 10:00:00,NO,clean — rolling/backward on closed 5m bars
+gkv,5m,2015-01-09 10:00:00,NO,clean — rolling/backward on closed 5m bars
+vov,5m,2015-01-09 11:40:00,NO,clean — rolling/backward on closed 5m bars
+bos_bull,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+bos_bear,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+choch_bull,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+choch_bear,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+fvg_bull_prev,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+fvg_bear_prev,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+ob_bull,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+ob_bear,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+liq_sweep_high,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+liq_sweep_low,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+cmf_proxy,5m,2015-01-09 10:50:00,NO,clean — rolling/backward on closed 5m bars
+zscore_20,5m,2015-01-09 10:50:00,NO,clean — rolling/backward on closed 5m bars
+zscore_50,5m,2015-01-09 13:20:00,NO,clean — rolling/backward on closed 5m bars
+vol_regime,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+vol_percentile,5m,2015-01-14 13:05:00,NO,clean — rolling/backward on closed 5m bars
+dow_primary,calendar,2015-01-09 09:15:00,NO,clean — deterministic calendar
+dow_secondary,calendar,2015-01-09 09:15:00,NO,clean — deterministic calendar
+is_morning,calendar,2015-01-09 09:15:00,NO,clean — deterministic calendar
+is_midday,calendar,2015-01-09 09:15:00,NO,clean — deterministic calendar
+is_afternoon,calendar,2015-01-09 09:15:00,NO,clean — deterministic calendar
+dow,calendar,2015-01-09 09:15:00,NO,clean — deterministic calendar
+dte,calendar,2015-01-09 09:15:00,NO,clean — deterministic calendar
+expiry_dow,calendar,2015-01-09 09:15:00,NO,clean — deterministic calendar
+is_expiry,calendar,2015-01-09 09:15:00,NO,clean — deterministic calendar
+expiry_is_tue,calendar,2015-01-09 09:15:00,NO,clean — deterministic calendar
+dte_norm,calendar,2015-01-09 09:15:00,NO,clean — deterministic calendar
+tf15_adx,tf15,2015-01-09 09:25:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf15_diplus,tf15,2015-01-09 09:25:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf15_diminus,tf15,2015-01-09 09:25:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf15_trending,tf15,2015-01-09 09:25:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf15_sideways,tf15,2015-01-09 09:25:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf15_bull_trend,tf15,2015-01-09 09:25:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf15_bear_trend,tf15,2015-01-09 09:25:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf15_rsi,tf15,2015-01-09 09:40:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf15_macd_hist,tf15,2015-01-09 09:25:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf15_ema_bull,tf15,2015-01-09 09:25:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf15_ema_dist,tf15,2015-01-09 09:25:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf15_atr_ratio,tf15,2015-01-09 12:40:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf15_bb_squeeze,tf15,2015-01-09 09:25:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf15_bb_pos,tf15,2015-01-09 14:10:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf30_adx,tf30,2015-01-09 09:40:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf30_bull_trend,tf30,2015-01-09 09:40:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf30_bear_trend,tf30,2015-01-09 09:40:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf30_rsi,tf30,2015-01-09 10:10:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf30_ema_bull,tf30,2015-01-09 09:40:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf30_ema_dist,tf30,2015-01-09 09:40:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf30_close_pos,tf30,2015-01-09 11:40:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf60_adx,tf60,2015-01-09 10:10:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf60_bull_trend,tf60,2015-01-09 10:10:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf60_bear_trend,tf60,2015-01-09 10:10:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf60_rsi,tf60,2015-01-09 12:10:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf60_ema_bull,tf60,2015-01-09 10:10:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf60_ema_dist,tf60,2015-01-09 10:10:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+tf60_close_pos,tf60,2015-01-09 13:10:00,NO (post-fix),FIXED — was partial-HTF-bar values; now completed bars only
+day_gap_pct,daily,2015-01-09 09:15:00,NO,clean — shifted levels / open-vs-prev-close
+day_gap_up,daily,2015-01-09 09:15:00,NO,clean — shifted levels / open-vs-prev-close
+day_gap_down,daily,2015-01-09 09:15:00,NO,clean — shifted levels / open-vs-prev-close
+day_big_gap,daily,2015-01-09 09:15:00,NO,clean — shifted levels / open-vs-prev-close
+day_ema9_bull,daily,2015-01-09 09:15:00,NO (post-fix),FIXED — was same-day close leak; now shift(1)
+day_ema_bull,daily,2015-01-09 09:15:00,NO (post-fix),FIXED — was same-day close leak; now shift(1)
+day_ema9_dist,daily,2015-01-09 09:15:00,NO (post-fix),FIXED — was same-day close leak; now shift(1)
+day_ema_dist,daily,2015-01-09 09:15:00,NO (post-fix),FIXED — was same-day close leak; now shift(1)
+day_ema50_dist,daily,2015-01-09 09:15:00,NO (post-fix),FIXED — was same-day close leak; now shift(1)
+day_week_pos,daily,2015-01-09 09:15:00,NO (post-fix),FIXED — was same-day close leak; now shift(1)
+day_rsi,daily,2015-01-09 09:15:00,NO (post-fix),FIXED — was same-day close leak; now shift(1)
+day_atr_pct,daily,2015-01-21 09:15:00,NO (post-fix),FIXED — was same-day close leak; now shift(1)
+vix_level,daily-VIX,2015-01-09 09:15:00,NO,clean — shift(1) merge (yesterday's VIX)
+vix_regime,daily-VIX,2015-01-09 09:15:00,NO,clean — shift(1) merge (yesterday's VIX)
+vix_pct5,daily-VIX,2015-01-09 09:15:00,NO,clean — shift(1) merge (yesterday's VIX)
+vix_pct20,daily-VIX,2015-01-09 09:15:00,NO,clean — shift(1) merge (yesterday's VIX)
+vix_rising,daily-VIX,2015-01-09 09:15:00,NO,clean — shift(1) merge (yesterday's VIX)
+vix_spike,daily-VIX,2015-01-09 09:15:00,NO,clean — shift(1) merge (yesterday's VIX)
+vix_ideal,daily-VIX,2015-01-09 09:15:00,NO,clean — shift(1) merge (yesterday's VIX)
+vix_danger,daily-VIX,2015-01-09 09:15:00,NO,clean — shift(1) merge (yesterday's VIX)
+vix_change1,daily-VIX,2015-01-09 09:15:00,NO,clean — shift(1) merge (yesterday's VIX)
+vix_change5,daily-VIX,2015-01-09 09:15:00,NO,clean — shift(1) merge (yesterday's VIX)
+vix_rank_30d,daily-VIX,2015-01-09 09:15:00,NO,clean — shift(1) merge (yesterday's VIX)
+vix_zscore_20d,daily-VIX,2015-01-09 09:15:00,NO,clean — shift(1) merge (yesterday's VIX)
+vix_above_ma20,daily-VIX,2015-01-09 09:15:00,NO,clean — shift(1) merge (yesterday's VIX)
+vix_extreme_high,daily-VIX,2015-01-09 09:15:00,NO,clean — shift(1) merge (yesterday's VIX)
+vix_extreme_low,daily-VIX,2015-01-09 09:15:00,NO,clean — shift(1) merge (yesterday's VIX)
+dist_from_open,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+intraday_pos,5m-session,2015-01-09 09:15:00,NO,clean — cumulative within day up to current bar (note: volume-exists switch uses whole-day metadata; benign)
+dist_prev_high,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+dist_prev_low,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+dist_prev_close,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+above_prev_high,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+below_prev_low,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+dist_week_high,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+dist_week_low,5m,2015-01-09 09:15:00,NO,clean — rolling/backward on closed 5m bars
+dist_vwap,5m-session,2015-01-09 09:15:00,NO,clean — cumulative within day up to current bar (note: volume-exists switch uses whole-day metadata; benign)
+above_vwap,5m-session,2015-01-09 09:15:00,NO,clean — cumulative within day up to current bar (note: volume-exists switch uses whole-day metadata; benign)
+below_vwap,5m-session,2015-01-09 09:15:00,NO,clean — cumulative within day up to current bar (note: volume-exists switch uses whole-day metadata; benign)
+vwap_dist_atr,5m-session,2015-01-09 10:20:00,NO,clean — cumulative within day up to current bar (note: volume-exists switch uses whole-day metadata; benign)
+bars_above_vwap,5m-session,2015-01-09 09:15:00,NO,clean — cumulative within day up to current bar (note: volume-exists switch uses whole-day metadata; benign)
+bars_below_vwap,5m-session,2015-01-09 09:15:00,NO,clean — cumulative within day up to current bar (note: volume-exists switch uses whole-day metadata; benign)
+intraday_range_pct,5m-session,2015-01-09 09:15:00,NO,clean — cumulative within day up to current bar (note: volume-exists switch uses whole-day metadata; benign)
+intraday_range_atr,5m-session,2015-01-09 10:20:00,NO,clean — cumulative within day up to current bar (note: volume-exists switch uses whole-day metadata; benign)
+day_move_pct,5m-session,2015-01-09 09:15:00,NO,clean — cumulative within day up to current bar (note: volume-exists switch uses whole-day metadata; benign)
+day_move_atr,5m-session,2015-01-09 10:20:00,NO,clean — cumulative within day up to current bar (note: volume-exists switch uses whole-day metadata; benign)

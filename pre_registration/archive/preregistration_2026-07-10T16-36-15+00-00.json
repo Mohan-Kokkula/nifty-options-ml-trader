@@ -1,0 +1,435 @@
+{
+  "code_manifest": {
+    "backtest.py": {
+      "sha256": "5545e4c173f9483f7d770770e5853767862119c6ef15e7b864a1ea37c45a579a",
+      "size": 28118
+    },
+    "backtest_execution_variations.py": {
+      "sha256": "8e2312c0566ec94c51ff70fd56b1f9098ec97fbe21fc5ae3ce0ac108f282464a",
+      "size": 6665
+    },
+    "backtest_multibrain.py": {
+      "sha256": "e05292955165d354904e98497cba067017eb4c27bba459d2df3274a23f5b5d1a",
+      "size": 8655
+    },
+    "backtest_multibrain_v2.py": {
+      "sha256": "f0823be03ef168a998f5027d191d72769280a9b44a00183e898b7d279b23bdd6",
+      "size": 9229
+    },
+    "backtest_options.py": {
+      "sha256": "f47f390b73d00050721321c93dae68c65f430ff9a91a6729ed5a16ef07ec5438",
+      "size": 30434
+    },
+    "backtest_rf_alone.py": {
+      "sha256": "03a60019293c480a707b325c0f307a201c35848695a0da2db68bbde03aedf9ef",
+      "size": 3499
+    },
+    "backtest_threshold_sweep.py": {
+      "sha256": "d698ab202dd29c5b24c45321ee631e37ea8a37dc0fc5d0108d0035c1bd1bda02",
+      "size": 13134
+    },
+    "backtest_walkforward_options.py": {
+      "sha256": "6ee46de400652b6a36ec4b62f2cc7a8e15623faf4c84c3b0399e57e299639885",
+      "size": 15258
+    },
+    "cross_asset_features.py": {
+      "sha256": "49509e151efed4c026a0dc3d1a9418ee1d1d268749d8214c1b88c374206f32ba",
+      "size": 6665
+    },
+    "feature_audit.py": {
+      "sha256": "8ff9e4f711250997a19fef9a01db5ff9290ad17aeb7ad5b4190745de4d8a44ef",
+      "size": 6315
+    },
+    "loss_analysis.py": {
+      "sha256": "5436a1e6dc87fb000605748d012a370779c3feb31d1a4d2fe777e0f4354d535e",
+      "size": 7850
+    },
+    "main.py": {
+      "sha256": "74cda30fd003778fffba7b080a65986e548b5eb534b6590e4f52d91d2edb8cab",
+      "size": 46174
+    },
+    "oi_ic_study.py": {
+      "sha256": "a8600326a4c1acdf4165d0c5267d0587577a92a6b5f9dfe406262c3edef3ffd5",
+      "size": 9443
+    },
+    "phase1_finish_avg4.py": {
+      "sha256": "1f1d670ffaebbc990c58439b5affdcbaff07484a4ccedc3dfb4f9ad5469d90ef",
+      "size": 8800
+    },
+    "phase1_leakage_audit.py": {
+      "sha256": "7ad2537fd52f28041fdd034226bfb4a7a971769ab067e7ec49c9b0801f645232",
+      "size": 9535
+    },
+    "phase1_run_single_fold.py": {
+      "sha256": "f7436de398ff779174ff5e6727901ca2c912b6ef23b81cde611e9476a07a8d2f",
+      "size": 11226
+    },
+    "phase2_launcher.py": {
+      "sha256": "a94d8cb76ff63dbb90b4d982a523ee7c735f0ecaf047912ef97029cdddf892c4",
+      "size": 14906
+    },
+    "phase2_run_single_fold.py": {
+      "sha256": "129e6666916a045eafdbd5194cecc9e4a72814935d83ddea8a17a1092b86c256",
+      "size": 16158
+    },
+    "phase2_xgb_hpo.py": {
+      "sha256": "e0f39b9da173ec9764fcf6e7ff2fa037018b2e48f4a7cdf08d3602465755d3cf",
+      "size": 14954
+    },
+    "phase3_arch_diversity.py": {
+      "sha256": "6ee54a541754ca7edcb06f4c1103bb00f035cddf3e060a72a1eab767652f3dbb",
+      "size": 21733
+    },
+    "phase3_catboost.py": {
+      "sha256": "056ae7f9bf40c28dc91329d00c866d899422907a047b41d130de24b1f1310eaf",
+      "size": 6273
+    },
+    "phase3_run_single_fold.py": {
+      "sha256": "534da6c8f92de353d2c570b1b4c8702047bb0371d2daee4bd1859336b4492683",
+      "size": 10357
+    },
+    "phase4_calibration.py": {
+      "sha256": "bb9bdfd395d0f887cf0165a8f4af99fe9a49f21ab8270a2c53aed0e4dd2365a5",
+      "size": 15317
+    },
+    "phase4_run_single_fold.py": {
+      "sha256": "d435f38a02e4af85f5d47cf7a43e08ce8dcb22268a67d70dd65f079473d7bba6",
+      "size": 17635
+    },
+    "phase5_ensemble.py": {
+      "sha256": "562047fd883c1b6cddff28d7698195056267afc50133f218710e9cb8937b6e79",
+      "size": 7976
+    },
+    "phase5_run_single_fold.py": {
+      "sha256": "1c6553a943187dbce8c751b14e3d56305ae0fdaf5c25f2efda35fe4e474ef043",
+      "size": 12522
+    },
+    "phase5_target_audit.py": {
+      "sha256": "5ade1fd0db9a41422e00ecbbe1c58bea63425e2d4d287f27f0c797c0c6836908",
+      "size": 8424
+    },
+    "phase6_final_report.py": {
+      "sha256": "a24ca1f07c0d639460cc3a3359fb287cb7569c587fcb7bab5511d1fa42091c8b",
+      "size": 9988
+    },
+    "stat_utils/__init__.py": {
+      "sha256": "355bfd8b838c70aa27a60f2526b0832e1e4f9cf1cc5822f56bed81ff26a01288",
+      "size": 2033
+    },
+    "stat_utils/_errors.py": {
+      "sha256": "4fc043e329bbc968e908a5abfaa27b6782caaa8e17a3fb0ffa50d0e48b071f10",
+      "size": 802
+    },
+    "stat_utils/_rng.py": {
+      "sha256": "ce180071d1457d89f6f039671d8d300f2a4a8286a9fdfb2ca24e8ef9ac212842",
+      "size": 2383
+    },
+    "stat_utils/_types.py": {
+      "sha256": "0c93eae02da0276dbf2c21e6caf86af2589d6c7c1f3aeb28e3e7828df4fabcfe",
+      "size": 6447
+    },
+    "stat_utils/_validation.py": {
+      "sha256": "a1c71aadbac52e332175f50637b9049181196f03163c71c710eab78e2088d2f1",
+      "size": 3833
+    },
+    "stat_utils/block_length.py": {
+      "sha256": "63a7bf8c6ae10ff8f729e1b91ed93857762e318d332fe8e435d58a8aacbb9a7f",
+      "size": 2427
+    },
+    "stat_utils/bootstrap.py": {
+      "sha256": "8c3e60bc39e5087e58312b3a09b41f4e8aac6120564723b78a5c268a0cc3dd0e",
+      "size": 12849
+    },
+    "stat_utils/dm.py": {
+      "sha256": "b5b04f88781367b65b835ebad6123faea26f927f3abdd6ae2b8ae66bfbc501ce",
+      "size": 4424
+    },
+    "stat_utils/dsr.py": {
+      "sha256": "7367b89d58c08d19a9a23cc62e039d6c47dfe731bf23699293c102b34f99034e",
+      "size": 4257
+    },
+    "stat_utils/hac.py": {
+      "sha256": "863c63db36580ce75dc35d02146a17a376cd7bdd7ab3d2c8cdd4c08b60be3afb",
+      "size": 2354
+    },
+    "stat_utils/helpers.py": {
+      "sha256": "0c4c2c5c71101c8ad09936c560c3d2d9c75092973e285df1aaf67005431eea32",
+      "size": 5061
+    },
+    "stat_utils/metrics.py": {
+      "sha256": "9d3ddb4352815c14b37b046259063f352291d20ed8f32658320239fd51115033",
+      "size": 3434
+    },
+    "stat_utils/mht.py": {
+      "sha256": "226597c8d9b1df1cad1a5d3700a8dc1d51cfc4f9024f0eb2d9a2c945210e660d",
+      "size": 4964
+    },
+    "stat_utils/pbo.py": {
+      "sha256": "3af4ebe8c7bd9ab418957a177333eebe50b7e6f5f668eb84258b9a326a0f65ee",
+      "size": 5867
+    },
+    "stat_utils/spa.py": {
+      "sha256": "e6f1ae608ea11827502a736bf832285f94093c8d1d40f22eae4555755807a14f",
+      "size": 5390
+    },
+    "stat_utils/tests/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "stat_utils/tests/conftest.py": {
+      "sha256": "a82db41fd4e34d9293d61a999077d8b8128cc2185ea659097ef9ac923b719298",
+      "size": 1305
+    },
+    "stat_utils/tests/test_benchmarks.py": {
+      "sha256": "2086bfc5e8d2d33820f5b4ea9c5f670389824e0d338a1f0c832f47e63c321394",
+      "size": 3383
+    },
+    "stat_utils/tests/test_bootstrap.py": {
+      "sha256": "bd36389ee45e9a8c86e9e4d19c50e4c563a81d7b07f8ba755e92a144cc434d7d",
+      "size": 5638
+    },
+    "stat_utils/tests/test_dm.py": {
+      "sha256": "e08c6b750d616f11ac14945ade26404fcac298cdb9ee6f8d46f933de7a0afa68",
+      "size": 2509
+    },
+    "stat_utils/tests/test_dsr.py": {
+      "sha256": "0c428622034298fed68dcbd15db6d45180b958b4ea3757f0bb684cc9aed50c4b",
+      "size": 2653
+    },
+    "stat_utils/tests/test_hac.py": {
+      "sha256": "52d7d7c25ce93cab22f85bf9d2f2bcc2e733768238558272f196db9469b13eb8",
+      "size": 2093
+    },
+    "stat_utils/tests/test_helpers.py": {
+      "sha256": "a3dba256b701f179d85a386c85335b2e8e4aac0c2fb3732a51ee55c8dbdb7af2",
+      "size": 3643
+    },
+    "stat_utils/tests/test_metrics.py": {
+      "sha256": "ed4ca9cd9cd01b5cf3267277a852fe873345fd21379fe49aac090876fa23eb36",
+      "size": 2539
+    },
+    "stat_utils/tests/test_mht.py": {
+      "sha256": "713bf56a7d6de172833aacc3cc6252c1ca679a162fb41d644023a7006e62242f",
+      "size": 3913
+    },
+    "stat_utils/tests/test_pbo.py": {
+      "sha256": "a2ffbd24f7d94340c0a89b0580cc7e124ce3d00bf7b6eb81c58e23c591b938b1",
+      "size": 3033
+    },
+    "stat_utils/tests/test_spa.py": {
+      "sha256": "91e846db343e5c5e27b26e21199b2976ff260fc9dfd3791c51a47199ede95529",
+      "size": 2442
+    },
+    "stat_utils/tests/test_white_rc.py": {
+      "sha256": "d541e68f888395b67b522af4e344642e81c8a3092ba7d1a653f2a5dde890634b",
+      "size": 3138
+    },
+    "stat_utils/white_rc.py": {
+      "sha256": "b314c58bd8a80b28dde80e0c82c39c464f8337f6d0d571c5e95f9b42b205a79b",
+      "size": 5767
+    },
+    "test_chain_oi.py": {
+      "sha256": "725b300a2f8aea7965a499d1870df071f12826709766f801422a7d96869f4512",
+      "size": 1691
+    },
+    "test_kotak_quote.py": {
+      "sha256": "887ebc79a0bd81528a130b6921fd272ffa773ab5f07b4f99add2ab3d17c97b8c",
+      "size": 2194
+    },
+    "test_kotak_raw.py": {
+      "sha256": "f71cea80389f2eae5e468231745675fbe30cf8e2ddf9e7d0f099c3094f301dff",
+      "size": 1826
+    },
+    "test_quotes_depth.py": {
+      "sha256": "2c053c0cc7b67f08bc2f1add55445c9999c3c76a595948a89d34c4d8c936a8e9",
+      "size": 2336
+    },
+    "test_sdk_methods.py": {
+      "sha256": "3434c798f29f62159034e296069178af61c92a9c6aaf3bc49ce4c338a6f0d43d",
+      "size": 464
+    },
+    "test_spot.py": {
+      "sha256": "2fe9b9951a069638bc24f2703d4f094ed3b7a99293ace85386e1586085b30a9f",
+      "size": 2001
+    },
+    "theta_cost_proof.py": {
+      "sha256": "f6642256e1dba659b5272733f60a4127d28acd6906b23c810a6aed07519ce48b",
+      "size": 11204
+    },
+    "trade_detail.py": {
+      "sha256": "45fbe6b7faab787d097bef6bf39285bffe5dc2c0b34aa10c8459af8377f02c8c",
+      "size": 12796
+    },
+    "validate_confidence_edge.py": {
+      "sha256": "62c14e473ffa6913e88f002ccb0a3406380c7da16b7a9d577a8a8b2f6950ec7f",
+      "size": 6435
+    }
+  },
+  "data_manifest": {
+    "data/cross_asset_daily.csv": {
+      "mtime_utc": "2026-06-16T16:00:54.296300+00:00",
+      "sha256": "8afcfa356ad5253e58dbb24a267810fcebb457b65dd9af2ed0f45efcd9cc2ac5",
+      "size": 162250
+    },
+    "data/india_vix.csv": {
+      "mtime_utc": "2026-06-04T15:18:53.934820+00:00",
+      "sha256": "79f3a4d9474a089f13681b34674091bc86b5d9e473dff0771d3c2230368e1235",
+      "size": 112688
+    },
+    "data/nifty_15min.csv": {
+      "mtime_utc": "2026-06-04T15:18:50.478663+00:00",
+      "sha256": "14caeab6775cf662e5f8076d5376d1c565182b3344b473f95f69f43494547f5f",
+      "size": 4081311
+    },
+    "data/nifty_30min.csv": {
+      "mtime_utc": "2026-06-04T15:18:51.760562+00:00",
+      "sha256": "fa2a6f93e9c96f6f9ee83a00043bd52124d17863dc3ce006b2d9605e593dcd92",
+      "size": 2125674
+    },
+    "data/nifty_5min.csv": {
+      "mtime_utc": "2026-06-04T15:18:48.634803+00:00",
+      "sha256": "6e108e52c1e358280f4b6418cf0089afc235af5b1009e9bf88533c9d86c6e22c",
+      "size": 12227596
+    },
+    "data/nifty_60min.csv": {
+      "mtime_utc": "2026-06-04T15:18:52.686353+00:00",
+      "sha256": "23e9614899d41b5609ef2394d30499cae9588ac11de60e5f617a653f76b2d808",
+      "size": 1145464
+    },
+    "data/nifty_day.csv": {
+      "mtime_utc": "2026-06-04T15:18:53.537447+00:00",
+      "sha256": "00e6ca4246a2c9d5211696fa4017bc06cd66302fd127ac4938608f02c5d7c16c",
+      "size": 164968
+    },
+    "data/nifty_expiry_history.csv": {
+      "mtime_utc": "2026-04-17T14:45:07+00:00",
+      "sha256": "c75ae6fd2664db95a004ea45d8ddadc5a744bc4a0ddf15d9468d07481d6c26e0",
+      "size": 2632
+    },
+    "pytest.ini": {
+      "mtime_utc": "2026-07-08T13:56:43.379551+00:00",
+      "sha256": "580671cfbcda29cccce79dfe41d173bedcb739876ab30a940aaf089ed841de40",
+      "size": 132
+    },
+    "requirements-test.txt": {
+      "mtime_utc": "2026-07-08T13:52:57.199749+00:00",
+      "sha256": "3dd90086061e636ad2830efe6f2a9f76c307a586600bbcd93dd1d32cc61c9d54",
+      "size": 175
+    }
+  },
+  "frozen_at_utc": "2026-07-10T16:36:15+00:00",
+  "protocol": {
+    "bootstrap": {
+      "block_unit": "outer_fold",
+      "ci_level": 0.9,
+      "method": "block_bootstrap",
+      "n_resamples": 10000,
+      "seed": 20260708
+    },
+    "correction_method": "holm_bonferroni",
+    "decision_tree_reference": "See \u00a74 of the protocol document.",
+    "diebold_mariano": {
+      "lag": 5,
+      "two_sided": true,
+      "variance_estimator": "newey_west"
+    },
+    "family_wise_error_rate": 0.1,
+    "post_hoc_threshold_changes": "FORBIDDEN",
+    "primary_hypotheses": [
+      {
+        "accept_criterion": "PF_LB90 > 1.00",
+        "description": "Current avg4 ensemble has a post-friction PF > 1.",
+        "effect_size": null,
+        "id": "H_edge",
+        "null": "PF <= 1.00",
+        "phase": 1,
+        "test": "block_bootstrap_pf_lb90"
+      },
+      {
+        "accept_criterion": "LB90(dPF) > +0.08 AND DM_p < holm_alpha",
+        "description": "Nested purged WF-HPO on PF objective improves PF.",
+        "effect_size": 0.08,
+        "id": "H_hpo",
+        "null": "PF(tuned) - PF(current) <= 0",
+        "phase": 2,
+        "test": "block_bootstrap_delta_pf + diebold_mariano"
+      },
+      {
+        "accept_criterion": "LB90(dPF) > +0.08 AND SPAResult.pvalue_lower < holm_alpha",
+        "description": "At least one non-GBDT architecture (linear, kernel SVM, FT-Transformer, temporal CNN, HMM, TabPFN) exceeds best GBDT PF by the pre-registered effect.",
+        "effect_size": 0.08,
+        "id": "H_arch",
+        "null": "max_nongbdt_PF - best_gbdt_PF <= 0",
+        "phase": 3,
+        "primary_spa_field": "pvalue_lower",
+        "spa_semantic_note": "Hansen (2005) SPA reports three p-values. For a signal-dominated scenario, pvalue_consistent and pvalue_upper are bounded away from zero by the recentring construction (bootstrap distribution centred at the observed max), so they cannot serve as the decisive rejection metric. pvalue_lower (recentring all models to zero, Hansen's least-favourable null) is the operational rejection p-value; pvalue_consistent and pvalue_upper are reported alongside as supplementary conservatism checks and MUST be published in the final results table.",
+        "supplementary_spa_fields": [
+          "pvalue_consistent",
+          "pvalue_upper"
+        ],
+        "test": "block_bootstrap + White_reality_check + Hansen_SPA"
+      },
+      {
+        "accept_criterion": "LB90(dPF) > +0.05 AND DM_p < holm_alpha",
+        "description": "Some ensemble construction (stacking, uncertainty-weighted, min-variance) beats simple mean.",
+        "effect_size": 0.05,
+        "id": "H_ens",
+        "null": "PF(best_ens) - PF(mean) <= 0",
+        "phase": 9,
+        "test": "block_bootstrap + diebold_mariano"
+      },
+      {
+        "accept_criterion": "LB90(dPF_isotonic) > +0.05",
+        "description": "Fitting isotonic (per-class) calibration OOF and re-simulating trades increases PF.",
+        "effect_size": 0.05,
+        "id": "H_cal",
+        "null": "PF(cal) - PF(uncal) <= 0",
+        "phase": 4,
+        "test": "block_bootstrap_delta_pf"
+      },
+      {
+        "accept_criterion": "Skill(alt) >= 1.5 x Skill(A) AND absolute Skill gap >= 0.02",
+        "description": "An alternative target formulation shows higher Skill than Target A within the same metric family (classification-only comparison; regression targets compared only to other regression targets).",
+        "effect_size": 0.02,
+        "id": "H_target",
+        "null": "Skill(alt) - Skill(A) <= 0",
+        "phase": 5,
+        "test": "block_bootstrap_delta_skill"
+      },
+      {
+        "accept_criterion": "LB90(high_capacity_gap) > +0.05 OR LB90(Bayes_gap) > +0.02",
+        "description": "Feature set contains extractable information beyond what current models use. Measured by k-NN Bayes lower bound vs achieved error, MINE MI vs Fano bound, and high-capacity ceiling gap.",
+        "effect_size": 0.05,
+        "id": "H_info",
+        "null": "Bayes_bound == achieved_error AND high_capacity_gap == 0",
+        "phase": 8,
+        "test": "block_bootstrap_gap + permutation_test"
+      }
+    ],
+    "protocol_version": "2.4",
+    "purpose": "Test whether the current OpenClaw architecture is exhausted, using pre-registered CI-based decisions and FWE control.",
+    "sanity_gates": {
+      "G1_zero_trade_fold": "Any fold with 0 trades invalidates that phase.",
+      "G2_manifest_drift": "code/data SHA mismatch invalidates the run.",
+      "G3_baseline_drift": "Phase 2 'current' PF must match logs/sweep_A_current.csv within +/-0.05, else Phase 2 is invalid.",
+      "G4_trade_count_min": "Any config with <100 trades in an arm is UNDECIDED.",
+      "G5_ci_wider_than_effect": "If any 90% CI half-width exceeds 2x the pre-reg effect, declare UNDECIDED rather than force a NO."
+    },
+    "undecided_state_permitted": true
+  },
+  "runtime_environment": {
+    "packages": {
+      "catboost": "1.2.10",
+      "lightgbm": "4.6.0",
+      "matplotlib": "3.11.0",
+      "numpy": "1.26.3",
+      "optuna": "4.9.0",
+      "pandas": "2.2.3",
+      "scipy": "1.16.3",
+      "sklearn": "1.8.0",
+      "xgboost": "3.2.0"
+    },
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.10"
+  }
+}

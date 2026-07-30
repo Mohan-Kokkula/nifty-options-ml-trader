@@ -1,0 +1,76 @@
+{
+  "date": "2026-05-08",
+  "regime": "choppy",
+  "bias": "neutral",
+  "risk_appetite": 0.5,
+  "max_trades_today": 3,
+  "min_confidence_boost": 2,
+  "avoid_otm2_otm3": true,
+  "key_levels": {
+    "support": 24176.65,
+    "resistance": 24476.65
+  },
+  "rationale": "Heuristic: VIX=16.6, US overnight=-0.38%, Asia=-1.18%, FII net=+0cr, news_bias=+0.09, events=[]",
+  "_payload": {
+    "date": "2026-05-08",
+    "global": {
+      "dow": {
+        "last": 49596.97,
+        "change_pct": -0.63
+      },
+      "nasdaq": {
+        "last": 25806.2,
+        "change_pct": -0.13
+      },
+      "sp500": {
+        "last": 7337.11,
+        "change_pct": -0.38
+      },
+      "nikkei": {
+        "last": 62174.12,
+        "change_pct": -1.05
+      },
+      "hangseng": {
+        "last": 26278.86,
+        "change_pct": -1.3
+      },
+      "ftse": {
+        "last": 10277.0,
+        "change_pct": -1.55
+      },
+      "dax": {
+        "last": 24663.61,
+        "change_pct": -1.02
+      },
+      "crude": {
+        "last": 95.39,
+        "change_pct": 0.33
+      },
+      "dxy": {
+        "last": 98.24,
+        "change_pct": 0.22
+      },
+      "us10y": {
+        "last": 4.39,
+        "change_pct": 0.83
+      },
+      "gift_nifty": {
+        "last": 24326.65,
+        "change_pct": -0.02
+      },
+      "india_vix": {
+        "last": 16.62,
+        "change_pct": -0.36
+      }
+    },
+    "fii_dii": {},
+    "news": {
+      "bias_score": 0.088,
+      "confidence": 0.095,
+      "event_count": 5,
+      "dominant_type": "other",
+      "hot_title": "FPI count on BSE jumps fivefold as Sensex options sizzle"
+    },
+    "events": []
+  }
+}

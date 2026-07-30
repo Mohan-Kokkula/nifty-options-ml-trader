@@ -1,0 +1,83 @@
+Building V9 (leak-fixed) feature + label frame...
+19:59:35 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:59:35 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:59:35 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:59:35 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:59:35 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:59:38 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:59:38 [V9]   5-min features computed: 98 cols
+19:59:38 [V9]   15-min features: 14 cols
+19:59:39 [V9]   30-min features: 7 cols
+19:59:41 [V9]   60-min features: 13 cols
+19:59:41 [V9]   Daily features: 17 cols
+19:59:42 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:59:42 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:59:42 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:59:46 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:59:46 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:59:47 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:59:47 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:59:48 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:59:48 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:59:48 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:59:48 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:59:48 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+Audit frame: 209,073 rows x 184 features | fwd-15m std=0.198%
+
+============================================================================================
+  CATEGORY SUMMARY
+============================================================================================
+    A_strong          0  features
+    B_weak           57  features
+    C_redundant      17  features
+    D_noise         110  features
+    TOTAL           184
+
+  Min BH q-value across ALL features: 0.000
+  Features with q<0.05 (signif IC):   124
+  Features clearing 15-min friction:  0
+
+============================================================================================
+  TOP 20 FEATURES BY XGB IMPORTANCE
+============================================================================================
+  feature                         IC   q(BH)      MI     imp   stab   cap%  cat
+  ----------------------------------------------------------------------------------------
+  tf15_sideways               +0.002   0.299  0.0187  0.0745   0.67  0.000  noise
+  rsi14                       +0.004   0.130  0.0185  0.0395   0.67  0.001  noise
+  tf15_adx                    +0.003   0.211  0.0287  0.0307   0.67  0.001  noise
+  is_midday                   -0.013   0.000  0.0105  0.0291   0.83  0.003  noise
+  tf15_trending               +0.000   0.996  0.0107  0.0230   0.50  0.000  noise
+  is_afternoon                +0.026   0.000  0.0023  0.0223   1.00  0.005  weak
+  a10                         +0.010   0.000  0.0138  0.0201   1.00  0.002  redundant
+  dist_week_high              +0.011   0.000  0.0134  0.0201   0.83  0.002  noise
+  intraday_range_pct          +0.025   0.000  0.0276  0.0198   1.00  0.005  weak
+  vix_level                   +0.011   0.000  0.0477  0.0189   0.83  0.002  noise
+  gkv                         +0.010   0.000  0.0134  0.0184   1.00  0.002  redundant
+  day_atr_pct                 +0.011   0.000  0.0514  0.0180   1.00  0.002  noise
+  is_morning                  -0.014   0.000  0.0041  0.0171   1.00  0.003  noise
+  tf15_bear_trend             -0.018   0.000  0.0103  0.0153   1.00  0.004  weak
+  park                        +0.011   0.000  0.0095  0.0148   0.83  0.002  noise
+  vix_regime                  +0.012   0.000  0.0102  0.0146   0.83  0.002  noise
+  a14                         +0.009   0.000  0.0131  0.0141   0.83  0.002  noise
+  dh20                        +0.007   0.003  0.0165  0.0136   0.83  0.001  noise
+  rsi7                        -0.010   0.000  0.0079  0.0126   1.00  0.002  noise
+  dow_secondary               +0.021   0.000  0.0075  0.0125   1.00  0.004  weak
+
+  TOP 10 BY |IC| (predictive, regardless of importance):
+    dist_from_open             IC=+0.032 q=0.000 stab=1.00 cap=0.006% [weak]
+    day_move_pct               IC=+0.032 q=0.000 stab=1.00 cap=0.006% [redundant]
+    day_move_atr               IC=+0.032 q=0.000 stab=1.00 cap=0.006% [weak]
+    dist_prev_low              IC=+0.030 q=0.000 stab=1.00 cap=0.006% [weak]
+    tf30_ema_dist              IC=+0.030 q=0.000 stab=1.00 cap=0.006% [weak]
+    dist_prev_close            IC=+0.030 q=0.000 stab=1.00 cap=0.006% [weak]
+    tf30_rsi                   IC=+0.029 q=0.000 stab=1.00 cap=0.006% [weak]
+    bars_above_vwap            IC=+0.028 q=0.000 stab=1.00 cap=0.005% [weak]
+    tf60_rsi                   IC=+0.027 q=0.000 stab=1.00 cap=0.005% [weak]
+    tf15_ema_dist              IC=+0.026 q=0.000 stab=1.00 cap=0.005% [weak]
+
+  Full table -> logs/feature_audit.csv

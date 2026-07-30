@@ -1,0 +1,145 @@
+{
+  "purge_embargo": [
+    {
+      "fold": 1,
+      "cutoff": "2024-06-28",
+      "train_max_date": "2024-06-27",
+      "test_min_date": "2024-07-01",
+      "gap_days": 4,
+      "required_gap": 3,
+      "ok": true
+    },
+    {
+      "fold": 2,
+      "cutoff": "2024-09-28",
+      "train_max_date": "2024-09-27",
+      "test_min_date": "2024-10-01",
+      "gap_days": 4,
+      "required_gap": 3,
+      "ok": true
+    },
+    {
+      "fold": 3,
+      "cutoff": "2024-12-29",
+      "train_max_date": "2024-12-27",
+      "test_min_date": "2025-01-01",
+      "gap_days": 5,
+      "required_gap": 3,
+      "ok": true
+    },
+    {
+      "fold": 4,
+      "cutoff": "2025-03-29",
+      "train_max_date": "2025-03-28",
+      "test_min_date": "2025-04-01",
+      "gap_days": 4,
+      "required_gap": 3,
+      "ok": true
+    },
+    {
+      "fold": 5,
+      "cutoff": "2025-06-28",
+      "train_max_date": "2025-06-27",
+      "test_min_date": "2025-07-01",
+      "gap_days": 4,
+      "required_gap": 3,
+      "ok": true
+    },
+    {
+      "fold": 6,
+      "cutoff": "2025-09-28",
+      "train_max_date": "2025-09-26",
+      "test_min_date": "2025-10-01",
+      "gap_days": 5,
+      "required_gap": 3,
+      "ok": true
+    },
+    {
+      "fold": 7,
+      "cutoff": "2025-12-29",
+      "train_max_date": "2025-12-26",
+      "test_min_date": "2026-01-01",
+      "gap_days": 6,
+      "required_gap": 3,
+      "ok": true
+    },
+    {
+      "fold": 8,
+      "cutoff": "2026-03-29",
+      "train_max_date": "2026-03-27",
+      "test_min_date": "2026-04-01",
+      "gap_days": 5,
+      "required_gap": 3,
+      "ok": true
+    }
+  ],
+  "feature_future_correlation": {
+    "threshold": 0.3,
+    "n_features_checked": 184,
+    "n_bars_sampled": 50000,
+    "flagged": [],
+    "top_abs_correlations": [
+      {
+        "feature": "bbw",
+        "r": 0.04633291915870125
+      },
+      {
+        "feature": "vov",
+        "r": 0.04426032274757855
+      },
+      {
+        "feature": "rv20",
+        "r": 0.04065529258635093
+      },
+      {
+        "feature": "dist_vwap",
+        "r": 0.03178711704644277
+      },
+      {
+        "feature": "intraday_range_pct",
+        "r": 0.031746171376961646
+      },
+      {
+        "feature": "dh20",
+        "r": -0.031281126160299745
+      },
+      {
+        "feature": "gkv",
+        "r": 0.029471251280651315
+      },
+      {
+        "feature": "tf60_dist_from_3h_high",
+        "r": -0.029245267149774323
+      },
+      {
+        "feature": "dist_from_open",
+        "r": 0.027158664333356407
+      },
+      {
+        "feature": "day_move_pct",
+        "r": 0.027158664333356407
+      }
+    ]
+  },
+  "label_construction": {
+    "ok": true,
+    "median_forward_return_by_label": {
+      "0": 0.001655777129844438,
+      "1": -0.0017586923282618683,
+      "2": 4.2199612607651815e-05
+    },
+    "label_encoding": {
+      "0": "CALL",
+      "1": "PUT",
+      "2": "SKIP"
+    }
+  },
+  "sample_weight_lookahead": {
+    "known_lookahead": "backtest_threshold_sweep._sample_weights uses sub.groupby(day)['close'].last() to compute |day_close - day_open|, then applies a 3x weight to every intraday training row on days where that quantity exceeds 150. day_close is not known until end-of-day.",
+    "training_rows_sampled": 200000,
+    "trade_rows_upweighted_vs_base_x1_5": 7792,
+    "share_of_trade_rows_upweighted": 0.21828164831778582,
+    "ablation_available": true,
+    "ablation_flag": "--no-lookahead-weights"
+  }
+}

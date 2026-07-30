@@ -1,0 +1,7 @@
+{
+  "embargo_days_required": 3,
+  "train_max_date": "2024-06-27",
+  "test_min_date": "2024-07-01",
+  "gap_days": 4,
+  "purge_satisfied": true
+}

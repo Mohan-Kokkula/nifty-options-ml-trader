@@ -1,0 +1,58 @@
+{
+  "protocol_version": "2.5",
+  "code_hash": {
+    "backtest_threshold_sweep.py": "d698ab202dd29c5b24c45321ee631e37ea8a37dc0fc5d0108d0035c1bd1bda02",
+    "backtest_options.py": "f47f390b73d00050721321c93dae68c65f430ff9a91a6729ed5a16ef07ec5438",
+    "phase6_threshold_optimizer.py": "d21b6f4e583ef07d687ce35383cbbaca55e90669f230fc0bd0cd2a5405d6127d",
+    "threshold_opt/__init__.py": "568894696978b7c408b2e0ffac69feb5c36758e1e9ffdfce32364caec46f1e79",
+    "threshold_opt/_base.py": "91c2ddd70ce9c3fba6d1067adeafd71f1e5b985e5ef7710902947f6c1e101f6e",
+    "threshold_opt/_grid.py": "f1469fd211c3e68204515e449d7631ee90b1e1e34f0adbab44f5b7dde62570dd",
+    "threshold_opt/_evaluate.py": "169d7beeba35d6871baf3d37df2927f18c64ca546d08304e26e6e057891dcb45",
+    "threshold_opt/_ranking.py": "85801d05c8fc208be72ab98aea9d9f5a079b6dabd7ea8764e585552d33b53b63",
+    "threshold_opt/_manifest.py": "e4c9d41d5552431e439351cea819c1fd308a61cdde967a84616533fe2c04f83b",
+    "threshold_opt/_stats.py": "e2876142b839b247b0b1d7941c52a3637623d222f3a4b77af2d05aa157d19cf0",
+    "threshold_opt/_visualize.py": "e10471f7c02cbb3ecd85adc49977f04f2a78849174b87af673149a9d34ac83a4"
+  },
+  "data_hash": {
+    "phase5_mean_fold_1_predictions": "91ade0cff731b906254cc5a244e373f807048a7a3e5d7e0ee1baa738aa39594e",
+    "phase5_mean_fold_2_predictions": "909cab920bf99e311f874733c132ec726a46e34e8cd1f846e4fed747eaf7f274",
+    "phase5_mean_fold_3_predictions": "0076019c1cd3e6864970c9d863927dd9f9e55978f39186c04af847116aa599f2",
+    "phase5_mean_fold_4_predictions": "e1304fb217ed34433955c8fe884607540d4d58a5a5a6be6232ba5abae955699b",
+    "phase5_mean_fold_5_predictions": "d3d1c1864ac553d9a63afa350886e88fb09bac62a191290171aee0ce5805a6e3",
+    "phase5_mean_fold_6_predictions": "c024119b2c0ce114af927c9f19ebbcce4a0b3c960ca78117fa43f5a335fc533e",
+    "phase5_mean_fold_7_predictions": "e3b34d0ad6081b3aecdb063674bfd94a5a12d67593c62b0b0a9d0d9f74f57d0b",
+    "phase5_mean_fold_8_predictions": "924257ff62f710c9783ca4414bbe2a6810cb56f6694398071c46d98c818c0efd"
+  },
+  "random_seed": 42,
+  "timestamp_utc": "2026-07-12T08:42:53+00:00",
+  "target_ensemble": "mean",
+  "input_source": "calibrated_isotonic",
+  "threshold_values": {
+    "call_thr": 0.3,
+    "put_thr": 0.2,
+    "skip_ceil": 0.65,
+    "min_edge": 0.03
+  },
+  "folds_evaluated": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "n_trades_per_fold": [
+    3,
+    5,
+    4,
+    9,
+    0,
+    0,
+    14,
+    1
+  ],
+  "min_trades_requirement": 50,
+  "passes_min_trades_filter": false
+}

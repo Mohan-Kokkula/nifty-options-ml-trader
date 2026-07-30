@@ -1,0 +1,11 @@
+{
+  "kind": "confidence",
+  "operation": "softmax(top1_confidence / temperature) per bar",
+  "temperature": 1.0,
+  "brains": [
+    "cat",
+    "lgb",
+    "mlp",
+    "xgb"
+  ]
+}

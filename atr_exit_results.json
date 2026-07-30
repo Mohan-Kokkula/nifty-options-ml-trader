@@ -1,0 +1,84 @@
+{
+  "folds": {
+    "1": {
+      "n_test": 8000,
+      "n_signals_fired": 1961,
+      "Champion_fixed": {
+        "trades": 1502,
+        "win_rate": 0.7010652463382158,
+        "pf": 1.1726057906458798,
+        "net_pnl": 3875,
+        "gross_profit": 26325,
+        "gross_loss": 22450,
+        "expectancy": 2.5798934753661786,
+        "max_drawdown_pts": 1650.0
+      },
+      "ATR_scaled": {
+        "trades": 672,
+        "win_rate": 0.8273809523809523,
+        "pf": 2.530965842995732,
+        "net_pnl": 17234.904698453185,
+        "gross_profit": 28492.441747567605,
+        "gross_loss": 11257.537049114437,
+        "expectancy": 25.64717961079343,
+        "max_drawdown_pts": 837.4431273952432
+      }
+    },
+    "2": {
+      "n_test": 8000,
+      "n_signals_fired": 144,
+      "Champion_fixed": {
+        "trades": 82,
+        "win_rate": 0.7804878048780488,
+        "pf": 1.7777777777777777,
+        "net_pnl": 700,
+        "gross_profit": 1600,
+        "gross_loss": 900,
+        "expectancy": 8.536585365853659,
+        "max_drawdown_pts": 200.0
+      },
+      "ATR_scaled": {
+        "trades": 55,
+        "win_rate": 0.9090909090909091,
+        "pf": 5.520083870520543,
+        "net_pnl": 1588.8023955764486,
+        "gross_profit": 1940.3008281472312,
+        "gross_loss": 351.4984325707828,
+        "expectancy": 28.887316283208158,
+        "max_drawdown_pts": 83.0688227524829
+      }
+    },
+    "3": {
+      "n_test": 8000,
+      "n_signals_fired": 2267,
+      "Champion_fixed": {
+        "trades": 1950,
+        "win_rate": 0.6938461538461539,
+        "pf": 1.1331658291457287,
+        "net_pnl": 3975,
+        "gross_profit": 33825,
+        "gross_loss": 29850,
+        "expectancy": 2.0384615384615383,
+        "max_drawdown_pts": 1775.0
+      },
+      "ATR_scaled": {
+        "trades": 859,
+        "win_rate": 0.8242142025611175,
+        "pf": 2.328094793951592,
+        "net_pnl": 21641.791057299593,
+        "gross_profit": 37937.157288581075,
+        "gross_loss": 16295.366231281518,
+        "expectancy": 25.194168867636314,
+        "max_drawdown_pts": 1098.7889242746023
+      }
+    }
+  },
+  "config": {
+    "K_TP": 1.7054751701639095,
+    "K_SL": 3.410950340327819,
+    "mean_atr_pre_test": 14.6586713411942,
+    "WIN_FIXED": 25,
+    "SL_FIXED": 50,
+    "MAX_FWD_BARS": 7
+  }
+}

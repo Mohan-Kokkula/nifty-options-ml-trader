@@ -1,0 +1,35 @@
+[
+  {
+    "fold": 1,
+    "train_start": 0,
+    "train_end": 184998,
+    "test_start": 185076,
+    "test_end": 193076,
+    "train_date_start": "2015-01-21 09:15:00",
+    "train_date_end": "2025-01-23 10:20:00",
+    "test_date_start": "2025-01-24 10:40:00",
+    "test_date_end": "2025-07-01 14:45:00"
+  },
+  {
+    "fold": 2,
+    "train_start": 0,
+    "train_end": 192998,
+    "test_start": 193076,
+    "test_end": 201076,
+    "train_date_start": "2015-01-21 09:15:00",
+    "train_date_end": "2025-06-30 14:30:00",
+    "test_date_start": "2025-07-01 14:50:00",
+    "test_date_end": "2025-12-05 11:40:00"
+  },
+  {
+    "fold": 3,
+    "train_start": 0,
+    "train_end": 200998,
+    "test_start": 201076,
+    "test_end": 209076,
+    "train_date_start": "2015-01-21 09:15:00",
+    "train_date_end": "2025-12-04 11:25:00",
+    "test_date_start": "2025-12-05 11:45:00",
+    "test_date_end": "2026-06-04 15:25:00"
+  }
+]

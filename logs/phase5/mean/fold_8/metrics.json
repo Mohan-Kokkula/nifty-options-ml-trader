@@ -1,0 +1,27 @@
+{
+  "ensemble_type": "mean",
+  "fold_id": 8,
+  "n_trades": 1,
+  "n_test_bars": 1415,
+  "n_bars_traded": 7,
+  "brains_used": [
+    "cat",
+    "lgb",
+    "mlp",
+    "xgb"
+  ],
+  "input_source": "calibrated_isotonic",
+  "weights_summary": {
+    "kind": "mean",
+    "weights": {
+      "cat": 0.25,
+      "lgb": 0.25,
+      "mlp": 0.25,
+      "xgb": 0.25
+    }
+  },
+  "fit_elapsed_s": 0.0,
+  "transform_elapsed_s": 0.0,
+  "simulate_elapsed_s": 0.016,
+  "n_oof_bars": 92979
+}

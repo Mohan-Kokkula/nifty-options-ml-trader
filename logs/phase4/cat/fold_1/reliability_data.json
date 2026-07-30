@@ -1,0 +1,1322 @@
+{
+  "uncal_top1": [
+    {
+      "bin_index": 0,
+      "conf_lo": 0.0,
+      "conf_hi": 0.1,
+      "mean_conf": null,
+      "mean_acc": null,
+      "n": 0
+    },
+    {
+      "bin_index": 1,
+      "conf_lo": 0.1,
+      "conf_hi": 0.2,
+      "mean_conf": null,
+      "mean_acc": null,
+      "n": 0
+    },
+    {
+      "bin_index": 2,
+      "conf_lo": 0.2,
+      "conf_hi": 0.30000000000000004,
+      "mean_conf": null,
+      "mean_acc": null,
+      "n": 0
+    },
+    {
+      "bin_index": 3,
+      "conf_lo": 0.30000000000000004,
+      "conf_hi": 0.4,
+      "mean_conf": 0.37644583804272547,
+      "mean_acc": 0.40189873417721517,
+      "n": 316
+    },
+    {
+      "bin_index": 4,
+      "conf_lo": 0.4,
+      "conf_hi": 0.5,
+      "mean_conf": 0.4493174033308915,
+      "mean_acc": 0.5636645962732919,
+      "n": 644
+    },
+    {
+      "bin_index": 5,
+      "conf_lo": 0.5,
+      "conf_hi": 0.6000000000000001,
+      "mean_conf": 0.5549941064602962,
+      "mean_acc": 0.7959905660377359,
+      "n": 848
+    },
+    {
+      "bin_index": 6,
+      "conf_lo": 0.6000000000000001,
+      "conf_hi": 0.7000000000000001,
+      "mean_conf": 0.6475059689003283,
+      "mean_acc": 0.8979779411764706,
+      "n": 1088
+    },
+    {
+      "bin_index": 7,
+      "conf_lo": 0.7000000000000001,
+      "conf_hi": 0.8,
+      "mean_conf": 0.7398381311824656,
+      "mean_acc": 0.9570957095709571,
+      "n": 606
+    },
+    {
+      "bin_index": 8,
+      "conf_lo": 0.8,
+      "conf_hi": 0.9,
+      "mean_conf": 0.8520810115598105,
+      "mean_acc": 0.9750889679715302,
+      "n": 281
+    },
+    {
+      "bin_index": 9,
+      "conf_lo": 0.9,
+      "conf_hi": 1.0,
+      "mean_conf": 0.9568600591129962,
+      "mean_acc": 1.0,
+      "n": 1017
+    }
+  ],
+  "uncal_per_class": {
+    "0": [
+      {
+        "bin_index": 0,
+        "conf_lo": 0.0,
+        "conf_hi": 0.1,
+        "mean_pred": 0.029135981950032648,
+        "mean_actual": 0.0,
+        "n": 1569
+      },
+      {
+        "bin_index": 1,
+        "conf_lo": 0.1,
+        "conf_hi": 0.2,
+        "mean_pred": 0.14833845293398684,
+        "mean_actual": 0.041982802225594334,
+        "n": 1977
+      },
+      {
+        "bin_index": 2,
+        "conf_lo": 0.2,
+        "conf_hi": 0.30000000000000004,
+        "mean_pred": 0.2423467972430637,
+        "mean_actual": 0.11818181818181818,
+        "n": 880
+      },
+      {
+        "bin_index": 3,
+        "conf_lo": 0.30000000000000004,
+        "conf_hi": 0.4,
+        "mean_pred": 0.3391470903012865,
+        "mean_actual": 0.18275862068965518,
+        "n": 290
+      },
+      {
+        "bin_index": 4,
+        "conf_lo": 0.4,
+        "conf_hi": 0.5,
+        "mean_pred": 0.4288007072389731,
+        "mean_actual": 0.25,
+        "n": 72
+      },
+      {
+        "bin_index": 5,
+        "conf_lo": 0.5,
+        "conf_hi": 0.6000000000000001,
+        "mean_pred": 0.5488107357038726,
+        "mean_actual": 0.0,
+        "n": 11
+      },
+      {
+        "bin_index": 6,
+        "conf_lo": 0.6000000000000001,
+        "conf_hi": 0.7000000000000001,
+        "mean_pred": 0.6201959117911577,
+        "mean_actual": 0.0,
+        "n": 1
+      },
+      {
+        "bin_index": 7,
+        "conf_lo": 0.7000000000000001,
+        "conf_hi": 0.8,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 8,
+        "conf_lo": 0.8,
+        "conf_hi": 0.9,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 9,
+        "conf_lo": 0.9,
+        "conf_hi": 1.0,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      }
+    ],
+    "1": [
+      {
+        "bin_index": 0,
+        "conf_lo": 0.0,
+        "conf_hi": 0.1,
+        "mean_pred": 0.02883103228002074,
+        "mean_actual": 0.0007077140835102619,
+        "n": 1413
+      },
+      {
+        "bin_index": 1,
+        "conf_lo": 0.1,
+        "conf_hi": 0.2,
+        "mean_pred": 0.15941694026842745,
+        "mean_actual": 0.03406998158379374,
+        "n": 1086
+      },
+      {
+        "bin_index": 2,
+        "conf_lo": 0.2,
+        "conf_hi": 0.30000000000000004,
+        "mean_pred": 0.24701936866494717,
+        "mean_actual": 0.06,
+        "n": 1250
+      },
+      {
+        "bin_index": 3,
+        "conf_lo": 0.30000000000000004,
+        "conf_hi": 0.4,
+        "mean_pred": 0.3462221485708879,
+        "mean_actual": 0.13950276243093923,
+        "n": 724
+      },
+      {
+        "bin_index": 4,
+        "conf_lo": 0.4,
+        "conf_hi": 0.5,
+        "mean_pred": 0.4414308058703255,
+        "mean_actual": 0.2140077821011673,
+        "n": 257
+      },
+      {
+        "bin_index": 5,
+        "conf_lo": 0.5,
+        "conf_hi": 0.6000000000000001,
+        "mean_pred": 0.5491345970046014,
+        "mean_actual": 0.17647058823529413,
+        "n": 51
+      },
+      {
+        "bin_index": 6,
+        "conf_lo": 0.6000000000000001,
+        "conf_hi": 0.7000000000000001,
+        "mean_pred": 0.637010941700669,
+        "mean_actual": 0.42105263157894735,
+        "n": 19
+      },
+      {
+        "bin_index": 7,
+        "conf_lo": 0.7000000000000001,
+        "conf_hi": 0.8,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 8,
+        "conf_lo": 0.8,
+        "conf_hi": 0.9,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 9,
+        "conf_lo": 0.9,
+        "conf_hi": 1.0,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      }
+    ],
+    "2": [
+      {
+        "bin_index": 0,
+        "conf_lo": 0.0,
+        "conf_hi": 0.1,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 1,
+        "conf_lo": 0.1,
+        "conf_hi": 0.2,
+        "mean_pred": 0.17718816630847703,
+        "mean_actual": 0.44680851063829785,
+        "n": 47
+      },
+      {
+        "bin_index": 2,
+        "conf_lo": 0.2,
+        "conf_hi": 0.30000000000000004,
+        "mean_pred": 0.25825400289429873,
+        "mean_actual": 0.5433070866141733,
+        "n": 127
+      },
+      {
+        "bin_index": 3,
+        "conf_lo": 0.30000000000000004,
+        "conf_hi": 0.4,
+        "mean_pred": 0.35508487844529774,
+        "mean_actual": 0.7632241813602015,
+        "n": 397
+      },
+      {
+        "bin_index": 4,
+        "conf_lo": 0.4,
+        "conf_hi": 0.5,
+        "mean_pred": 0.45362543037691183,
+        "mean_actual": 0.7579617834394905,
+        "n": 471
+      },
+      {
+        "bin_index": 5,
+        "conf_lo": 0.5,
+        "conf_hi": 0.6000000000000001,
+        "mean_pred": 0.5554608393617735,
+        "mean_actual": 0.8473282442748091,
+        "n": 786
+      },
+      {
+        "bin_index": 6,
+        "conf_lo": 0.6000000000000001,
+        "conf_hi": 0.7000000000000001,
+        "mean_pred": 0.647718249400237,
+        "mean_actual": 0.9073033707865169,
+        "n": 1068
+      },
+      {
+        "bin_index": 7,
+        "conf_lo": 0.7000000000000001,
+        "conf_hi": 0.8,
+        "mean_pred": 0.7398381311824656,
+        "mean_actual": 0.9570957095709571,
+        "n": 606
+      },
+      {
+        "bin_index": 8,
+        "conf_lo": 0.8,
+        "conf_hi": 0.9,
+        "mean_pred": 0.8520810115598105,
+        "mean_actual": 0.9750889679715302,
+        "n": 281
+      },
+      {
+        "bin_index": 9,
+        "conf_lo": 0.9,
+        "conf_hi": 1.0,
+        "mean_pred": 0.9568600591129962,
+        "mean_actual": 1.0,
+        "n": 1017
+      }
+    ]
+  },
+  "noop_top1": [
+    {
+      "bin_index": 0,
+      "conf_lo": 0.0,
+      "conf_hi": 0.1,
+      "mean_conf": null,
+      "mean_acc": null,
+      "n": 0
+    },
+    {
+      "bin_index": 1,
+      "conf_lo": 0.1,
+      "conf_hi": 0.2,
+      "mean_conf": null,
+      "mean_acc": null,
+      "n": 0
+    },
+    {
+      "bin_index": 2,
+      "conf_lo": 0.2,
+      "conf_hi": 0.30000000000000004,
+      "mean_conf": null,
+      "mean_acc": null,
+      "n": 0
+    },
+    {
+      "bin_index": 3,
+      "conf_lo": 0.30000000000000004,
+      "conf_hi": 0.4,
+      "mean_conf": 0.37644583804272547,
+      "mean_acc": 0.40189873417721517,
+      "n": 316
+    },
+    {
+      "bin_index": 4,
+      "conf_lo": 0.4,
+      "conf_hi": 0.5,
+      "mean_conf": 0.4493174033308915,
+      "mean_acc": 0.5636645962732919,
+      "n": 644
+    },
+    {
+      "bin_index": 5,
+      "conf_lo": 0.5,
+      "conf_hi": 0.6000000000000001,
+      "mean_conf": 0.5549941064602962,
+      "mean_acc": 0.7959905660377359,
+      "n": 848
+    },
+    {
+      "bin_index": 6,
+      "conf_lo": 0.6000000000000001,
+      "conf_hi": 0.7000000000000001,
+      "mean_conf": 0.6475059689003283,
+      "mean_acc": 0.8979779411764706,
+      "n": 1088
+    },
+    {
+      "bin_index": 7,
+      "conf_lo": 0.7000000000000001,
+      "conf_hi": 0.8,
+      "mean_conf": 0.7398381311824656,
+      "mean_acc": 0.9570957095709571,
+      "n": 606
+    },
+    {
+      "bin_index": 8,
+      "conf_lo": 0.8,
+      "conf_hi": 0.9,
+      "mean_conf": 0.8520810115598105,
+      "mean_acc": 0.9750889679715302,
+      "n": 281
+    },
+    {
+      "bin_index": 9,
+      "conf_lo": 0.9,
+      "conf_hi": 1.0,
+      "mean_conf": 0.9568600591129962,
+      "mean_acc": 1.0,
+      "n": 1017
+    }
+  ],
+  "noop_per_class": {
+    "0": [
+      {
+        "bin_index": 0,
+        "conf_lo": 0.0,
+        "conf_hi": 0.1,
+        "mean_pred": 0.029135981950032648,
+        "mean_actual": 0.0,
+        "n": 1569
+      },
+      {
+        "bin_index": 1,
+        "conf_lo": 0.1,
+        "conf_hi": 0.2,
+        "mean_pred": 0.14833845293398684,
+        "mean_actual": 0.041982802225594334,
+        "n": 1977
+      },
+      {
+        "bin_index": 2,
+        "conf_lo": 0.2,
+        "conf_hi": 0.30000000000000004,
+        "mean_pred": 0.2423467972430637,
+        "mean_actual": 0.11818181818181818,
+        "n": 880
+      },
+      {
+        "bin_index": 3,
+        "conf_lo": 0.30000000000000004,
+        "conf_hi": 0.4,
+        "mean_pred": 0.3391470903012865,
+        "mean_actual": 0.18275862068965518,
+        "n": 290
+      },
+      {
+        "bin_index": 4,
+        "conf_lo": 0.4,
+        "conf_hi": 0.5,
+        "mean_pred": 0.4288007072389731,
+        "mean_actual": 0.25,
+        "n": 72
+      },
+      {
+        "bin_index": 5,
+        "conf_lo": 0.5,
+        "conf_hi": 0.6000000000000001,
+        "mean_pred": 0.5488107357038726,
+        "mean_actual": 0.0,
+        "n": 11
+      },
+      {
+        "bin_index": 6,
+        "conf_lo": 0.6000000000000001,
+        "conf_hi": 0.7000000000000001,
+        "mean_pred": 0.6201959117911577,
+        "mean_actual": 0.0,
+        "n": 1
+      },
+      {
+        "bin_index": 7,
+        "conf_lo": 0.7000000000000001,
+        "conf_hi": 0.8,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 8,
+        "conf_lo": 0.8,
+        "conf_hi": 0.9,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 9,
+        "conf_lo": 0.9,
+        "conf_hi": 1.0,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      }
+    ],
+    "1": [
+      {
+        "bin_index": 0,
+        "conf_lo": 0.0,
+        "conf_hi": 0.1,
+        "mean_pred": 0.02883103228002074,
+        "mean_actual": 0.0007077140835102619,
+        "n": 1413
+      },
+      {
+        "bin_index": 1,
+        "conf_lo": 0.1,
+        "conf_hi": 0.2,
+        "mean_pred": 0.15941694026842745,
+        "mean_actual": 0.03406998158379374,
+        "n": 1086
+      },
+      {
+        "bin_index": 2,
+        "conf_lo": 0.2,
+        "conf_hi": 0.30000000000000004,
+        "mean_pred": 0.24701936866494717,
+        "mean_actual": 0.06,
+        "n": 1250
+      },
+      {
+        "bin_index": 3,
+        "conf_lo": 0.30000000000000004,
+        "conf_hi": 0.4,
+        "mean_pred": 0.3462221485708879,
+        "mean_actual": 0.13950276243093923,
+        "n": 724
+      },
+      {
+        "bin_index": 4,
+        "conf_lo": 0.4,
+        "conf_hi": 0.5,
+        "mean_pred": 0.4414308058703255,
+        "mean_actual": 0.2140077821011673,
+        "n": 257
+      },
+      {
+        "bin_index": 5,
+        "conf_lo": 0.5,
+        "conf_hi": 0.6000000000000001,
+        "mean_pred": 0.5491345970046014,
+        "mean_actual": 0.17647058823529413,
+        "n": 51
+      },
+      {
+        "bin_index": 6,
+        "conf_lo": 0.6000000000000001,
+        "conf_hi": 0.7000000000000001,
+        "mean_pred": 0.637010941700669,
+        "mean_actual": 0.42105263157894735,
+        "n": 19
+      },
+      {
+        "bin_index": 7,
+        "conf_lo": 0.7000000000000001,
+        "conf_hi": 0.8,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 8,
+        "conf_lo": 0.8,
+        "conf_hi": 0.9,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 9,
+        "conf_lo": 0.9,
+        "conf_hi": 1.0,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      }
+    ],
+    "2": [
+      {
+        "bin_index": 0,
+        "conf_lo": 0.0,
+        "conf_hi": 0.1,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 1,
+        "conf_lo": 0.1,
+        "conf_hi": 0.2,
+        "mean_pred": 0.17718816630847703,
+        "mean_actual": 0.44680851063829785,
+        "n": 47
+      },
+      {
+        "bin_index": 2,
+        "conf_lo": 0.2,
+        "conf_hi": 0.30000000000000004,
+        "mean_pred": 0.25825400289429873,
+        "mean_actual": 0.5433070866141733,
+        "n": 127
+      },
+      {
+        "bin_index": 3,
+        "conf_lo": 0.30000000000000004,
+        "conf_hi": 0.4,
+        "mean_pred": 0.35508487844529774,
+        "mean_actual": 0.7632241813602015,
+        "n": 397
+      },
+      {
+        "bin_index": 4,
+        "conf_lo": 0.4,
+        "conf_hi": 0.5,
+        "mean_pred": 0.45362543037691183,
+        "mean_actual": 0.7579617834394905,
+        "n": 471
+      },
+      {
+        "bin_index": 5,
+        "conf_lo": 0.5,
+        "conf_hi": 0.6000000000000001,
+        "mean_pred": 0.5554608393617735,
+        "mean_actual": 0.8473282442748091,
+        "n": 786
+      },
+      {
+        "bin_index": 6,
+        "conf_lo": 0.6000000000000001,
+        "conf_hi": 0.7000000000000001,
+        "mean_pred": 0.647718249400237,
+        "mean_actual": 0.9073033707865169,
+        "n": 1068
+      },
+      {
+        "bin_index": 7,
+        "conf_lo": 0.7000000000000001,
+        "conf_hi": 0.8,
+        "mean_pred": 0.7398381311824656,
+        "mean_actual": 0.9570957095709571,
+        "n": 606
+      },
+      {
+        "bin_index": 8,
+        "conf_lo": 0.8,
+        "conf_hi": 0.9,
+        "mean_pred": 0.8520810115598105,
+        "mean_actual": 0.9750889679715302,
+        "n": 281
+      },
+      {
+        "bin_index": 9,
+        "conf_lo": 0.9,
+        "conf_hi": 1.0,
+        "mean_pred": 0.9568600591129962,
+        "mean_actual": 1.0,
+        "n": 1017
+      }
+    ]
+  },
+  "platt_top1": [
+    {
+      "bin_index": 0,
+      "conf_lo": 0.0,
+      "conf_hi": 0.1,
+      "mean_conf": null,
+      "mean_acc": null,
+      "n": 0
+    },
+    {
+      "bin_index": 1,
+      "conf_lo": 0.1,
+      "conf_hi": 0.2,
+      "mean_conf": null,
+      "mean_acc": null,
+      "n": 0
+    },
+    {
+      "bin_index": 2,
+      "conf_lo": 0.2,
+      "conf_hi": 0.30000000000000004,
+      "mean_conf": null,
+      "mean_acc": null,
+      "n": 0
+    },
+    {
+      "bin_index": 3,
+      "conf_lo": 0.30000000000000004,
+      "conf_hi": 0.4,
+      "mean_conf": null,
+      "mean_acc": null,
+      "n": 0
+    },
+    {
+      "bin_index": 4,
+      "conf_lo": 0.4,
+      "conf_hi": 0.5,
+      "mean_conf": 0.49022971493260437,
+      "mean_acc": 0.5714285714285714,
+      "n": 7
+    },
+    {
+      "bin_index": 5,
+      "conf_lo": 0.5,
+      "conf_hi": 0.6000000000000001,
+      "mean_conf": 0.5466691280442648,
+      "mean_acc": 0.525,
+      "n": 80
+    },
+    {
+      "bin_index": 6,
+      "conf_lo": 0.6000000000000001,
+      "conf_hi": 0.7000000000000001,
+      "mean_conf": 0.6529256883738593,
+      "mean_acc": 0.6303030303030303,
+      "n": 165
+    },
+    {
+      "bin_index": 7,
+      "conf_lo": 0.7000000000000001,
+      "conf_hi": 0.8,
+      "mean_conf": 0.7553307695472196,
+      "mean_acc": 0.7424812030075187,
+      "n": 532
+    },
+    {
+      "bin_index": 8,
+      "conf_lo": 0.8,
+      "conf_hi": 0.9,
+      "mean_conf": 0.8630777048482556,
+      "mean_acc": 0.8335889570552147,
+      "n": 1304
+    },
+    {
+      "bin_index": 9,
+      "conf_lo": 0.9,
+      "conf_hi": 1.0,
+      "mean_conf": 0.9428503987508821,
+      "mean_acc": 0.967551622418879,
+      "n": 2712
+    }
+  ],
+  "platt_per_class": {
+    "0": [
+      {
+        "bin_index": 0,
+        "conf_lo": 0.0,
+        "conf_hi": 0.1,
+        "mean_pred": 0.038767223333375636,
+        "mean_actual": 0.03658248760915742,
+        "n": 4237
+      },
+      {
+        "bin_index": 1,
+        "conf_lo": 0.1,
+        "conf_hi": 0.2,
+        "mean_pred": 0.13599205589283062,
+        "mean_actual": 0.16267942583732056,
+        "n": 418
+      },
+      {
+        "bin_index": 2,
+        "conf_lo": 0.2,
+        "conf_hi": 0.30000000000000004,
+        "mean_pred": 0.23992120212893214,
+        "mean_actual": 0.26495726495726496,
+        "n": 117
+      },
+      {
+        "bin_index": 3,
+        "conf_lo": 0.30000000000000004,
+        "conf_hi": 0.4,
+        "mean_pred": 0.3336352422258421,
+        "mean_actual": 0.17391304347826086,
+        "n": 23
+      },
+      {
+        "bin_index": 4,
+        "conf_lo": 0.4,
+        "conf_hi": 0.5,
+        "mean_pred": 0.4341469929886709,
+        "mean_actual": 0.0,
+        "n": 5
+      },
+      {
+        "bin_index": 5,
+        "conf_lo": 0.5,
+        "conf_hi": 0.6000000000000001,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 6,
+        "conf_lo": 0.6000000000000001,
+        "conf_hi": 0.7000000000000001,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 7,
+        "conf_lo": 0.7000000000000001,
+        "conf_hi": 0.8,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 8,
+        "conf_lo": 0.8,
+        "conf_hi": 0.9,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 9,
+        "conf_lo": 0.9,
+        "conf_hi": 1.0,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      }
+    ],
+    "1": [
+      {
+        "bin_index": 0,
+        "conf_lo": 0.0,
+        "conf_hi": 0.1,
+        "mean_pred": 0.039398874499940575,
+        "mean_actual": 0.03446515190196579,
+        "n": 3917
+      },
+      {
+        "bin_index": 1,
+        "conf_lo": 0.1,
+        "conf_hi": 0.2,
+        "mean_pred": 0.13756748239840233,
+        "mean_actual": 0.14202049780380674,
+        "n": 683
+      },
+      {
+        "bin_index": 2,
+        "conf_lo": 0.2,
+        "conf_hi": 0.30000000000000004,
+        "mean_pred": 0.2355148947233136,
+        "mean_actual": 0.2702702702702703,
+        "n": 148
+      },
+      {
+        "bin_index": 3,
+        "conf_lo": 0.30000000000000004,
+        "conf_hi": 0.4,
+        "mean_pred": 0.3421399440620769,
+        "mean_actual": 0.2558139534883721,
+        "n": 43
+      },
+      {
+        "bin_index": 4,
+        "conf_lo": 0.4,
+        "conf_hi": 0.5,
+        "mean_pred": 0.4370900573968426,
+        "mean_actual": 0.3333333333333333,
+        "n": 9
+      },
+      {
+        "bin_index": 5,
+        "conf_lo": 0.5,
+        "conf_hi": 0.6000000000000001,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 6,
+        "conf_lo": 0.6000000000000001,
+        "conf_hi": 0.7000000000000001,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 7,
+        "conf_lo": 0.7000000000000001,
+        "conf_hi": 0.8,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 8,
+        "conf_lo": 0.8,
+        "conf_hi": 0.9,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 9,
+        "conf_lo": 0.9,
+        "conf_hi": 1.0,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      }
+    ],
+    "2": [
+      {
+        "bin_index": 0,
+        "conf_lo": 0.0,
+        "conf_hi": 0.1,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 1,
+        "conf_lo": 0.1,
+        "conf_hi": 0.2,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 2,
+        "conf_lo": 0.2,
+        "conf_hi": 0.30000000000000004,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 3,
+        "conf_lo": 0.30000000000000004,
+        "conf_hi": 0.4,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 4,
+        "conf_lo": 0.4,
+        "conf_hi": 0.5,
+        "mean_pred": 0.49022971493260437,
+        "mean_actual": 0.5714285714285714,
+        "n": 7
+      },
+      {
+        "bin_index": 5,
+        "conf_lo": 0.5,
+        "conf_hi": 0.6000000000000001,
+        "mean_pred": 0.5466691280442648,
+        "mean_actual": 0.525,
+        "n": 80
+      },
+      {
+        "bin_index": 6,
+        "conf_lo": 0.6000000000000001,
+        "conf_hi": 0.7000000000000001,
+        "mean_pred": 0.6529256883738593,
+        "mean_actual": 0.6303030303030303,
+        "n": 165
+      },
+      {
+        "bin_index": 7,
+        "conf_lo": 0.7000000000000001,
+        "conf_hi": 0.8,
+        "mean_pred": 0.7553307695472196,
+        "mean_actual": 0.7424812030075187,
+        "n": 532
+      },
+      {
+        "bin_index": 8,
+        "conf_lo": 0.8,
+        "conf_hi": 0.9,
+        "mean_pred": 0.8630777048482556,
+        "mean_actual": 0.8335889570552147,
+        "n": 1304
+      },
+      {
+        "bin_index": 9,
+        "conf_lo": 0.9,
+        "conf_hi": 1.0,
+        "mean_pred": 0.9428503987508821,
+        "mean_actual": 0.967551622418879,
+        "n": 2712
+      }
+    ]
+  },
+  "isotonic_top1": [
+    {
+      "bin_index": 0,
+      "conf_lo": 0.0,
+      "conf_hi": 0.1,
+      "mean_conf": null,
+      "mean_acc": null,
+      "n": 0
+    },
+    {
+      "bin_index": 1,
+      "conf_lo": 0.1,
+      "conf_hi": 0.2,
+      "mean_conf": null,
+      "mean_acc": null,
+      "n": 0
+    },
+    {
+      "bin_index": 2,
+      "conf_lo": 0.2,
+      "conf_hi": 0.30000000000000004,
+      "mean_conf": null,
+      "mean_acc": null,
+      "n": 0
+    },
+    {
+      "bin_index": 3,
+      "conf_lo": 0.30000000000000004,
+      "conf_hi": 0.4,
+      "mean_conf": null,
+      "mean_acc": null,
+      "n": 0
+    },
+    {
+      "bin_index": 4,
+      "conf_lo": 0.4,
+      "conf_hi": 0.5,
+      "mean_conf": 0.48626043905291316,
+      "mean_acc": 0.4074074074074074,
+      "n": 27
+    },
+    {
+      "bin_index": 5,
+      "conf_lo": 0.5,
+      "conf_hi": 0.6000000000000001,
+      "mean_conf": 0.5664830301428496,
+      "mean_acc": 0.4915254237288136,
+      "n": 59
+    },
+    {
+      "bin_index": 6,
+      "conf_lo": 0.6000000000000001,
+      "conf_hi": 0.7000000000000001,
+      "mean_conf": 0.6690930178724652,
+      "mean_acc": 0.665158371040724,
+      "n": 221
+    },
+    {
+      "bin_index": 7,
+      "conf_lo": 0.7000000000000001,
+      "conf_hi": 0.8,
+      "mean_conf": 0.7557372472505612,
+      "mean_acc": 0.7496062992125985,
+      "n": 635
+    },
+    {
+      "bin_index": 8,
+      "conf_lo": 0.8,
+      "conf_hi": 0.9,
+      "mean_conf": 0.8563865665702486,
+      "mean_acc": 0.8468941382327209,
+      "n": 1143
+    },
+    {
+      "bin_index": 9,
+      "conf_lo": 0.9,
+      "conf_hi": 1.0,
+      "mean_conf": 0.9673689905543144,
+      "mean_acc": 0.9668508287292817,
+      "n": 2715
+    }
+  ],
+  "isotonic_per_class": {
+    "0": [
+      {
+        "bin_index": 0,
+        "conf_lo": 0.0,
+        "conf_hi": 0.1,
+        "mean_pred": 0.02632406011660746,
+        "mean_actual": 0.03043367993913264,
+        "n": 3943
+      },
+      {
+        "bin_index": 1,
+        "conf_lo": 0.1,
+        "conf_hi": 0.2,
+        "mean_pred": 0.13352307152238166,
+        "mean_actual": 0.13872832369942195,
+        "n": 692
+      },
+      {
+        "bin_index": 2,
+        "conf_lo": 0.2,
+        "conf_hi": 0.30000000000000004,
+        "mean_pred": 0.23271997702787764,
+        "mean_actual": 0.25766871165644173,
+        "n": 163
+      },
+      {
+        "bin_index": 3,
+        "conf_lo": 0.30000000000000004,
+        "conf_hi": 0.4,
+        "mean_pred": 0.3394276202283695,
+        "mean_actual": 0.0,
+        "n": 2
+      },
+      {
+        "bin_index": 4,
+        "conf_lo": 0.4,
+        "conf_hi": 0.5,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 5,
+        "conf_lo": 0.5,
+        "conf_hi": 0.6000000000000001,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 6,
+        "conf_lo": 0.6000000000000001,
+        "conf_hi": 0.7000000000000001,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 7,
+        "conf_lo": 0.7000000000000001,
+        "conf_hi": 0.8,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 8,
+        "conf_lo": 0.8,
+        "conf_hi": 0.9,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 9,
+        "conf_lo": 0.9,
+        "conf_hi": 1.0,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      }
+    ],
+    "1": [
+      {
+        "bin_index": 0,
+        "conf_lo": 0.0,
+        "conf_hi": 0.1,
+        "mean_pred": 0.0277707616061604,
+        "mean_actual": 0.02836105808562858,
+        "n": 3667
+      },
+      {
+        "bin_index": 1,
+        "conf_lo": 0.1,
+        "conf_hi": 0.2,
+        "mean_pred": 0.14812600982410568,
+        "mean_actual": 0.14029535864978904,
+        "n": 948
+      },
+      {
+        "bin_index": 2,
+        "conf_lo": 0.2,
+        "conf_hi": 0.30000000000000004,
+        "mean_pred": 0.22919627285583208,
+        "mean_actual": 0.25142857142857145,
+        "n": 175
+      },
+      {
+        "bin_index": 3,
+        "conf_lo": 0.30000000000000004,
+        "conf_hi": 0.4,
+        "mean_pred": 0.3254971566379049,
+        "mean_actual": 0.5,
+        "n": 10
+      },
+      {
+        "bin_index": 4,
+        "conf_lo": 0.4,
+        "conf_hi": 0.5,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 5,
+        "conf_lo": 0.5,
+        "conf_hi": 0.6000000000000001,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 6,
+        "conf_lo": 0.6000000000000001,
+        "conf_hi": 0.7000000000000001,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 7,
+        "conf_lo": 0.7000000000000001,
+        "conf_hi": 0.8,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 8,
+        "conf_lo": 0.8,
+        "conf_hi": 0.9,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 9,
+        "conf_lo": 0.9,
+        "conf_hi": 1.0,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      }
+    ],
+    "2": [
+      {
+        "bin_index": 0,
+        "conf_lo": 0.0,
+        "conf_hi": 0.1,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 1,
+        "conf_lo": 0.1,
+        "conf_hi": 0.2,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 2,
+        "conf_lo": 0.2,
+        "conf_hi": 0.30000000000000004,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 3,
+        "conf_lo": 0.30000000000000004,
+        "conf_hi": 0.4,
+        "mean_pred": null,
+        "mean_actual": null,
+        "n": 0
+      },
+      {
+        "bin_index": 4,
+        "conf_lo": 0.4,
+        "conf_hi": 0.5,
+        "mean_pred": 0.48626043905291316,
+        "mean_actual": 0.4074074074074074,
+        "n": 27
+      },
+      {
+        "bin_index": 5,
+        "conf_lo": 0.5,
+        "conf_hi": 0.6000000000000001,
+        "mean_pred": 0.5664830301428496,
+        "mean_actual": 0.4915254237288136,
+        "n": 59
+      },
+      {
+        "bin_index": 6,
+        "conf_lo": 0.6000000000000001,
+        "conf_hi": 0.7000000000000001,
+        "mean_pred": 0.6690930178724652,
+        "mean_actual": 0.665158371040724,
+        "n": 221
+      },
+      {
+        "bin_index": 7,
+        "conf_lo": 0.7000000000000001,
+        "conf_hi": 0.8,
+        "mean_pred": 0.7557372472505612,
+        "mean_actual": 0.7496062992125985,
+        "n": 635
+      },
+      {
+        "bin_index": 8,
+        "conf_lo": 0.8,
+        "conf_hi": 0.9,
+        "mean_pred": 0.8563865665702486,
+        "mean_actual": 0.8468941382327209,
+        "n": 1143
+      },
+      {
+        "bin_index": 9,
+        "conf_lo": 0.9,
+        "conf_hi": 1.0,
+        "mean_pred": 0.9673689905543144,
+        "mean_actual": 0.9668508287292817,
+        "n": 2715
+      }
+    ]
+  }
+}

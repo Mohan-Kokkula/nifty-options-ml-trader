@@ -1,0 +1,2 @@
+time,year,dir,reason,net_option,gross_option,cost,delta_model,prem_entry,prem_exit,iv,sl_pts,trail,entry_time,hold_min,fold,brain,calibrator
+2024-08-05 13:05:00,2024,PUT,TRAIL_SL,2078.795391107879,2225.066657262587,146.27126615470783,2211.3000000000284,215.17730273561756,249.40909746273428,0.2416518063538878,90.0,True,2024-08-05 12:10:00,55.0,1,cat,isotonic

@@ -1,0 +1,76 @@
+{
+  "date": "2026-04-29",
+  "regime": "event_day",
+  "bias": "neutral",
+  "risk_appetite": 0.5,
+  "max_trades_today": 3,
+  "min_confidence_boost": 3,
+  "avoid_otm2_otm3": true,
+  "key_levels": {
+    "support": 23845.7,
+    "resistance": 24145.7
+  },
+  "rationale": "Heuristic: VIX=18.1, US overnight=-0.48%, Asia=+0.10%, FII net=+0cr, news_bias=+0.09, events=[]",
+  "_payload": {
+    "date": "2026-04-29",
+    "global": {
+      "dow": {
+        "last": 49141.93,
+        "change_pct": -0.05
+      },
+      "nasdaq": {
+        "last": 24663.8,
+        "change_pct": -0.9
+      },
+      "sp500": {
+        "last": 7138.8,
+        "change_pct": -0.49
+      },
+      "nikkei": {
+        "last": 59917.46,
+        "change_pct": -1.02
+      },
+      "hangseng": {
+        "last": 25995.9,
+        "change_pct": 1.23
+      },
+      "ftse": {
+        "last": 10332.8,
+        "change_pct": 0.11
+      },
+      "dax": {
+        "last": 24018.26,
+        "change_pct": -0.27
+      },
+      "crude": {
+        "last": 99.1,
+        "change_pct": 2.83
+      },
+      "dxy": {
+        "last": 98.64,
+        "change_pct": 0.16
+      },
+      "us10y": {
+        "last": 4.35,
+        "change_pct": 0.42
+      },
+      "gift_nifty": {
+        "last": 23995.7,
+        "change_pct": -0.4
+      },
+      "india_vix": {
+        "last": 18.05,
+        "change_pct": -1.8
+      }
+    },
+    "fii_dii": {},
+    "news": {
+      "bias_score": 0.093,
+      "confidence": 0.073,
+      "event_count": 4,
+      "dominant_type": "other",
+      "hot_title": "Oil Price Today (April 29): Crude oil crosses $110, extends gain for 8th straight session. Here\u2019s why"
+    },
+    "events": []
+  }
+}

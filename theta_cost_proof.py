@@ -1,0 +1,274 @@
+"""
+theta_cost_proof.py — Model-free proof of the option-buyer cost drag
+====================================================================
+This script does NOT use the ML model. It quantifies, directly from
+real NSE bhavcopy option data, what an intraday Nifty option BUYER
+loses to theta decay + bid-ask spread + transaction costs.
+
+It exists because backtest.py prices trades as `0.50 * index_move *
+lot` — which ignores all three. This script measures the size of
+what was ignored, so the ~Rs.869/trade backtest average can be put
+in context.
+
+Needs only pandas / numpy (no xgboost). Run:
+    python theta_cost_proof.py
+"""
+
+import warnings; warnings.filterwarnings("ignore")
+import math
+from pathlib import Path
+from datetime import datetime, timedelta
+
+import numpy as np
+import pandas as pd
+
+RISK_FREE   = 0.065
+DIV_YIELD   = 0.012
+STRIKE_STEP = 50
+LOT_SIZE    = 65
+
+BHAV = "data/nse_bhavcopy/nifty_options_merged.csv"
+FIVE = "data/nifty_5min.csv"
+
+# cost model (per round-trip, 1 lot)
+BROKERAGE_PER_ORDER = 20.0
+STT_SELL_RATE = 0.001000
+EXCH_TXN_RATE = 0.00035
+SEBI_RATE     = 0.000001
+STAMP_BUY     = 0.00003
+GST_RATE      = 0.18
+SPREAD_PCT    = 0.005
+SPREAD_FLOOR  = 0.40
+
+
+# ---------------------------------------------------------------- BS
+def _ncdf(x):
+    return 0.5 * (1.0 + math.erf(x / math.sqrt(2.0)))
+
+
+def bs(S, K, T, sig, opt, r=RISK_FREE, q=DIV_YIELD):
+    if T <= 0 or sig <= 0:
+        return max(0.0, S - K) if opt == "CE" else max(0.0, K - S)
+    vt = sig * math.sqrt(T)
+    d1 = (math.log(S / K) + (r - q + 0.5 * sig * sig) * T) / vt
+    d2 = d1 - vt
+    if opt == "CE":
+        return S * math.exp(-q * T) * _ncdf(d1) - K * math.exp(-r * T) * _ncdf(d2)
+    return K * math.exp(-r * T) * _ncdf(-d2) - S * math.exp(-q * T) * _ncdf(-d1)
+
+
+def iv(price, S, K, T, opt):
+    if T <= 0 or price <= 0:
+        return None
+    intr = max(0.0, S - K) if opt == "CE" else max(0.0, K - S)
+    if price <= intr + 0.05:
+        return None
+    lo, hi = 0.01, 3.0
+    for _ in range(80):
+        m = 0.5 * (lo + hi)
+        if bs(S, K, T, m, opt) > price:
+            hi = m
+        else:
+            lo = m
+    v = 0.5 * (lo + hi)
+    return v if 0.02 < v < 2.5 else None
+
+
+def yrs(dt_from, dt_to):
+    return max((dt_to - dt_from).total_seconds(), 60.0) / (365.0 * 24 * 3600)
+
+
+def round_trip_cost(pe, px, qty):
+    spread = max(SPREAD_FLOOR, SPREAD_PCT * pe) * qty
+    brok = BROKERAGE_PER_ORDER * 2
+    stt = STT_SELL_RATE * px * qty
+    turn = (pe + px) * qty
+    txn = EXCH_TXN_RATE * turn
+    sebi = SEBI_RATE * turn
+    stamp = STAMP_BUY * pe * qty
+    gst = GST_RATE * (brok + txn + sebi)
+    return spread + brok + stt + txn + sebi + stamp + gst
+
+
+# ---------------------------------------------------------------- main
+def main():
+    if not Path(BHAV).exists():
+        print(f"ERROR: {BHAV} not found"); return
+
+    print("\n" + "=" * 70)
+    print("  OPTION-BUYER COST PROOF  (model-free, real NSE bhavcopy data)")
+    print("=" * 70)
+
+    df = pd.read_csv(BHAV)
+    df["date"] = pd.to_datetime(df["date"]).dt.date
+    df["expiry"] = pd.to_datetime(df["expiry"]).dt.date
+
+    # ---- per-day ATM IV calibration --------------------------------
+    rows = []
+    for d, day in df.groupby("date"):
+        fexp = [e for e in sorted(day["expiry"].unique()) if e >= d]
+        if not fexp:
+            continue
+        exp = fexp[0]
+        chain = day[day["expiry"] == exp]
+        und = chain["underlying"].replace(0.0, np.nan).median()
+        if not np.isfinite(und) or und <= 0:
+            continue
+        atm = round(und / STRIKE_STEP) * STRIKE_STEP
+        expiry_dt = datetime(exp.year, exp.month, exp.day, 15, 30)
+        eod = datetime(d.year, d.month, d.day, 15, 30)
+        T = yrs(eod, expiry_dt)
+        ivs = []
+        for opt in ("CE", "PE"):
+            r = chain[(chain["strike"] == atm) & (chain["opt_type"] == opt)]
+            if r.empty:
+                continue
+            v = iv(float(r["close"].iloc[0]), und, atm, T, opt)
+            if v is not None:
+                ivs.append(v)
+        if ivs:
+            rows.append({"date": d, "expiry": exp, "spot": und, "atm": atm,
+                         "iv": float(np.mean(ivs)),
+                         "dte": (exp - d).days})
+    cal = pd.DataFrame(rows)
+    print(f"\n  Calibrated {len(cal)} trading days "
+          f"({cal.date.min()} -> {cal.date.max()})")
+    print(f"  ATM IV: median {cal.iv.median()*100:.1f}%  "
+          f"range {cal.iv.min()*100:.1f}%-{cal.iv.max()*100:.1f}%")
+
+    # ---- theta tax: premium lost if the index does NOT move --------
+    # Entry 11:00 (after the bot's morning block), index held flat.
+    print("\n" + "-" * 70)
+    print("  1) THETA TAX — premium lost to time decay, index UNCHANGED")
+    print("-" * 70)
+    print(f"  {'Hold':>6}  {'Expiry day':>14}  {'1-2 DTE':>12}  {'3-6 DTE':>12}")
+    for hold in (60, 90, 120):
+        cells = {}
+        for label, lo, hi in (("exp", 0, 0), ("12", 1, 2), ("36", 3, 6)):
+            sub = cal[(cal.dte >= lo) & (cal.dte <= hi)]
+            losses = []
+            for _, x in sub.iterrows():
+                expiry_dt = datetime(x.expiry.year, x.expiry.month,
+                                     x.expiry.day, 15, 30)
+                t_in = datetime(x.date.year, x.date.month, x.date.day, 11, 0)
+                t_out = t_in + timedelta(minutes=hold)
+                Tin, Tout = yrs(t_in, expiry_dt), yrs(t_out, expiry_dt)
+                pe = bs(x.spot, x.atm, Tin, x.iv, "CE")
+                px = bs(x.spot, x.atm, Tout, x.iv, "CE")
+                if pe > 0:
+                    losses.append((pe - px) / pe * 100.0)
+            cells[label] = np.mean(losses) if losses else float("nan")
+        print(f"  {hold:>4}m   {cells['exp']:>12.1f}%  "
+              f"{cells['12']:>11.1f}%  {cells['36']:>11.1f}%")
+    print("  (an ATM option loses this %% of its value to theta even when"
+          "\n   you are exactly right that the index goes nowhere)")
+
+    # ---- breakeven move --------------------------------------------
+    print("\n" + "-" * 70)
+    print("  2) BREAKEVEN MOVE — index points needed JUST to cover")
+    print("     theta + spread + costs on a 90-min ATM trade")
+    print("-" * 70)
+    print(f"  {'DTE':>10}  {'AvgPremium':>11}  {'Cost/RT':>9}  "
+          f"{'BreakevenMove':>14}")
+    for label, lo, hi in (("Expiry day", 0, 0), ("1-2 DTE", 1, 2),
+                          ("3-6 DTE", 3, 6)):
+        sub = cal[(cal.dte >= lo) & (cal.dte <= hi)]
+        be_moves, prems, costs = [], [], []
+        for _, x in sub.iterrows():
+            expiry_dt = datetime(x.expiry.year, x.expiry.month,
+                                 x.expiry.day, 15, 30)
+            t_in = datetime(x.date.year, x.date.month, x.date.day, 11, 0)
+            t_out = t_in + timedelta(minutes=90)
+            Tin, Tout = yrs(t_in, expiry_dt), yrs(t_out, expiry_dt)
+            pe = bs(x.spot, x.atm, Tin, x.iv, "CE")
+            if pe <= 0:
+                continue
+            cost = round_trip_cost(pe, pe, LOT_SIZE)
+            cost_pts = cost / LOT_SIZE
+            # find favourable index move M so option gain == cost_pts
+            lo_m, hi_m = 0.0, 500.0
+            for _ in range(60):
+                m = 0.5 * (lo_m + hi_m)
+                px = bs(x.spot + m, x.atm, Tout, x.iv, "CE")
+                if (px - pe) > cost_pts:
+                    hi_m = m
+                else:
+                    lo_m = m
+            be_moves.append(0.5 * (lo_m + hi_m))
+            prems.append(pe)
+            costs.append(cost)
+        if be_moves:
+            print(f"  {label:>10}  {np.mean(prems):>10.0f}   "
+                  f"Rs.{np.mean(costs):>6.0f}  {np.mean(be_moves):>11.0f} pts")
+
+    # ---- intraday move distribution from real 5-min data -----------
+    print("\n" + "-" * 70)
+    print("  3) REALITY CHECK — how often the index actually moves enough")
+    print("-" * 70)
+    if Path(FIVE).exists():
+        f5 = pd.read_csv(FIVE)
+        f5.columns = f5.columns.str.strip().str.lower()
+        dtc = next(c for c in f5.columns if "date" in c or "time" in c)
+        f5[dtc] = pd.to_datetime(f5[dtc])
+        f5 = f5.set_index(dtc).sort_index().between_time("09:15", "15:30")
+        f5 = f5[f5.index.date >= cal.date.min()]
+        moves = []
+        for _, g in f5.groupby(f5.index.date):
+            c = g["close"].values
+            for k in range(0, len(c) - 18):       # 18 bars = 90 min
+                moves.append(abs(c[k + 18] - c[k]))
+        moves = np.array(moves)
+        # representative breakeven ~ middle bucket (1-2 DTE)
+        for be in (35, 45, 55):
+            pct = (moves < be).mean() * 100
+            print(f"  90-min windows where |index move| < {be} pts: "
+                  f"{pct:>5.1f}%  (a correct call still loses here)")
+        print(f"  median 90-min |move| = {np.median(moves):.0f} pts  |  "
+              f"mean = {moves.mean():.0f} pts")
+    else:
+        print("  (nifty_5min.csv not found — skipped)")
+
+    # ---- translation to the old backtest --------------------------
+    print("\n" + "-" * 70)
+    print("  4) WHAT THIS DOES TO THE Rs.869/TRADE BACKTEST AVERAGE")
+    print("-" * 70)
+    sub = cal[(cal.dte >= 1) & (cal.dte <= 4)]
+    drag_theta, drag_cost = [], []
+    for _, x in sub.iterrows():
+        expiry_dt = datetime(x.expiry.year, x.expiry.month, x.expiry.day, 15, 30)
+        t_in = datetime(x.date.year, x.date.month, x.date.day, 11, 0)
+        t_out = t_in + timedelta(minutes=90)
+        Tin, Tout = yrs(t_in, expiry_dt), yrs(t_out, expiry_dt)
+        pe = bs(x.spot, x.atm, Tin, x.iv, "CE")
+        px = bs(x.spot, x.atm, Tout, x.iv, "CE")
+        if pe <= 0:
+            continue
+        drag_theta.append((pe - px) * LOT_SIZE)
+        drag_cost.append(round_trip_cost(pe, px, LOT_SIZE))
+    theta_rs = np.mean(drag_theta)
+    cost_rs = np.mean(drag_cost)
+    total = theta_rs + cost_rs
+    print(f"  Avg theta drag / trade (90-min, flat index) : Rs.{theta_rs:>7.0f}")
+    print(f"  Avg round-trip cost / trade                 : Rs.{cost_rs:>7.0f}")
+    print(f"  ----------------------------------------------------------")
+    print(f"  Total drag NOT modelled by backtest.py      : Rs.{total:>7.0f}")
+    print(f"  Backtest's reported average profit / trade  : Rs.    869")
+    print(f"  ----------------------------------------------------------")
+    net = 869 - total
+    print(f"  869 minus cost/theta drag                   : Rs.{net:>7.0f}")
+    print("=" * 70)
+    print("  HOW TO READ THIS:")
+    print("  * Costs + theta are real but modest (~Rs.200/trade for normal")
+    print("    weekly trades; much worse on EXPIRY DAY — see section 1).")
+    print("  * So transaction costs ALONE do not erase a genuine edge.")
+    print("  * The open question is whether the Rs.869 itself is real or a")
+    print("    backtest artefact (overfit / lookahead). Costs are not the")
+    print("    main risk here - the directional model is.")
+    print("  * backtest_options.py answers this: it reprices the")
+    print("    model signals as real options. Walk-forward testing on")
+    print("    unseen data proves whether 869 survives out-of-sample.")
+    print("=" * 70 + chr(10))
+
+
+if __name__ == "__main__":
+    main()

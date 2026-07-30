@@ -1,0 +1,19 @@
+Phase 2 XGB HPO comparison report
+==============================================================================
+n_folds_completed : 1/8
+pooled baseline PF: 0.704   tuned PF: 0.671   delta: -0.033
+paired 90% CI     : [-0.033, -0.033]  (point -0.033)
+DM p-value (grtr) : 0.1155
+effect threshold  : +0.08
+decision          : FAIL TO REJECT H0_hpo
+
+Per-fold breakdown:
+  fold 1: baseline PF=0.704 tuned PF=0.671 delta=-0.033 net_delta=Rs.+7,084
+           best_params={'max_depth': 6, 'learning_rate': 0.04170553216181044, 'min_child_weight': 1, 'gamma': 0.9699098521619943, 'subsample': 0.9162213204002109, 'colsample_bytree': 0.4274034664069657, 'reg_alpha': 0.9091248360355031, 'reg_lambda': 0.8661333735273129}
+  fold 2: MISSING
+  fold 3: MISSING
+  fold 4: MISSING
+  fold 5: MISSING
+  fold 6: MISSING
+  fold 7: MISSING
+  fold 8: MISSING

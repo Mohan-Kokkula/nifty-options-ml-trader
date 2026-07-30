@@ -1,0 +1,142 @@
+{
+  "0.22": {
+    "coverage": 0.18066666666666667,
+    "precision": 0.4464430016843071,
+    "recall": 0.4540529558842432,
+    "trades": 1080,
+    "pf": 4.182860505753708,
+    "win_rate": 0.9314814814814815,
+    "expectancy": 42.84165813078709,
+    "n_differs_from_prev": 0
+  },
+  "0.34": {
+    "coverage": 0.179625,
+    "precision": 0.4465621767762702,
+    "recall": 0.45364689186696094,
+    "trades": 1075,
+    "pf": 4.163555867190214,
+    "win_rate": 0.9311627906976744,
+    "expectancy": 42.77987049418609,
+    "n_differs_from_prev": 25
+  },
+  "0.4": {
+    "coverage": 0.1075,
+    "precision": 0.4592490560583782,
+    "recall": 0.419249459806859,
+    "trades": 622,
+    "pf": 5.792334430587431,
+    "win_rate": 0.9437299035369775,
+    "expectancy": 49.17027582395506,
+    "n_differs_from_prev": 1731
+  },
+  "0.45": {
+    "coverage": 0.057166666666666664,
+    "precision": 0.46295261500207197,
+    "recall": 0.3814707407024666,
+    "trades": 305,
+    "pf": 6.2680367928066705,
+    "win_rate": 0.940983606557377,
+    "expectancy": 50.88975358606563,
+    "n_differs_from_prev": 1208
+  },
+  "0.5": {
+    "coverage": 0.035041666666666665,
+    "precision": 0.466139935640995,
+    "recall": 0.36322444501450163,
+    "trades": 172,
+    "pf": 6.168059106671144,
+    "win_rate": 0.9418604651162791,
+    "expectancy": 51.2962917877908,
+    "n_differs_from_prev": 531
+  },
+  "0.55": {
+    "coverage": 0.017666666666666667,
+    "precision": 0.4722295986601752,
+    "recall": 0.3490741841322964,
+    "trades": 73,
+    "pf": 4.489782854546878,
+    "win_rate": 0.9315068493150684,
+    "expectancy": 46.366306720890535,
+    "n_differs_from_prev": 417
+  },
+  "0.6": {
+    "coverage": 0.007541666666666667,
+    "precision": 0.49074281371984796,
+    "recall": 0.34103906510234633,
+    "trades": 36,
+    "pf": 3.739235302511428,
+    "win_rate": 0.9444444444444444,
+    "expectancy": 41.65920355902797,
+    "n_differs_from_prev": 243
+  },
+  "0.65": {
+    "coverage": 0.0020416666666666665,
+    "precision": 0.5498024737012671,
+    "recall": 0.3358355418492702,
+    "trades": 10,
+    "pf": Infinity,
+    "win_rate": 1.0,
+    "expectancy": 61.39096875000083,
+    "n_differs_from_prev": 132
+  },
+  "0.7": {
+    "coverage": 4.1666666666666665e-05,
+    "precision": 0.2782338152978596,
+    "recall": 0.3333166941213664,
+    "trades": 0,
+    "pf": null,
+    "win_rate": null,
+    "expectancy": null,
+    "n_differs_from_prev": 48
+  },
+  "0.75": {
+    "coverage": 0.0,
+    "precision": 0.27823611111111113,
+    "recall": 0.3333333333333333,
+    "trades": 0,
+    "pf": null,
+    "win_rate": null,
+    "expectancy": null,
+    "n_differs_from_prev": 1
+  },
+  "0.8": {
+    "coverage": 0.0,
+    "precision": 0.27823611111111113,
+    "recall": 0.3333333333333333,
+    "trades": 0,
+    "pf": null,
+    "win_rate": null,
+    "expectancy": null,
+    "n_differs_from_prev": 0
+  },
+  "0.85": {
+    "coverage": 0.0,
+    "precision": 0.27823611111111113,
+    "recall": 0.3333333333333333,
+    "trades": 0,
+    "pf": null,
+    "win_rate": null,
+    "expectancy": null,
+    "n_differs_from_prev": 0
+  },
+  "0.9": {
+    "coverage": 0.0,
+    "precision": 0.27823611111111113,
+    "recall": 0.3333333333333333,
+    "trades": 0,
+    "pf": null,
+    "win_rate": null,
+    "expectancy": null,
+    "n_differs_from_prev": 0
+  },
+  "0.95": {
+    "coverage": 0.0,
+    "precision": 0.27823611111111113,
+    "recall": 0.3333333333333333,
+    "trades": 0,
+    "pf": null,
+    "win_rate": null,
+    "expectancy": null,
+    "n_differs_from_prev": 0
+  }
+}

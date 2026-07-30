@@ -1,0 +1,33 @@
+# docker-compose.yml — Run the trader with security hardening
+#
+# Usage:
+#   cp config/settings.example.env config/settings.env
+#   # Edit settings.env with your real credentials
+#   docker compose up -d
+
+services:
+  nifty-trader:
+    build: .
+    container_name: nifty-trader
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=50M
+    ports:
+      - "8080:8080"
+    env_file:
+      - config/settings.env
+    # Restrict network: only OpenAlgo (localhost) + Twilio + Gmail SMTP
+    # In production, use a custom network with firewall rules
+    network_mode: host
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

@@ -1,0 +1,75 @@
+{
+ "source": "SYNTHETIC (no archive data yet)",
+ "synthetic": true,
+ "rows": 376,
+ "features": {
+  "atm_oi_change_5m": {
+   "nan_rate": 0.1676,
+   "mean": 0.00063,
+   "std": 0.002298,
+   "min": -0.005559,
+   "max": 0.008379
+  },
+  "atm_oi_change_15m": {
+   "nan_rate": 0.3856,
+   "mean": 0.002145,
+   "std": 0.004383,
+   "min": -0.009764,
+   "max": 0.011017
+  },
+  "atm_oi_change_30m": {
+   "nan_rate": 0.6809,
+   "mean": 0.004549,
+   "std": 0.006802,
+   "min": -0.00847,
+   "max": 0.018088
+  },
+  "call_unwinding": {
+   "nan_rate": 0.1676,
+   "mean": 0.108626,
+   "std": 0.311668,
+   "min": 0.0,
+   "max": 1.0
+  },
+  "put_writing": {
+   "nan_rate": 0.1676,
+   "mean": 0.373802,
+   "std": 0.484587,
+   "min": 0.0,
+   "max": 1.0
+  },
+  "short_covering": {
+   "nan_rate": 0.1676,
+   "mean": 0.060703,
+   "std": 0.239167,
+   "min": 0.0,
+   "max": 1.0
+  },
+  "long_buildup": {
+   "nan_rate": 0.1676,
+   "mean": 0.376997,
+   "std": 0.48541,
+   "min": 0.0,
+   "max": 1.0
+  },
+  "pcr_velocity": {
+   "nan_rate": 0.0399,
+   "mean": -0.000103,
+   "std": 0.002607,
+   "min": -0.006634,
+   "max": 0.007373
+  },
+  "oi_acceleration": {
+   "nan_rate": 0.492,
+   "mean": -7.6e-05,
+   "std": 0.003059,
+   "min": -0.009676,
+   "max": 0.007666
+  }
+ },
+ "notes": [
+  "fixed-strike: OI deltas masked across ATM re-references",
+  "oi_acceleration emitted for diagnostics only (panel: noise-prone)",
+  "no model training performed (per Part D requirements)"
+ ]
+}

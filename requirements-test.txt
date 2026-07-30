@@ -1,0 +1,5 @@
+# Test-only dependencies for stat_utils.
+# Production code does NOT depend on any of these.
+pytest>=7.0
+pytest-cov>=4.0
+statsmodels>=0.14   # HAC ground-truth validation only

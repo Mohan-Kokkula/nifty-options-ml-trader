@@ -1,0 +1,24 @@
+{
+  "n": 1,
+  "pf": Infinity,
+  "wr": 1.0,
+  "net": 973.181426366916,
+  "avg": 973.181426366916,
+  "dd": -0.0,
+  "sharpe": NaN,
+  "sortino": NaN,
+  "brain": "cat",
+  "fold_idx": 8,
+  "calibrator": "isotonic",
+  "calibration": {
+    "top1_ece": 0.0374462909580036,
+    "class_conditional_ece": {
+      "0": 0.025494715442045162,
+      "1": 0.02584072129307899,
+      "2": 0.0374462909580036
+    },
+    "brier": 0.3717397195371601,
+    "log_loss": 0.6444922763194715
+  },
+  "calibrator_fit_elapsed_s": 0.091
+}

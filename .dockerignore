@@ -1,0 +1,12 @@
+config/settings.env
+*.env
+!config/settings.example.env
+__pycache__
+*.pyc
+.git
+.gitignore
+.vscode
+.idea
+docs/
+*.md
+!README.md

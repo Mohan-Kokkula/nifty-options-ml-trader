@@ -1,0 +1,76 @@
+{
+  "date": "2026-05-04",
+  "regime": "event_day",
+  "bias": "neutral",
+  "risk_appetite": 0.5,
+  "max_trades_today": 3,
+  "min_confidence_boost": 3,
+  "avoid_otm2_otm3": true,
+  "key_levels": {
+    "support": 23847.55,
+    "resistance": 24147.55
+  },
+  "rationale": "Heuristic: VIX=18.5, US overnight=+0.29%, Asia=+1.09%, FII net=+0cr, news_bias=+0.31, events=[]",
+  "_payload": {
+    "date": "2026-05-04",
+    "global": {
+      "dow": {
+        "last": 49499.27,
+        "change_pct": -0.31
+      },
+      "nasdaq": {
+        "last": 25114.44,
+        "change_pct": 0.89
+      },
+      "sp500": {
+        "last": 7230.12,
+        "change_pct": 0.29
+      },
+      "nikkei": {
+        "last": 59513.12,
+        "change_pct": 0.38
+      },
+      "hangseng": {
+        "last": 26242.79,
+        "change_pct": 1.81
+      },
+      "ftse": {
+        "last": 10363.9,
+        "change_pct": -0.14
+      },
+      "dax": {
+        "last": 24292.38,
+        "change_pct": 1.41
+      },
+      "crude": {
+        "last": 101.84,
+        "change_pct": -0.1
+      },
+      "dxy": {
+        "last": 98.18,
+        "change_pct": -0.03
+      },
+      "us10y": {
+        "last": 4.38,
+        "change_pct": -0.27
+      },
+      "gift_nifty": {
+        "last": 23997.55,
+        "change_pct": -0.74
+      },
+      "india_vix": {
+        "last": 18.46,
+        "change_pct": 5.85
+      }
+    },
+    "fii_dii": {},
+    "news": {
+      "bias_score": 0.309,
+      "confidence": 0.181,
+      "event_count": 5,
+      "dominant_type": "results",
+      "hot_title": "Sensex, Nifty 50 | Stock Market LIVE: Gift Nifty signals firm start for Indian market; Assembly election results eyed"
+    },
+    "events": []
+  }
+}

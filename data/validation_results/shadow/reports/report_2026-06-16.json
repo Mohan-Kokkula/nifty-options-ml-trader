@@ -1,0 +1,29 @@
+{
+ "date": "2026-06-16",
+ "n_cycles": 45,
+ "source": "data/shadow/predictions/shadow_2026-06-16.jsonl",
+ "generated_at": "2026-06-16T15:35:00",
+ "agreement_rate": 0.9333,
+ "direction_distribution": {
+  "primary": {
+   "SKIP": 45
+  },
+  "shadow": {
+   "SKIP": 42,
+   "PUT": 3
+  }
+ },
+ "trade_count": {
+  "primary": 0,
+  "shadow": 3,
+  "diff": 3
+ },
+ "trade_decision_agreement_rate": 0.9333,
+ "confidence": {
+  "primary_mean": 63.27,
+  "shadow_mean": 73.93,
+  "mean_diff": 10.65,
+  "mean_abs_diff": 12.35
+ },
+ "shadow_model_dir": "models/htf36"
+}

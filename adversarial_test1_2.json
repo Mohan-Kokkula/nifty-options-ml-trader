@@ -1,0 +1,22 @@
+{
+  "n_trades": 8936,
+  "net_pnl_real": 303730.822265625,
+  "pf_real": 4.8162982781612556,
+  "wr_real": 0.941025067144136,
+  "max_dd_shuffled_p5": 581.757000000008,
+  "max_dd_shuffled_p50": 726.8150000000096,
+  "max_dd_shuffled_p95": 987.3015000000166,
+  "max_dd_real": 2985.1199999999953,
+  "max_dd_real_percentile": 100.0,
+  "annualized_pts_per_year": 40936.414329343,
+  "years_span": 7.4195756331279945,
+  "longest_loss_streak_real": 8,
+  "longest_win_streak_real": 238,
+  "prob_consec_losses": {
+    "5": 0.0059,
+    "6": 0.0003,
+    "7": 0.0,
+    "8": 0.0,
+    "10": 0.0
+  }
+}

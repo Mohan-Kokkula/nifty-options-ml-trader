@@ -1,0 +1,2 @@
+time,year,dir,reason,net_option,gross_option,cost,delta_model,prem_entry,prem_exit,iv,sl_pts,trail,entry_time,hold_min,fold,ensemble
+2026-04-02 12:30:00,2026,PUT,SL,-2820.9675189252266,-2668.0193324355514,152.94818648967524,-2925.0,245.67713669430486,204.6306854260656,0.2501,90.0,False,2026-04-02 11:30:00,60.0,8,mean

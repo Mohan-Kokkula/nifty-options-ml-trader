@@ -1,0 +1,1875 @@
+[pre-flight] Windows sleep prevention: True
+[xgb/fold 1] cache MISS (missing manifest.json); recomputing
+[Phase 4 / xgb / Fold 1] loading Phase 3 outputs ...
+  outer test: n=4800
+[Phase 4 / xgb / Fold 1] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:07:52 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:07:52 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:07:52 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:07:52 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:07:52 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:07:54 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:07:54 [V9]   5-min features computed: 98 cols
+16:07:54 [V9]   15-min features: 14 cols
+16:07:55 [V9]   30-min features: 7 cols
+16:07:56 [V9]   60-min features: 13 cols
+16:07:57 [V9]   Daily features: 17 cols
+16:07:57 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:07:57 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:07:57 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:07:59 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:07:59 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:08:00 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:08:00 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:08:01 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:08:01 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:08:01 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:08:01 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:08:01 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-03-26  val 2020-03-29..2021-08-28
+    inner 2: train<2021-08-25  val 2021-08-28..2023-01-27
+    inner 3: train<2023-01-24  val 2023-01-27..2024-06-27
+[Phase 4] retraining xgb on inner folds to build OOF pool ...
+    inner fold 1: n_val=26261, train=7s
+    inner fold 2: n_val=26250, train=60s
+    inner fold 3: n_val=25992, train=73s
+  OOF pool: n=78503
+
+[xgb/fold 1] calibrator=noop
+  noop: n_trades=97 PF=0.704 Net=Rs.-19,081 top1_ece=0.1657 brier=0.2934 log_loss=0.5327
+
+[xgb/fold 1] calibrator=platt
+  platt: n_trades=9 PF=1.973 Net=Rs.+5,606 top1_ece=0.0161 brier=0.1892 log_loss=0.3696
+
+[xgb/fold 1] calibrator=isotonic
+  isotonic: n_trades=1 PF=inf Net=Rs.+1,349 top1_ece=0.0083 brier=0.1885 log_loss=0.3633
+
+[xgb Fold 1] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         97   0.704      -19,081     0.1657  0.2934     0.5327
+  noop          97   0.704      -19,081     0.1657  0.2934     0.5327
+  platt          9   1.973       +5,606     0.0161  0.1892     0.3696
+  isotonic       1     inf       +1,349     0.0083  0.1885     0.3633
+[xgb/fold 2] cache MISS (missing manifest.json); recomputing
+[Phase 4 / xgb / Fold 2] loading Phase 3 outputs ...
+  outer test: n=4575
+[Phase 4 / xgb / Fold 2] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:10:28 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:10:29 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:10:29 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:10:29 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:10:29 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:10:31 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:10:31 [V9]   5-min features computed: 98 cols
+16:10:31 [V9]   15-min features: 14 cols
+16:10:32 [V9]   30-min features: 7 cols
+16:10:33 [V9]   60-min features: 13 cols
+16:10:34 [V9]   Daily features: 17 cols
+16:10:34 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:10:34 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:10:34 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:10:36 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:10:36 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:10:37 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:10:37 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:10:38 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:10:38 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:10:38 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:10:38 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:10:38 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-05-16  val 2020-05-19..2021-10-31
+    inner 2: train<2021-10-28  val 2021-10-31..2023-04-14
+    inner 3: train<2023-04-11  val 2023-04-14..2024-09-25
+[Phase 4] retraining xgb on inner folds to build OOF pool ...
+    inner fold 1: n_val=27161, train=5s
+    inner fold 2: n_val=26850, train=63s
+    inner fold 3: n_val=26817, train=94s
+  OOF pool: n=80828
+
+[xgb/fold 2] calibrator=noop
+  noop: n_trades=100 PF=1.206 Net=Rs.+10,447 top1_ece=0.0702 brier=0.4725 log_loss=0.7898
+
+[xgb/fold 2] calibrator=platt
+  platt: n_trades=41 PF=0.831 Net=Rs.-4,716 top1_ece=0.0356 brier=0.3238 log_loss=0.5811
+
+[xgb/fold 2] calibrator=isotonic
+  isotonic: n_trades=12 PF=1.518 Net=Rs.+5,540 top1_ece=0.0278 brier=0.3241 log_loss=0.5801
+
+[xgb Fold 2] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal        100   1.206      +10,447     0.0702  0.4725     0.7898
+  noop         100   1.206      +10,447     0.0702  0.4725     0.7898
+  platt         41   0.831       -4,716     0.0356  0.3238     0.5811
+  isotonic      12   1.518       +5,540     0.0278  0.3241     0.5801
+[xgb/fold 3] cache MISS (missing manifest.json); recomputing
+[Phase 4 / xgb / Fold 3] loading Phase 3 outputs ...
+  outer test: n=4650
+[Phase 4 / xgb / Fold 3] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:13:26 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:13:26 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:13:26 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:13:26 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:13:26 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:13:29 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:13:29 [V9]   5-min features computed: 98 cols
+16:13:29 [V9]   15-min features: 14 cols
+16:13:29 [V9]   30-min features: 7 cols
+16:13:31 [V9]   60-min features: 13 cols
+16:13:31 [V9]   Daily features: 17 cols
+16:13:32 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:13:32 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:13:32 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:13:34 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:13:34 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:13:35 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:13:35 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:13:36 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:13:36 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:13:36 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:13:36 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:13:36 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-07-05  val 2020-07-08..2022-01-03
+    inner 2: train<2021-12-31  val 2022-01-03..2023-07-01
+    inner 3: train<2023-06-28  val 2023-07-01..2024-12-26
+[Phase 4] retraining xgb on inner folds to build OOF pool ...
+    inner fold 1: n_val=27686, train=54s
+    inner fold 2: n_val=27675, train=68s
+    inner fold 3: n_val=27417, train=76s
+  OOF pool: n=82778
+
+[xgb/fold 3] calibrator=noop
+  noop: n_trades=95 PF=1.021 Net=Rs.+961 top1_ece=0.0785 brier=0.4198 log_loss=0.7090
+
+[xgb/fold 3] calibrator=platt
+  platt: n_trades=29 PF=0.425 Net=Rs.-12,073 top1_ece=0.0276 brier=0.3217 log_loss=0.5834
+
+[xgb/fold 3] calibrator=isotonic
+  isotonic: n_trades=5 PF=0.899 Net=Rs.-521 top1_ece=0.0183 brier=0.3184 log_loss=0.5709
+
+[xgb Fold 3] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         95   1.021         +961     0.0785  0.4198     0.7090
+  noop          95   1.021         +961     0.0785  0.4198     0.7090
+  platt         29   0.425      -12,073     0.0276  0.3217     0.5834
+  isotonic       5   0.899         -521     0.0183  0.3184     0.5709
+[xgb/fold 4] cache MISS (missing manifest.json); recomputing
+[Phase 4 / xgb / Fold 4] loading Phase 3 outputs ...
+  outer test: n=4575
+[Phase 4 / xgb / Fold 4] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:17:00 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:17:00 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:17:00 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:17:00 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:17:00 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:17:03 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:17:03 [V9]   5-min features computed: 98 cols
+16:17:03 [V9]   15-min features: 14 cols
+16:17:03 [V9]   30-min features: 7 cols
+16:17:05 [V9]   60-min features: 13 cols
+16:17:05 [V9]   Daily features: 17 cols
+16:17:05 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:17:05 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:17:06 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:17:08 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:17:08 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:17:09 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:17:09 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:17:09 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:17:09 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:17:09 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:17:09 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:17:09 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-08-24  val 2020-08-27..2022-03-08
+    inner 2: train<2022-03-05  val 2022-03-08..2023-09-17
+    inner 3: train<2023-09-14  val 2023-09-17..2025-03-28
+[Phase 4] retraining xgb on inner folds to build OOF pool ...
+    inner fold 1: n_val=28286, train=19s
+    inner fold 2: n_val=28425, train=25s
+    inner fold 3: n_val=28242, train=106s
+  OOF pool: n=84953
+
+[xgb/fold 4] calibrator=noop
+  noop: n_trades=83 PF=1.077 Net=Rs.+4,662 top1_ece=0.1144 brier=0.3778 log_loss=0.6478
+
+[xgb/fold 4] calibrator=platt
+  platt: n_trades=27 PF=1.014 Net=Rs.+445 top1_ece=0.0195 brier=0.2651 log_loss=0.4891
+
+[xgb/fold 4] calibrator=isotonic
+  isotonic: n_trades=11 PF=1.249 Net=Rs.+1,978 top1_ece=0.0223 brier=0.2598 log_loss=0.4758
+
+[xgb Fold 4] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         83   1.077       +4,662     0.1144  0.3778     0.6478
+  noop          83   1.077       +4,662     0.1144  0.3778     0.6478
+  platt         27   1.014         +445     0.0195  0.2651     0.4891
+  isotonic      11   1.249       +1,978     0.0223  0.2598     0.4758
+[xgb/fold 5] cache MISS (missing manifest.json); recomputing
+[Phase 4 / xgb / Fold 5] loading Phase 3 outputs ...
+  outer test: n=4800
+[Phase 4 / xgb / Fold 5] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:19:47 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:19:47 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:19:47 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:19:47 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:19:47 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:19:50 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:19:50 [V9]   5-min features computed: 98 cols
+16:19:50 [V9]   15-min features: 14 cols
+16:19:50 [V9]   30-min features: 7 cols
+16:19:52 [V9]   60-min features: 13 cols
+16:19:52 [V9]   Daily features: 17 cols
+16:19:52 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:19:52 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:19:53 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:19:55 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:19:55 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:19:56 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:19:56 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:19:56 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:19:56 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:19:56 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:19:56 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:19:56 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-10-13  val 2020-10-16..2022-05-10
+    inner 2: train<2022-05-07  val 2022-05-10..2023-12-02
+    inner 3: train<2023-11-29  val 2023-12-02..2025-06-25
+[Phase 4] retraining xgb on inner folds to build OOF pool ...
+    inner fold 1: n_val=28736, train=10s
+    inner fold 2: n_val=29100, train=21s
+    inner fold 3: n_val=28842, train=83s
+  OOF pool: n=86678
+
+[xgb/fold 5] calibrator=noop
+  noop: n_trades=56 PF=1.714 Net=Rs.+13,714 top1_ece=0.1725 brier=0.2408 log_loss=0.4545
+
+[xgb/fold 5] calibrator=platt
+  platt: n_trades=6 PF=0.234 Net=Rs.-3,038 top1_ece=0.0126 brier=0.1646 log_loss=0.3343
+
+[xgb/fold 5] calibrator=isotonic
+  isotonic: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0238 brier=0.1655 log_loss=0.3417
+
+[xgb Fold 5] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         56   1.714      +13,714     0.1725  0.2408     0.4545
+  noop          56   1.714      +13,714     0.1725  0.2408     0.4545
+  platt          6   0.234       -3,038     0.0126  0.1646     0.3343
+  isotonic       0     nan           +0     0.0238  0.1655     0.3417
+[xgb/fold 6] cache MISS (missing manifest.json); recomputing
+[Phase 4 / xgb / Fold 6] loading Phase 3 outputs ...
+  outer test: n=4587
+[Phase 4 / xgb / Fold 6] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:21:57 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:21:57 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:21:57 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:21:57 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:21:57 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:22:00 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:22:00 [V9]   5-min features computed: 98 cols
+16:22:00 [V9]   15-min features: 14 cols
+16:22:00 [V9]   30-min features: 7 cols
+16:22:02 [V9]   60-min features: 13 cols
+16:22:02 [V9]   Daily features: 17 cols
+16:22:02 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:22:02 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:22:03 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:22:05 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:22:05 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:22:06 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:22:06 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:22:06 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:22:06 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:22:06 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:22:06 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:22:06 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-12-02  val 2020-12-05..2022-07-13
+    inner 2: train<2022-07-10  val 2022-07-13..2024-02-18
+    inner 3: train<2024-02-15  val 2024-02-18..2025-09-25
+[Phase 4] retraining xgb on inner folds to build OOF pool ...
+    inner fold 1: n_val=29636, train=16s
+    inner fold 2: n_val=29625, train=14s
+    inner fold 3: n_val=29667, train=62s
+  OOF pool: n=88928
+
+[xgb/fold 6] calibrator=noop
+  noop: n_trades=46 PF=0.835 Net=Rs.-4,558 top1_ece=0.1578 brier=0.2383 log_loss=0.4610
+
+[xgb/fold 6] calibrator=platt
+  platt: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0357 brier=0.1898 log_loss=0.3880
+
+[xgb/fold 6] calibrator=isotonic
+  isotonic: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0499 brier=0.1915 log_loss=0.4253
+
+[xgb Fold 6] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         46   0.835       -4,558     0.1578  0.2383     0.4610
+  noop          46   0.835       -4,558     0.1578  0.2383     0.4610
+  platt          0     nan           +0     0.0357  0.1898     0.3880
+  isotonic       0     nan           +0     0.0499  0.1915     0.4253
+[xgb/fold 7] cache MISS (missing manifest.json); recomputing
+[Phase 4 / xgb / Fold 7] loading Phase 3 outputs ...
+  outer test: n=4350
+[Phase 4 / xgb / Fold 7] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:23:45 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:23:46 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:23:46 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:23:46 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:23:46 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:23:52 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:23:52 [V9]   5-min features computed: 98 cols
+16:23:52 [V9]   15-min features: 14 cols
+16:23:53 [V9]   30-min features: 7 cols
+16:23:57 [V9]   60-min features: 13 cols
+16:23:58 [V9]   Daily features: 17 cols
+16:23:58 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:23:59 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:23:59 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:24:07 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:24:07 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:24:09 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:24:09 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:24:11 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:24:11 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:24:12 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:24:12 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:24:12 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2021-01-21  val 2021-01-24..2022-09-15
+    inner 2: train<2022-09-12  val 2022-09-15..2024-05-06
+    inner 3: train<2024-05-03  val 2024-05-06..2025-12-26
+[Phase 4] retraining xgb on inner folds to build OOF pool ...
+    inner fold 1: n_val=30311, train=32s
+    inner fold 2: n_val=30096, train=115s
+    inner fold 3: n_val=30558, train=113s
+  OOF pool: n=90965
+
+[xgb/fold 7] calibrator=noop
+  noop: n_trades=92 PF=0.393 Net=Rs.-36,368 top1_ece=0.0580 brier=0.4443 log_loss=0.7493
+
+[xgb/fold 7] calibrator=platt
+  platt: n_trades=38 PF=0.457 Net=Rs.-16,258 top1_ece=0.0254 brier=0.3386 log_loss=0.6045
+
+[xgb/fold 7] calibrator=isotonic
+  isotonic: n_trades=18 PF=0.008 Net=Rs.-15,385 top1_ece=0.0193 brier=0.3337 log_loss=0.5887
+
+[xgb Fold 7] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         92   0.393      -36,368     0.0580  0.4443     0.7493
+  noop          92   0.393      -36,368     0.0580  0.4443     0.7493
+  platt         38   0.457      -16,258     0.0254  0.3386     0.6045
+  isotonic      18   0.008      -15,385     0.0193  0.3337     0.5887
+[xgb/fold 8] cache MISS (missing manifest.json); recomputing
+[Phase 4 / xgb / Fold 8] loading Phase 3 outputs ...
+  outer test: n=1415
+[Phase 4 / xgb / Fold 8] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:28:43 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:28:43 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:28:43 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:28:43 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:28:43 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:28:49 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:28:49 [V9]   5-min features computed: 98 cols
+16:28:49 [V9]   15-min features: 14 cols
+16:28:50 [V9]   30-min features: 7 cols
+16:28:55 [V9]   60-min features: 13 cols
+16:28:55 [V9]   Daily features: 17 cols
+16:28:56 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:28:56 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:28:57 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:29:04 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:29:04 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:29:07 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:29:07 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:29:09 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:29:09 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:29:09 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:29:09 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:29:09 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2021-03-12  val 2021-03-15..2022-11-17
+    inner 2: train<2022-11-14  val 2022-11-17..2024-07-21
+    inner 3: train<2024-07-18  val 2024-07-21..2026-03-25
+[Phase 4] retraining xgb on inner folds to build OOF pool ...
+    inner fold 1: n_val=30975, train=56s
+    inner fold 2: n_val=30942, train=115s
+    inner fold 3: n_val=31062, train=138s
+  OOF pool: n=92979
+
+[xgb/fold 8] calibrator=noop
+  noop: n_trades=29 PF=0.449 Net=Rs.-14,687 top1_ece=0.0856 brier=0.4582 log_loss=0.7656
+
+[xgb/fold 8] calibrator=platt
+  platt: n_trades=10 PF=0.097 Net=Rs.-7,806 top1_ece=0.0554 brier=0.3761 log_loss=0.6643
+
+[xgb/fold 8] calibrator=isotonic
+  isotonic: n_trades=4 PF=7.867 Net=Rs.+2,044 top1_ece=0.0527 brier=0.3760 log_loss=0.6524
+
+[xgb Fold 8] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         29   0.449      -14,687     0.0856  0.4582     0.7656
+  noop          29   0.449      -14,687     0.0856  0.4582     0.7656
+  platt         10   0.097       -7,806     0.0554  0.3761     0.6643
+  isotonic       4   7.867       +2,044     0.0527  0.3760     0.6524
+[lgb/fold 1] cache HIT; skipping (ok)
+[lgb/fold 2] cache MISS (missing manifest.json); recomputing
+[Phase 4 / lgb / Fold 2] loading Phase 3 outputs ...
+  outer test: n=4575
+[Phase 4 / lgb / Fold 2] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:34:30 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:34:30 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:34:30 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:34:30 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:34:30 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:34:36 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:34:36 [V9]   5-min features computed: 98 cols
+16:34:37 [V9]   15-min features: 14 cols
+16:34:37 [V9]   30-min features: 7 cols
+16:34:42 [V9]   60-min features: 13 cols
+16:34:43 [V9]   Daily features: 17 cols
+16:34:43 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:34:43 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:34:44 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:34:52 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:34:52 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:34:54 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:34:54 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:34:56 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:34:56 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:34:56 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:34:56 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:34:56 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-05-16  val 2020-05-19..2021-10-31
+    inner 2: train<2021-10-28  val 2021-10-31..2023-04-14
+    inner 3: train<2023-04-11  val 2023-04-14..2024-09-25
+[Phase 4] retraining lgb on inner folds to build OOF pool ...
+    inner fold 1: n_val=27161, train=8s
+    inner fold 2: n_val=26850, train=62s
+    inner fold 3: n_val=26817, train=76s
+  OOF pool: n=80828
+
+[lgb/fold 2] calibrator=noop
+  noop: n_trades=120 PF=1.356 Net=Rs.+21,246 top1_ece=0.0598 brier=0.4626 log_loss=0.7703
+
+[lgb/fold 2] calibrator=platt
+  platt: n_trades=37 PF=1.449 Net=Rs.+9,068 top1_ece=0.0246 brier=0.3269 log_loss=0.5890
+
+[lgb/fold 2] calibrator=isotonic
+  isotonic: n_trades=15 PF=2.799 Net=Rs.+13,169 top1_ece=0.0094 brier=0.3253 log_loss=0.5865
+
+[lgb Fold 2] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal        120   1.356      +21,246     0.0598  0.4626     0.7703
+  noop         120   1.356      +21,246     0.0598  0.4626     0.7703
+  platt         37   1.449       +9,068     0.0246  0.3269     0.5890
+  isotonic      15   2.799      +13,169     0.0094  0.3253     0.5865
+[lgb/fold 3] cache MISS (missing manifest.json); recomputing
+[Phase 4 / lgb / Fold 3] loading Phase 3 outputs ...
+  outer test: n=4650
+[Phase 4 / lgb / Fold 3] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:37:35 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:37:35 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:37:35 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:37:35 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:37:35 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:37:41 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:37:41 [V9]   5-min features computed: 98 cols
+16:37:41 [V9]   15-min features: 14 cols
+16:37:42 [V9]   30-min features: 7 cols
+16:37:47 [V9]   60-min features: 13 cols
+16:37:48 [V9]   Daily features: 17 cols
+16:37:48 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:37:48 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:37:49 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:37:57 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:37:57 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:37:59 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:37:59 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:38:02 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:38:02 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:38:02 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:38:02 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:38:02 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-07-05  val 2020-07-08..2022-01-03
+    inner 2: train<2021-12-31  val 2022-01-03..2023-07-01
+    inner 3: train<2023-06-28  val 2023-07-01..2024-12-26
+[Phase 4] retraining lgb on inner folds to build OOF pool ...
+    inner fold 1: n_val=27686, train=45s
+    inner fold 2: n_val=27675, train=54s
+    inner fold 3: n_val=27417, train=64s
+  OOF pool: n=82778
+
+[lgb/fold 3] calibrator=noop
+  noop: n_trades=105 PF=0.532 Net=Rs.-33,264 top1_ece=0.0779 brier=0.4284 log_loss=0.7212
+
+[lgb/fold 3] calibrator=platt
+  platt: n_trades=17 PF=0.896 Net=Rs.-857 top1_ece=0.0275 brier=0.3202 log_loss=0.5784
+
+[lgb/fold 3] calibrator=isotonic
+  isotonic: n_trades=2 PF=0.000 Net=Rs.-2,395 top1_ece=0.0237 brier=0.3177 log_loss=0.5619
+
+[lgb Fold 3] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal        105   0.532      -33,264     0.0779  0.4284     0.7212
+  noop         105   0.532      -33,264     0.0779  0.4284     0.7212
+  platt         17   0.896         -857     0.0275  0.3202     0.5784
+  isotonic       2   0.000       -2,395     0.0237  0.3177     0.5619
+[lgb/fold 4] cache MISS (missing manifest.json); recomputing
+[Phase 4 / lgb / Fold 4] loading Phase 3 outputs ...
+  outer test: n=4575
+[Phase 4 / lgb / Fold 4] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:40:58 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:40:58 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:40:58 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:40:58 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:40:58 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:41:03 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:41:03 [V9]   5-min features computed: 98 cols
+16:41:04 [V9]   15-min features: 14 cols
+16:41:04 [V9]   30-min features: 7 cols
+16:41:09 [V9]   60-min features: 13 cols
+16:41:10 [V9]   Daily features: 17 cols
+16:41:10 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:41:10 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:41:11 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:41:19 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:41:19 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:41:21 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:41:21 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:41:24 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:41:24 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:41:24 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:41:24 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:41:24 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-08-24  val 2020-08-27..2022-03-08
+    inner 2: train<2022-03-05  val 2022-03-08..2023-09-17
+    inner 3: train<2023-09-14  val 2023-09-17..2025-03-28
+[Phase 4] retraining lgb on inner folds to build OOF pool ...
+    inner fold 1: n_val=28286, train=12s
+    inner fold 2: n_val=28425, train=15s
+    inner fold 3: n_val=28242, train=53s
+  OOF pool: n=84953
+
+[lgb/fold 4] calibrator=noop
+  noop: n_trades=87 PF=0.899 Net=Rs.-6,056 top1_ece=0.1005 brier=0.3765 log_loss=0.6431
+
+[lgb/fold 4] calibrator=platt
+  platt: n_trades=35 PF=1.042 Net=Rs.+1,446 top1_ece=0.0265 brier=0.2666 log_loss=0.4917
+
+[lgb/fold 4] calibrator=isotonic
+  isotonic: n_trades=10 PF=2.751 Net=Rs.+17,605 top1_ece=0.0238 brier=0.2603 log_loss=0.4768
+
+[lgb Fold 4] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         87   0.899       -6,056     0.1005  0.3765     0.6431
+  noop          87   0.899       -6,056     0.1005  0.3765     0.6431
+  platt         35   1.042       +1,446     0.0265  0.2666     0.4917
+  isotonic      10   2.751      +17,605     0.0238  0.2603     0.4768
+[lgb/fold 5] cache MISS (missing manifest.json); recomputing
+[Phase 4 / lgb / Fold 5] loading Phase 3 outputs ...
+  outer test: n=4800
+[Phase 4 / lgb / Fold 5] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:42:56 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:42:56 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:42:56 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:42:56 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:42:56 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:43:01 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:43:01 [V9]   5-min features computed: 98 cols
+16:43:01 [V9]   15-min features: 14 cols
+16:43:02 [V9]   30-min features: 7 cols
+16:43:07 [V9]   60-min features: 13 cols
+16:43:08 [V9]   Daily features: 17 cols
+16:43:08 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:43:08 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:43:09 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:43:16 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:43:16 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:43:19 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:43:19 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:43:21 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:43:21 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:43:21 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:43:21 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:43:21 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-10-13  val 2020-10-16..2022-05-10
+    inner 2: train<2022-05-07  val 2022-05-10..2023-12-02
+    inner 3: train<2023-11-29  val 2023-12-02..2025-06-25
+[Phase 4] retraining lgb on inner folds to build OOF pool ...
+    inner fold 1: n_val=28736, train=10s
+    inner fold 2: n_val=29100, train=19s
+    inner fold 3: n_val=28842, train=67s
+  OOF pool: n=86678
+
+[lgb/fold 5] calibrator=noop
+  noop: n_trades=59 PF=0.903 Net=Rs.-2,123 top1_ece=0.1693 brier=0.2406 log_loss=0.4519
+
+[lgb/fold 5] calibrator=platt
+  platt: n_trades=3 PF=0.064 Net=Rs.-3,686 top1_ece=0.0145 brier=0.1646 log_loss=0.3358
+
+[lgb/fold 5] calibrator=isotonic
+  isotonic: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0230 brier=0.1655 log_loss=0.3380
+
+[lgb Fold 5] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         59   0.903       -2,123     0.1693  0.2406     0.4519
+  noop          59   0.903       -2,123     0.1693  0.2406     0.4519
+  platt          3   0.064       -3,686     0.0145  0.1646     0.3358
+  isotonic       0     nan           +0     0.0230  0.1655     0.3380
+[lgb/fold 6] cache MISS (missing manifest.json); recomputing
+[Phase 4 / lgb / Fold 6] loading Phase 3 outputs ...
+  outer test: n=4587
+[Phase 4 / lgb / Fold 6] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:45:08 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:45:09 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:45:09 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:45:09 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:45:09 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:45:14 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:45:14 [V9]   5-min features computed: 98 cols
+16:45:14 [V9]   15-min features: 14 cols
+16:45:14 [V9]   30-min features: 7 cols
+16:45:19 [V9]   60-min features: 13 cols
+16:45:20 [V9]   Daily features: 17 cols
+16:45:20 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:45:20 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:45:21 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:45:29 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:45:29 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:45:31 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:45:31 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:45:33 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:45:33 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:45:33 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:45:33 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:45:33 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-12-02  val 2020-12-05..2022-07-13
+    inner 2: train<2022-07-10  val 2022-07-13..2024-02-18
+    inner 3: train<2024-02-15  val 2024-02-18..2025-09-25
+[Phase 4] retraining lgb on inner folds to build OOF pool ...
+    inner fold 1: n_val=29636, train=16s
+    inner fold 2: n_val=29625, train=13s
+    inner fold 3: n_val=29667, train=53s
+  OOF pool: n=88928
+
+[lgb/fold 6] calibrator=noop
+  noop: n_trades=46 PF=0.887 Net=Rs.-2,214 top1_ece=0.1366 brier=0.2304 log_loss=0.4451
+
+[lgb/fold 6] calibrator=platt
+  platt: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0376 brier=0.1906 log_loss=0.3921
+
+[lgb/fold 6] calibrator=isotonic
+  isotonic: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0539 brier=0.1927 log_loss=0.4497
+
+[lgb Fold 6] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         46   0.887       -2,214     0.1366  0.2304     0.4451
+  noop          46   0.887       -2,214     0.1366  0.2304     0.4451
+  platt          0     nan           +0     0.0376  0.1906     0.3921
+  isotonic       0     nan           +0     0.0539  0.1927     0.4497
+[lgb/fold 7] cache MISS (missing manifest.json); recomputing
+[Phase 4 / lgb / Fold 7] loading Phase 3 outputs ...
+  outer test: n=4350
+[Phase 4 / lgb / Fold 7] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:47:06 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:47:06 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:47:06 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:47:06 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:47:06 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:47:13 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:47:13 [V9]   5-min features computed: 98 cols
+16:47:13 [V9]   15-min features: 14 cols
+16:47:13 [V9]   30-min features: 7 cols
+16:47:18 [V9]   60-min features: 13 cols
+16:47:19 [V9]   Daily features: 17 cols
+16:47:20 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:47:20 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:47:20 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:47:28 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:47:28 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:47:30 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:47:30 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:47:33 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:47:33 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:47:33 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:47:33 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:47:33 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2021-01-21  val 2021-01-24..2022-09-15
+    inner 2: train<2022-09-12  val 2022-09-15..2024-05-06
+    inner 3: train<2024-05-03  val 2024-05-06..2025-12-26
+[Phase 4] retraining lgb on inner folds to build OOF pool ...
+    inner fold 1: n_val=30311, train=24s
+    inner fold 2: n_val=30096, train=59s
+    inner fold 3: n_val=30558, train=40s
+  OOF pool: n=90965
+
+[lgb/fold 7] calibrator=noop
+  noop: n_trades=88 PF=0.763 Net=Rs.-13,146 top1_ece=0.0520 brier=0.4405 log_loss=0.7409
+
+[lgb/fold 7] calibrator=platt
+  platt: n_trades=31 PF=0.261 Net=Rs.-24,635 top1_ece=0.0328 brier=0.3394 log_loss=0.6071
+
+[lgb/fold 7] calibrator=isotonic
+  isotonic: n_trades=18 PF=0.224 Net=Rs.-22,376 top1_ece=0.0241 brier=0.3345 log_loss=0.5947
+
+[lgb Fold 7] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         88   0.763      -13,146     0.0520  0.4405     0.7409
+  noop          88   0.763      -13,146     0.0520  0.4405     0.7409
+  platt         31   0.261      -24,635     0.0328  0.3394     0.6071
+  isotonic      18   0.224      -22,376     0.0241  0.3345     0.5947
+[lgb/fold 8] cache MISS (missing manifest.json); recomputing
+[Phase 4 / lgb / Fold 8] loading Phase 3 outputs ...
+  outer test: n=1415
+[Phase 4 / lgb / Fold 8] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:49:48 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:49:49 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:49:49 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:49:49 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:49:49 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:49:54 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:49:54 [V9]   5-min features computed: 98 cols
+16:49:54 [V9]   15-min features: 14 cols
+16:49:55 [V9]   30-min features: 7 cols
+16:49:59 [V9]   60-min features: 13 cols
+16:50:00 [V9]   Daily features: 17 cols
+16:50:01 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:50:01 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:50:01 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:50:09 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:50:09 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:50:11 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:50:11 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:50:13 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:50:13 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:50:13 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:50:13 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:50:13 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2021-03-12  val 2021-03-15..2022-11-17
+    inner 2: train<2022-11-14  val 2022-11-17..2024-07-21
+    inner 3: train<2024-07-18  val 2024-07-21..2026-03-25
+[Phase 4] retraining lgb on inner folds to build OOF pool ...
+    inner fold 1: n_val=30975, train=52s
+    inner fold 2: n_val=30942, train=75s
+    inner fold 3: n_val=31062, train=71s
+  OOF pool: n=92979
+
+[lgb/fold 8] calibrator=noop
+  noop: n_trades=29 PF=0.240 Net=Rs.-21,486 top1_ece=0.0625 brier=0.4603 log_loss=0.7654
+
+[lgb/fold 8] calibrator=platt
+  platt: n_trades=9 PF=0.077 Net=Rs.-10,005 top1_ece=0.0572 brier=0.3784 log_loss=0.6699
+
+[lgb/fold 8] calibrator=isotonic
+  isotonic: n_trades=4 PF=5.849 Net=Rs.+1,270 top1_ece=0.0486 brier=0.3772 log_loss=0.6551
+
+[lgb Fold 8] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         29   0.240      -21,486     0.0625  0.4603     0.7654
+  noop          29   0.240      -21,486     0.0625  0.4603     0.7654
+  platt          9   0.077      -10,005     0.0572  0.3784     0.6699
+  isotonic       4   5.849       +1,270     0.0486  0.3772     0.6551
+[cat/fold 1] cache MISS (missing manifest.json); recomputing
+[Phase 4 / cat / Fold 1] loading Phase 3 outputs ...
+  outer test: n=4800
+[Phase 4 / cat / Fold 1] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:53:44 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:53:44 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:53:44 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:53:44 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:53:44 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:53:50 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:53:50 [V9]   5-min features computed: 98 cols
+16:53:50 [V9]   15-min features: 14 cols
+16:53:50 [V9]   30-min features: 7 cols
+16:53:55 [V9]   60-min features: 13 cols
+16:53:56 [V9]   Daily features: 17 cols
+16:53:56 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:53:56 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:53:57 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:54:04 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:54:04 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:54:07 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:54:07 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:54:09 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:54:09 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:54:09 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:54:09 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:54:09 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-03-26  val 2020-03-29..2021-08-28
+    inner 2: train<2021-08-25  val 2021-08-28..2023-01-27
+    inner 3: train<2023-01-24  val 2023-01-27..2024-06-27
+[Phase 4] retraining cat on inner folds to build OOF pool ...
+    inner fold 1: n_val=26261, train=21s
+    inner fold 2: n_val=26250, train=101s
+    inner fold 3: n_val=25992, train=116s
+  OOF pool: n=78503
+
+[cat/fold 1] calibrator=noop
+  noop: n_trades=82 PF=0.801 Net=Rs.-11,000 top1_ece=0.1601 brier=0.2838 log_loss=0.5219
+
+[cat/fold 1] calibrator=platt
+  platt: n_trades=6 PF=2.146 Net=Rs.+6,059 top1_ece=0.0246 brier=0.1889 log_loss=0.3687
+
+[cat/fold 1] calibrator=isotonic
+  isotonic: n_trades=1 PF=inf Net=Rs.+2,079 top1_ece=0.0049 brier=0.1875 log_loss=0.3642
+
+[cat Fold 1] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         82   0.801      -11,000     0.1601  0.2838     0.5219
+  noop          82   0.801      -11,000     0.1601  0.2838     0.5219
+  platt          6   2.146       +6,059     0.0246  0.1889     0.3687
+  isotonic       1     inf       +2,079     0.0049  0.1875     0.3642
+[cat/fold 2] cache MISS (missing manifest.json); recomputing
+[Phase 4 / cat / Fold 2] loading Phase 3 outputs ...
+  outer test: n=4575
+[Phase 4 / cat / Fold 2] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+16:58:18 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+16:58:18 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+16:58:19 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+16:58:19 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+16:58:19 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+16:58:24 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:58:24 [V9]   5-min features computed: 98 cols
+16:58:24 [V9]   15-min features: 14 cols
+16:58:25 [V9]   30-min features: 7 cols
+16:58:29 [V9]   60-min features: 13 cols
+16:58:30 [V9]   Daily features: 17 cols
+16:58:30 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+16:58:30 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:58:31 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:58:39 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:58:39 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:58:41 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:58:41 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:58:43 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:58:43 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:58:43 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:58:43 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:58:43 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-05-16  val 2020-05-19..2021-10-31
+    inner 2: train<2021-10-28  val 2021-10-31..2023-04-14
+    inner 3: train<2023-04-11  val 2023-04-14..2024-09-25
+[Phase 4] retraining cat on inner folds to build OOF pool ...
+    inner fold 1: n_val=27161, train=13s
+    inner fold 2: n_val=26850, train=103s
+    inner fold 3: n_val=26817, train=119s
+  OOF pool: n=80828
+
+[cat/fold 2] calibrator=noop
+  noop: n_trades=99 PF=1.222 Net=Rs.+10,603 top1_ece=0.0654 brier=0.4674 log_loss=0.7826
+
+[cat/fold 2] calibrator=platt
+  platt: n_trades=41 PF=2.279 Net=Rs.+24,787 top1_ece=0.0193 brier=0.3220 log_loss=0.5740
+
+[cat/fold 2] calibrator=isotonic
+  isotonic: n_trades=5 PF=0.713 Net=Rs.-1,166 top1_ece=0.0213 brier=0.3201 log_loss=0.5690
+
+[cat Fold 2] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         99   1.222      +10,603     0.0654  0.4674     0.7826
+  noop          99   1.222      +10,603     0.0654  0.4674     0.7826
+  platt         41   2.279      +24,787     0.0193  0.3220     0.5740
+  isotonic       5   0.713       -1,166     0.0213  0.3201     0.5690
+[cat/fold 3] cache MISS (missing manifest.json); recomputing
+[Phase 4 / cat / Fold 3] loading Phase 3 outputs ...
+  outer test: n=4650
+[Phase 4 / cat / Fold 3] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+17:02:49 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+17:02:49 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+17:02:49 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+17:02:49 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+17:02:49 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+17:02:54 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+17:02:54 [V9]   5-min features computed: 98 cols
+17:02:54 [V9]   15-min features: 14 cols
+17:02:55 [V9]   30-min features: 7 cols
+17:03:00 [V9]   60-min features: 13 cols
+17:03:00 [V9]   Daily features: 17 cols
+17:03:01 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+17:03:01 [V9]   VIX features: 15 cols (with options-pricing additions)
+17:03:01 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+17:03:09 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:03:09 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+17:03:11 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:03:11 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+17:03:13 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:03:13 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+17:03:13 [V9]   VIX>35 forced SKIP: 3,225 bars
+17:03:13 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+17:03:13 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-07-05  val 2020-07-08..2022-01-03
+    inner 2: train<2021-12-31  val 2022-01-03..2023-07-01
+    inner 3: train<2023-06-28  val 2023-07-01..2024-12-26
+[Phase 4] retraining cat on inner folds to build OOF pool ...
+    inner fold 1: n_val=27686, train=34s
+    inner fold 2: n_val=27675, train=106s
+    inner fold 3: n_val=27417, train=94s
+  OOF pool: n=82778
+
+[cat/fold 3] calibrator=noop
+  noop: n_trades=111 PF=0.673 Net=Rs.-20,209 top1_ece=0.0742 brier=0.4311 log_loss=0.7289
+
+[cat/fold 3] calibrator=platt
+  platt: n_trades=15 PF=0.491 Net=Rs.-6,233 top1_ece=0.0308 brier=0.3203 log_loss=0.5722
+
+[cat/fold 3] calibrator=isotonic
+  isotonic: n_trades=5 PF=0.531 Net=Rs.-1,630 top1_ece=0.0169 brier=0.3163 log_loss=0.5565
+
+[cat Fold 3] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal        111   0.673      -20,209     0.0742  0.4311     0.7289
+  noop         111   0.673      -20,209     0.0742  0.4311     0.7289
+  platt         15   0.491       -6,233     0.0308  0.3203     0.5722
+  isotonic       5   0.531       -1,630     0.0169  0.3163     0.5565
+[cat/fold 4] cache MISS (missing manifest.json); recomputing
+[Phase 4 / cat / Fold 4] loading Phase 3 outputs ...
+  outer test: n=4575
+[Phase 4 / cat / Fold 4] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+17:07:20 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+17:07:20 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+17:07:20 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+17:07:20 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+17:07:20 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+17:07:23 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+17:07:23 [V9]   5-min features computed: 98 cols
+17:07:24 [V9]   15-min features: 14 cols
+17:07:24 [V9]   30-min features: 7 cols
+17:07:26 [V9]   60-min features: 13 cols
+17:07:26 [V9]   Daily features: 17 cols
+17:07:26 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+17:07:26 [V9]   VIX features: 15 cols (with options-pricing additions)
+17:07:27 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+17:07:29 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:07:29 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+17:07:30 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:07:30 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+17:07:31 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:07:31 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+17:07:31 [V9]   VIX>35 forced SKIP: 3,225 bars
+17:07:31 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+17:07:31 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-08-24  val 2020-08-27..2022-03-08
+    inner 2: train<2022-03-05  val 2022-03-08..2023-09-17
+    inner 3: train<2023-09-14  val 2023-09-17..2025-03-28
+[Phase 4] retraining cat on inner folds to build OOF pool ...
+    inner fold 1: n_val=28286, train=16s
+    inner fold 2: n_val=28425, train=18s
+    inner fold 3: n_val=28242, train=81s
+  OOF pool: n=84953
+
+[cat/fold 4] calibrator=noop
+  noop: n_trades=80 PF=0.939 Net=Rs.-4,070 top1_ece=0.1131 brier=0.3852 log_loss=0.6618
+
+[cat/fold 4] calibrator=platt
+  platt: n_trades=29 PF=0.159 Net=Rs.-19,983 top1_ece=0.0238 brier=0.2633 log_loss=0.4829
+
+[cat/fold 4] calibrator=isotonic
+  isotonic: n_trades=24 PF=1.462 Net=Rs.+5,444 top1_ece=0.0263 brier=0.2580 log_loss=0.4745
+
+[cat Fold 4] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         80   0.939       -4,070     0.1131  0.3852     0.6618
+  noop          80   0.939       -4,070     0.1131  0.3852     0.6618
+  platt         29   0.159      -19,983     0.0238  0.2633     0.4829
+  isotonic      24   1.462       +5,444     0.0263  0.2580     0.4745
+[cat/fold 5] cache MISS (missing manifest.json); recomputing
+[Phase 4 / cat / Fold 5] loading Phase 3 outputs ...
+  outer test: n=4800
+[Phase 4 / cat / Fold 5] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+17:09:33 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+17:09:33 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+17:09:33 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+17:09:33 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+17:09:33 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+17:09:35 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+17:09:35 [V9]   5-min features computed: 98 cols
+17:09:35 [V9]   15-min features: 14 cols
+17:09:36 [V9]   30-min features: 7 cols
+17:09:37 [V9]   60-min features: 13 cols
+17:09:38 [V9]   Daily features: 17 cols
+17:09:38 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+17:09:38 [V9]   VIX features: 15 cols (with options-pricing additions)
+17:09:38 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+17:09:41 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:09:41 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+17:09:41 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:09:41 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+17:09:42 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:09:42 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+17:09:42 [V9]   VIX>35 forced SKIP: 3,225 bars
+17:09:42 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+17:09:42 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-10-13  val 2020-10-16..2022-05-10
+    inner 2: train<2022-05-07  val 2022-05-10..2023-12-02
+    inner 3: train<2023-11-29  val 2023-12-02..2025-06-25
+[Phase 4] retraining cat on inner folds to build OOF pool ...
+    inner fold 1: n_val=28736, train=14s
+    inner fold 2: n_val=29100, train=16s
+    inner fold 3: n_val=28842, train=80s
+  OOF pool: n=86678
+
+[cat/fold 5] calibrator=noop
+  noop: n_trades=71 PF=1.291 Net=Rs.+7,307 top1_ece=0.1907 brier=0.2555 log_loss=0.4778
+
+[cat/fold 5] calibrator=platt
+  platt: n_trades=1 PF=0.000 Net=Rs.-1,359 top1_ece=0.0174 brier=0.1642 log_loss=0.3327
+
+[cat/fold 5] calibrator=isotonic
+  isotonic: n_trades=1 PF=0.000 Net=Rs.-1,359 top1_ece=0.0084 brier=0.1642 log_loss=0.3302
+
+[cat Fold 5] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         71   1.291       +7,307     0.1907  0.2555     0.4778
+  noop          71   1.291       +7,307     0.1907  0.2555     0.4778
+  platt          1   0.000       -1,359     0.0174  0.1642     0.3327
+  isotonic       1   0.000       -1,359     0.0084  0.1642     0.3302
+[cat/fold 6] cache MISS (missing manifest.json); recomputing
+[Phase 4 / cat / Fold 6] loading Phase 3 outputs ...
+  outer test: n=4587
+[Phase 4 / cat / Fold 6] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+17:11:39 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+17:11:39 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+17:11:39 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+17:11:39 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+17:11:39 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+17:11:42 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+17:11:42 [V9]   5-min features computed: 98 cols
+17:11:42 [V9]   15-min features: 14 cols
+17:11:42 [V9]   30-min features: 7 cols
+17:11:44 [V9]   60-min features: 13 cols
+17:11:44 [V9]   Daily features: 17 cols
+17:11:44 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+17:11:44 [V9]   VIX features: 15 cols (with options-pricing additions)
+17:11:45 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+17:11:47 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:11:47 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+17:11:48 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:11:48 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+17:11:48 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:11:48 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+17:11:48 [V9]   VIX>35 forced SKIP: 3,225 bars
+17:11:48 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+17:11:48 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-12-02  val 2020-12-05..2022-07-13
+    inner 2: train<2022-07-10  val 2022-07-13..2024-02-18
+    inner 3: train<2024-02-15  val 2024-02-18..2025-09-25
+[Phase 4] retraining cat on inner folds to build OOF pool ...
+    inner fold 1: n_val=29636, train=18s
+    inner fold 2: n_val=29625, train=16s
+    inner fold 3: n_val=29667, train=76s
+  OOF pool: n=88928
+
+[cat/fold 6] calibrator=noop
+  noop: n_trades=57 PF=0.607 Net=Rs.-13,098 top1_ece=0.1882 brier=0.2568 log_loss=0.4892
+
+[cat/fold 6] calibrator=platt
+  platt: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0196 brier=0.1889 log_loss=0.3826
+
+[cat/fold 6] calibrator=isotonic
+  isotonic: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0291 brier=0.1894 log_loss=0.4017
+
+[cat Fold 6] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         57   0.607      -13,098     0.1882  0.2568     0.4892
+  noop          57   0.607      -13,098     0.1882  0.2568     0.4892
+  platt          0     nan           +0     0.0196  0.1889     0.3826
+  isotonic       0     nan           +0     0.0291  0.1894     0.4017
+[cat/fold 7] cache MISS (missing manifest.json); recomputing
+[Phase 4 / cat / Fold 7] loading Phase 3 outputs ...
+  outer test: n=4350
+[Phase 4 / cat / Fold 7] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+17:13:44 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+17:13:44 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+17:13:44 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+17:13:44 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+17:13:44 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+17:13:47 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+17:13:47 [V9]   5-min features computed: 98 cols
+17:13:47 [V9]   15-min features: 14 cols
+17:13:48 [V9]   30-min features: 7 cols
+17:13:49 [V9]   60-min features: 13 cols
+17:13:50 [V9]   Daily features: 17 cols
+17:13:50 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+17:13:50 [V9]   VIX features: 15 cols (with options-pricing additions)
+17:13:50 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+17:13:53 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:13:53 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+17:13:53 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:13:53 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+17:13:54 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:13:54 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+17:13:54 [V9]   VIX>35 forced SKIP: 3,225 bars
+17:13:54 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+17:13:54 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2021-01-21  val 2021-01-24..2022-09-15
+    inner 2: train<2022-09-12  val 2022-09-15..2024-05-06
+    inner 3: train<2024-05-03  val 2024-05-06..2025-12-26
+[Phase 4] retraining cat on inner folds to build OOF pool ...
+    inner fold 1: n_val=30311, train=25s
+    inner fold 2: n_val=30096, train=112s
+    inner fold 3: n_val=30558, train=122s
+  OOF pool: n=90965
+
+[cat/fold 7] calibrator=noop
+  noop: n_trades=94 PF=0.395 Net=Rs.-36,844 top1_ece=0.0414 brier=0.4550 log_loss=0.7656
+
+[cat/fold 7] calibrator=platt
+  platt: n_trades=37 PF=0.450 Net=Rs.-18,444 top1_ece=0.0278 brier=0.3414 log_loss=0.6066
+
+[cat/fold 7] calibrator=isotonic
+  isotonic: n_trades=20 PF=0.331 Net=Rs.-11,971 top1_ece=0.0127 brier=0.3344 log_loss=0.6014
+
+[cat Fold 7] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         94   0.395      -36,844     0.0414  0.4550     0.7656
+  noop          94   0.395      -36,844     0.0414  0.4550     0.7656
+  platt         37   0.450      -18,444     0.0278  0.3414     0.6066
+  isotonic      20   0.331      -11,971     0.0127  0.3344     0.6014
+[cat/fold 8] cache MISS (missing manifest.json); recomputing
+[Phase 4 / cat / Fold 8] loading Phase 3 outputs ...
+  outer test: n=1415
+[Phase 4 / cat / Fold 8] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+17:18:22 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+17:18:22 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+17:18:22 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+17:18:22 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+17:18:22 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+17:18:27 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+17:18:27 [V9]   5-min features computed: 98 cols
+17:18:27 [V9]   15-min features: 14 cols
+17:18:28 [V9]   30-min features: 7 cols
+17:18:32 [V9]   60-min features: 13 cols
+17:18:33 [V9]   Daily features: 17 cols
+17:18:33 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+17:18:34 [V9]   VIX features: 15 cols (with options-pricing additions)
+17:18:34 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+17:18:42 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:18:42 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+17:18:44 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:18:44 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+17:18:46 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:18:46 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+17:18:46 [V9]   VIX>35 forced SKIP: 3,225 bars
+17:18:46 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+17:18:46 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2021-03-12  val 2021-03-15..2022-11-17
+    inner 2: train<2022-11-14  val 2022-11-17..2024-07-21
+    inner 3: train<2024-07-18  val 2024-07-21..2026-03-25
+[Phase 4] retraining cat on inner folds to build OOF pool ...
+    inner fold 1: n_val=30975, train=34s
+    inner fold 2: n_val=30942, train=116s
+    inner fold 3: n_val=31062, train=133s
+  OOF pool: n=92979
+
+[cat/fold 8] calibrator=noop
+  noop: n_trades=31 PF=0.880 Net=Rs.-2,549 top1_ece=0.0421 brier=0.4778 log_loss=0.7922
+
+[cat/fold 8] calibrator=platt
+  platt: n_trades=7 PF=13.778 Net=Rs.+13,824 top1_ece=0.0356 brier=0.3719 log_loss=0.6548
+
+[cat/fold 8] calibrator=isotonic
+  isotonic: n_trades=1 PF=inf Net=Rs.+973 top1_ece=0.0374 brier=0.3717 log_loss=0.6445
+
+[cat Fold 8] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         31   0.880       -2,549     0.0421  0.4778     0.7922
+  noop          31   0.880       -2,549     0.0421  0.4778     0.7922
+  platt          7  13.778      +13,824     0.0356  0.3719     0.6548
+  isotonic       1     inf         +973     0.0374  0.3717     0.6445
+[mlp/fold 1] cache MISS (missing manifest.json); recomputing
+[Phase 4 / mlp / Fold 1] loading Phase 3 outputs ...
+  outer test: n=4800
+[Phase 4 / mlp / Fold 1] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+17:23:41 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+17:23:41 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+17:23:41 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+17:23:41 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+17:23:41 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+17:23:48 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+17:23:48 [V9]   5-min features computed: 98 cols
+17:23:48 [V9]   15-min features: 14 cols
+17:23:49 [V9]   30-min features: 7 cols
+17:23:53 [V9]   60-min features: 13 cols
+17:23:54 [V9]   Daily features: 17 cols
+17:23:55 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+17:23:55 [V9]   VIX features: 15 cols (with options-pricing additions)
+17:23:55 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+17:24:03 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:24:03 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+17:24:06 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:24:06 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+17:24:08 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:24:08 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+17:24:08 [V9]   VIX>35 forced SKIP: 3,225 bars
+17:24:08 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+17:24:08 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-03-26  val 2020-03-29..2021-08-28
+    inner 2: train<2021-08-25  val 2021-08-28..2023-01-27
+    inner 3: train<2023-01-24  val 2023-01-27..2024-06-27
+[Phase 4] retraining mlp on inner folds to build OOF pool ...
+    inner fold 1: n_val=26261, train=499s
+    inner fold 2: n_val=26250, train=431s
+    inner fold 3: n_val=25992, train=516s
+  OOF pool: n=78503
+
+[mlp/fold 1] calibrator=noop
+  noop: n_trades=64 PF=0.523 Net=Rs.-22,790 top1_ece=0.1894 brier=0.4594 log_loss=1.6041
+
+[mlp/fold 1] calibrator=platt
+  platt: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0687 brier=0.2131 log_loss=0.4467
+
+[mlp/fold 1] calibrator=isotonic
+  isotonic: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0726 brier=0.2136 log_loss=0.4498
+
+[mlp Fold 1] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         64   0.523      -22,790     0.1894  0.4594     1.6041
+  noop          64   0.523      -22,790     0.1894  0.4594     1.6041
+  platt          0     nan           +0     0.0687  0.2131     0.4467
+  isotonic       0     nan           +0     0.0726  0.2136     0.4498
+[mlp/fold 2] cache MISS (missing manifest.json); recomputing
+[Phase 4 / mlp / Fold 2] loading Phase 3 outputs ...
+  outer test: n=4575
+[Phase 4 / mlp / Fold 2] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+17:48:26 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+17:48:26 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+17:48:26 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+17:48:26 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+17:48:26 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+17:48:29 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+17:48:29 [V9]   5-min features computed: 98 cols
+17:48:29 [V9]   15-min features: 14 cols
+17:48:29 [V9]   30-min features: 7 cols
+17:48:31 [V9]   60-min features: 13 cols
+17:48:31 [V9]   Daily features: 17 cols
+17:48:32 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+17:48:32 [V9]   VIX features: 15 cols (with options-pricing additions)
+17:48:32 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+17:48:34 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:48:34 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+17:48:35 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:48:35 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+17:48:36 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+17:48:36 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+17:48:36 [V9]   VIX>35 forced SKIP: 3,225 bars
+17:48:36 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+17:48:36 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-05-16  val 2020-05-19..2021-10-31
+    inner 2: train<2021-10-28  val 2021-10-31..2023-04-14
+    inner 3: train<2023-04-11  val 2023-04-14..2024-09-25
+[Phase 4] retraining mlp on inner folds to build OOF pool ...
+    inner fold 1: n_val=27161, train=267s
+    inner fold 2: n_val=26850, train=709s
+    inner fold 3: n_val=26817, train=672s
+  OOF pool: n=80828
+
+[mlp/fold 2] calibrator=noop
+  noop: n_trades=103 PF=1.281 Net=Rs.+15,298 top1_ece=0.3063 brier=0.6874 log_loss=2.1458
+
+[mlp/fold 2] calibrator=platt
+  platt: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0109 brier=0.3469 log_loss=0.6499
+
+[mlp/fold 2] calibrator=isotonic
+  isotonic: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0289 brier=0.3418 log_loss=0.6352
+
+[mlp Fold 2] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal        103   1.281      +15,298     0.3063  0.6874     2.1458
+  noop         103   1.281      +15,298     0.3063  0.6874     2.1458
+  platt          0     nan           +0     0.0109  0.3469     0.6499
+  isotonic       0     nan           +0     0.0289  0.3418     0.6352
+[mlp/fold 3] cache MISS (missing manifest.json); recomputing
+[Phase 4 / mlp / Fold 3] loading Phase 3 outputs ...
+  outer test: n=4650
+[Phase 4 / mlp / Fold 3] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+18:16:11 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+18:16:11 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+18:16:11 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+18:16:11 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+18:16:11 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+18:16:15 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+18:16:15 [V9]   5-min features computed: 98 cols
+18:16:15 [V9]   15-min features: 14 cols
+18:16:16 [V9]   30-min features: 7 cols
+18:16:17 [V9]   60-min features: 13 cols
+18:16:18 [V9]   Daily features: 17 cols
+18:16:18 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+18:16:18 [V9]   VIX features: 15 cols (with options-pricing additions)
+18:16:19 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+18:16:22 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+18:16:22 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+18:16:23 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+18:16:23 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+18:16:24 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+18:16:24 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+18:16:24 [V9]   VIX>35 forced SKIP: 3,225 bars
+18:16:24 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+18:16:24 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-07-05  val 2020-07-08..2022-01-03
+    inner 2: train<2021-12-31  val 2022-01-03..2023-07-01
+    inner 3: train<2023-06-28  val 2023-07-01..2024-12-26
+[Phase 4] retraining mlp on inner folds to build OOF pool ...
+    inner fold 1: n_val=27686, train=423s
+    inner fold 2: n_val=27675, train=476s
+    inner fold 3: n_val=27417, train=967s
+  OOF pool: n=82778
+
+[mlp/fold 3] calibrator=noop
+  noop: n_trades=93 PF=0.765 Net=Rs.-13,576 top1_ece=0.2655 brier=0.5968 log_loss=1.9006
+
+[mlp/fold 3] calibrator=platt
+  platt: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0212 brier=0.3475 log_loss=0.6471
+
+[mlp/fold 3] calibrator=isotonic
+  isotonic: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0536 brier=0.3388 log_loss=0.6224
+
+[mlp Fold 3] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         93   0.765      -13,576     0.2655  0.5968     1.9006
+  noop          93   0.765      -13,576     0.2655  0.5968     1.9006
+  platt          0     nan           +0     0.0212  0.3475     0.6471
+  isotonic       0     nan           +0     0.0536  0.3388     0.6224
+[mlp/fold 4] cache MISS (missing manifest.json); recomputing
+[Phase 4 / mlp / Fold 4] loading Phase 3 outputs ...
+  outer test: n=4575
+[Phase 4 / mlp / Fold 4] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+18:47:38 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+18:47:38 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+18:47:38 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+18:47:38 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+18:47:38 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+18:47:42 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+18:47:42 [V9]   5-min features computed: 98 cols
+18:47:42 [V9]   15-min features: 14 cols
+18:47:43 [V9]   30-min features: 7 cols
+18:47:44 [V9]   60-min features: 13 cols
+18:47:45 [V9]   Daily features: 17 cols
+18:47:45 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+18:47:45 [V9]   VIX features: 15 cols (with options-pricing additions)
+18:47:46 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+18:47:49 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+18:47:49 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+18:47:50 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+18:47:50 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+18:47:51 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+18:47:51 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+18:47:51 [V9]   VIX>35 forced SKIP: 3,225 bars
+18:47:51 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+18:47:51 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-08-24  val 2020-08-27..2022-03-08
+    inner 2: train<2022-03-05  val 2022-03-08..2023-09-17
+    inner 3: train<2023-09-14  val 2023-09-17..2025-03-28
+[Phase 4] retraining mlp on inner folds to build OOF pool ...
+    inner fold 1: n_val=28286, train=865s
+    inner fold 2: n_val=28425, train=1215s
+    inner fold 3: n_val=28242, train=1323s
+  OOF pool: n=84953
+
+[mlp/fold 4] calibrator=noop
+  noop: n_trades=78 PF=0.761 Net=Rs.-12,910 top1_ece=0.2342 brier=0.5473 log_loss=1.7627
+
+[mlp/fold 4] calibrator=platt
+  platt: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0552 brier=0.2918 log_loss=0.5652
+
+[mlp/fold 4] calibrator=isotonic
+  isotonic: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0384 brier=0.2900 log_loss=0.5569
+
+[mlp Fold 4] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         78   0.761      -12,910     0.2342  0.5473     1.7627
+  noop          78   0.761      -12,910     0.2342  0.5473     1.7627
+  platt          0     nan           +0     0.0552  0.2918     0.5652
+  isotonic       0     nan           +0     0.0384  0.2900     0.5569
+[mlp/fold 5] cache MISS (missing manifest.json); recomputing
+[Phase 4 / mlp / Fold 5] loading Phase 3 outputs ...
+  outer test: n=4800
+[Phase 4 / mlp / Fold 5] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:44:43 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:44:43 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:44:43 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:44:43 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:44:43 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:44:46 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:44:46 [V9]   5-min features computed: 98 cols
+19:44:46 [V9]   15-min features: 14 cols
+19:44:46 [V9]   30-min features: 7 cols
+19:44:48 [V9]   60-min features: 13 cols
+19:44:48 [V9]   Daily features: 17 cols
+19:44:48 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:44:48 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:44:49 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:44:51 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:44:51 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:44:52 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:44:52 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:44:53 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:44:53 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:44:53 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:44:53 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:44:53 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-10-13  val 2020-10-16..2022-05-10
+    inner 2: train<2022-05-07  val 2022-05-10..2023-12-02
+    inner 3: train<2023-11-29  val 2023-12-02..2025-06-25
+[Phase 4] retraining mlp on inner folds to build OOF pool ...
+    inner fold 1: n_val=28736, train=307s
+    inner fold 2: n_val=29100, train=377s
+    inner fold 3: n_val=28842, train=421s
+  OOF pool: n=86678
+
+[mlp/fold 5] calibrator=noop
+  noop: n_trades=59 PF=1.030 Net=Rs.+855 top1_ece=0.1917 brier=0.4465 log_loss=1.8286
+
+[mlp/fold 5] calibrator=platt
+  platt: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0855 brier=0.1849 log_loss=0.4031
+
+[mlp/fold 5] calibrator=isotonic
+  isotonic: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0754 brier=0.1825 log_loss=0.3955
+
+[mlp Fold 5] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         59   1.030         +855     0.1917  0.4465     1.8286
+  noop          59   1.030         +855     0.1917  0.4465     1.8286
+  platt          0     nan           +0     0.0855  0.1849     0.4031
+  isotonic       0     nan           +0     0.0754  0.1825     0.3955
+[mlp/fold 6] cache MISS (missing manifest.json); recomputing
+[Phase 4 / mlp / Fold 6] loading Phase 3 outputs ...
+  outer test: n=4587
+[Phase 4 / mlp / Fold 6] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+20:03:25 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+20:03:25 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+20:03:25 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+20:03:25 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+20:03:25 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+20:03:28 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+20:03:28 [V9]   5-min features computed: 98 cols
+20:03:28 [V9]   15-min features: 14 cols
+20:03:29 [V9]   30-min features: 7 cols
+20:03:30 [V9]   60-min features: 13 cols
+20:03:30 [V9]   Daily features: 17 cols
+20:03:31 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+20:03:31 [V9]   VIX features: 15 cols (with options-pricing additions)
+20:03:31 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+20:03:33 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:03:33 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+20:03:34 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:03:34 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+20:03:35 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:03:35 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+20:03:35 [V9]   VIX>35 forced SKIP: 3,225 bars
+20:03:35 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+20:03:35 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2020-12-02  val 2020-12-05..2022-07-13
+    inner 2: train<2022-07-10  val 2022-07-13..2024-02-18
+    inner 3: train<2024-02-15  val 2024-02-18..2025-09-25
+[Phase 4] retraining mlp on inner folds to build OOF pool ...
+    inner fold 1: n_val=29636, train=305s
+    inner fold 2: n_val=29625, train=249s
+    inner fold 3: n_val=29667, train=435s
+  OOF pool: n=88928
+
+[mlp/fold 6] calibrator=noop
+  noop: n_trades=19 PF=0.353 Net=Rs.-8,312 top1_ece=0.1279 brier=0.2778 log_loss=1.7580
+
+[mlp/fold 6] calibrator=platt
+  platt: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0506 brier=0.1994 log_loss=0.4229
+
+[mlp/fold 6] calibrator=isotonic
+  isotonic: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0366 brier=0.1965 log_loss=0.4135
+
+[mlp Fold 6] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         19   0.353       -8,312     0.1279  0.2778     1.7580
+  noop          19   0.353       -8,312     0.1279  0.2778     1.7580
+  platt          0     nan           +0     0.0506  0.1994     0.4229
+  isotonic       0     nan           +0     0.0366  0.1965     0.4135
+[mlp/fold 7] cache MISS (missing manifest.json); recomputing
+[Phase 4 / mlp / Fold 7] loading Phase 3 outputs ...
+  outer test: n=4350
+[Phase 4 / mlp / Fold 7] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+20:20:10 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+20:20:10 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+20:20:10 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+20:20:10 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+20:20:10 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+20:20:13 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+20:20:13 [V9]   5-min features computed: 98 cols
+20:20:13 [V9]   15-min features: 14 cols
+20:20:13 [V9]   30-min features: 7 cols
+20:20:15 [V9]   60-min features: 13 cols
+20:20:15 [V9]   Daily features: 17 cols
+20:20:15 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+20:20:15 [V9]   VIX features: 15 cols (with options-pricing additions)
+20:20:15 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+20:20:18 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:20:18 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+20:20:19 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:20:19 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+20:20:19 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:20:19 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+20:20:19 [V9]   VIX>35 forced SKIP: 3,225 bars
+20:20:19 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+20:20:19 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2021-01-21  val 2021-01-24..2022-09-15
+    inner 2: train<2022-09-12  val 2022-09-15..2024-05-06
+    inner 3: train<2024-05-03  val 2024-05-06..2025-12-26
+[Phase 4] retraining mlp on inner folds to build OOF pool ...
+    inner fold 1: n_val=30311, train=447s
+    inner fold 2: n_val=30096, train=415s
+    inner fold 3: n_val=30558, train=361s
+  OOF pool: n=90965
+
+[mlp/fold 7] calibrator=noop
+  noop: n_trades=69 PF=0.939 Net=Rs.-2,668 top1_ece=0.3264 brier=0.7022 log_loss=3.3846
+
+[mlp/fold 7] calibrator=platt
+  platt: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0465 brier=0.3754 log_loss=0.6939
+
+[mlp/fold 7] calibrator=isotonic
+  isotonic: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0503 brier=0.3737 log_loss=0.6934
+
+[mlp Fold 7] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         69   0.939       -2,668     0.3264  0.7022     3.3846
+  noop          69   0.939       -2,668     0.3264  0.7022     3.3846
+  platt          0     nan           +0     0.0465  0.3754     0.6939
+  isotonic       0     nan           +0     0.0503  0.3737     0.6934
+[mlp/fold 8] cache MISS (missing manifest.json); recomputing
+[Phase 4 / mlp / Fold 8] loading Phase 3 outputs ...
+  outer test: n=1415
+[Phase 4 / mlp / Fold 8] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+20:40:48 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+20:40:48 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+20:40:49 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+20:40:49 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+20:40:49 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+20:40:51 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+20:40:51 [V9]   5-min features computed: 98 cols
+20:40:51 [V9]   15-min features: 14 cols
+20:40:52 [V9]   30-min features: 7 cols
+20:40:53 [V9]   60-min features: 13 cols
+20:40:54 [V9]   Daily features: 17 cols
+20:40:54 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+20:40:54 [V9]   VIX features: 15 cols (with options-pricing additions)
+20:40:54 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+20:40:56 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:40:56 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+20:40:57 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:40:57 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+20:40:58 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:40:58 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+20:40:58 [V9]   VIX>35 forced SKIP: 3,225 bars
+20:40:58 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+20:40:58 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  inner CV K=3:
+    inner 1: train<2021-03-12  val 2021-03-15..2022-11-17
+    inner 2: train<2022-11-14  val 2022-11-17..2024-07-21
+    inner 3: train<2024-07-18  val 2024-07-21..2026-03-25
+[Phase 4] retraining mlp on inner folds to build OOF pool ...
+    inner fold 1: n_val=30975, train=395s
+    inner fold 2: n_val=30942, train=503s
+    inner fold 3: n_val=31062, train=368s
+  OOF pool: n=92979
+
+[mlp/fold 8] calibrator=noop
+  noop: n_trades=19 PF=0.547 Net=Rs.-5,901 top1_ece=0.3158 brier=0.6806 log_loss=3.4736
+
+[mlp/fold 8] calibrator=platt
+  platt: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0925 brier=0.4312 log_loss=0.7862
+
+[mlp/fold 8] calibrator=isotonic
+  isotonic: n_trades=0 PF=nan Net=Rs.+0 top1_ece=0.0882 brier=0.4293 log_loss=0.7815
+
+[mlp Fold 8] Phase 4 done.
+  config         n      PF          Net   top1_ECE   Brier   log_loss
+  uncal         19   0.547       -5,901     0.3158  0.6806     3.4736
+  noop          19   0.547       -5,901     0.3158  0.6806     3.4736
+  platt          0     nan           +0     0.0925  0.4312     0.7862
+  isotonic       0     nan           +0     0.0882  0.4293     0.7815
+
+  Run summary:
+    xgb fold 1: ran
+    xgb fold 2: ran
+    xgb fold 3: ran
+    xgb fold 4: ran
+    xgb fold 5: ran
+    xgb fold 6: ran
+    xgb fold 7: ran
+    xgb fold 8: ran
+    lgb fold 1: cached
+    lgb fold 2: ran
+    lgb fold 3: ran
+    lgb fold 4: ran
+    lgb fold 5: ran
+    lgb fold 6: ran
+    lgb fold 7: ran
+    lgb fold 8: ran
+    cat fold 1: ran
+    cat fold 2: ran
+    cat fold 3: ran
+    cat fold 4: ran
+    cat fold 5: ran
+    cat fold 6: ran
+    cat fold 7: ran
+    cat fold 8: ran
+    mlp fold 1: ran
+    mlp fold 2: ran
+    mlp fold 3: ran
+    mlp fold 4: ran
+    mlp fold 5: ran
+    mlp fold 6: ran
+    mlp fold 7: ran
+    mlp fold 8: ran
+
+==============================================================================
+  Phase 4 — Calibration aggregate
+==============================================================================
+   brain        cfg  folds  pooled_n      PF             90% CI         Net Rs.   WR%   Sharpe  Sortino   meanECE  meanBrier
+  ------------------------------------------------------------------------------------------------------------------------
+     xgb      uncal      8       598   0.873 [+0.678, +1.074]         -44,909 33.4%   -0.038   -0.056    0.1129     0.3681
+     xgb       noop      8       598   0.873 [+0.678, +1.074]         -44,909 33.4%   -0.038   -0.056    0.1129     0.3681
+     xgb      platt      7       160   0.705 [+0.477, +0.931]         -37,841 23.8%   -0.084   -0.150    0.0285     0.2711
+     xgb   isotonic      6        51   0.874 [+0.318, +1.635]          -4,996 25.5%   -0.042   -0.060    0.0278     0.2697
+     lgb      uncal      8       629   0.802 [+0.627, +0.996]         -75,399 32.1%   -0.061   -0.091    0.1023     0.3654
+     lgb       noop      8       629   0.802 [+0.627, +0.996]         -75,399 32.1%   -0.061   -0.091    0.1023     0.3654
+     lgb      platt      7       139   0.812 [+0.429, +1.233]         -21,607 26.6%   -0.053   -0.093    0.0299     0.2721
+     lgb   isotonic      6        50   1.147 [+0.264, +2.796]          +7,205 26.0%   +0.033   +0.078    0.0272     0.2703
+     cat      uncal      8       625   0.813 [+0.651, +0.986]         -69,860 32.2%   -0.057   -0.084    0.1094     0.3766
+     cat       noop      8       625   0.813 [+0.651, +0.986]         -69,860 32.2%   -0.057   -0.084    0.1094     0.3766
+     cat      platt      7       136   0.986 [+0.453, +1.989]          -1,350 31.6%   -0.004   -0.006    0.0248     0.2701
+     cat   isotonic      7        57   0.802 [+0.409, +1.448]          -7,629 29.8%   -0.068   -0.085    0.0196     0.2677
+     mlp      uncal      8       504   0.840 [+0.680, +1.005]         -50,004 31.5%   -0.055   -0.074    0.2446     0.5498
+     mlp       noop      8       504   0.840 [+0.680, +1.005]         -50,004 31.5%   -0.055   -0.074    0.2446     0.5498
+
+  Calibration effect on trading (calibrated - uncal):
+   brain        cfg   delta_PF          90% paired CI  DM_p (grtr)    delta_Net Rs.
+  ----------------------------------------------------------------------------------
+     xgb       noop     +0.000 [ +0.000,  +0.000]       1.0000               +0
+     xgb      platt     -0.171 [ -0.430,  +0.065]       0.5540           +7,069
+     xgb   isotonic     +0.050 [ -0.320,  +0.817]        n/a            +39,913
+     lgb       noop     +0.000 [ +0.000,  +0.000]       1.0000               +0
+     lgb      platt     +0.015 [ -0.294,  +0.397]       0.9660          +53,793
+     lgb   isotonic     +0.357 [ -0.365,  +1.918]       0.9728          +82,604
+     cat       noop     +0.000 [ +0.000,  +0.000]       1.0000               +0
+     cat      platt     +0.153 [ -0.339,  +1.053]       0.8988          +68,510
+     cat   isotonic     -0.031 [ -0.386,  +0.538]        n/a            +62,231
+     mlp       noop     +0.000 [ +0.000,  +0.000]       1.0000               +0
+
+  H_cal verdict (pre-registered acceptance criteria):
+    rule: LB90(dPF_isotonic) > +0.05 for AT LEAST ONE brain
+    passing brains       : []
+    decision             : FAIL TO REJECT H0_cal
+
+  wrote logs/phase4/summary.json

@@ -1,0 +1,76 @@
+{
+  "date": "2026-05-11",
+  "regime": "choppy",
+  "bias": "neutral",
+  "risk_appetite": 0.5,
+  "max_trades_today": 3,
+  "min_confidence_boost": 2,
+  "avoid_otm2_otm3": true,
+  "key_levels": {
+    "support": 24026.15,
+    "resistance": 24326.15
+  },
+  "rationale": "Heuristic: VIX=16.8, US overnight=+0.86%, Asia=-0.49%, FII net=+0cr, news_bias=-0.19, events=[]",
+  "_payload": {
+    "date": "2026-05-11",
+    "global": {
+      "dow": {
+        "last": 49609.16,
+        "change_pct": 0.02
+      },
+      "nasdaq": {
+        "last": 26247.08,
+        "change_pct": 1.71
+      },
+      "sp500": {
+        "last": 7398.93,
+        "change_pct": 0.84
+      },
+      "nikkei": {
+        "last": 62486.84,
+        "change_pct": -0.36
+      },
+      "hangseng": {
+        "last": 26228.33,
+        "change_pct": -0.63
+      },
+      "ftse": {
+        "last": 10233.1,
+        "change_pct": -0.43
+      },
+      "dax": {
+        "last": 24338.63,
+        "change_pct": -1.32
+      },
+      "crude": {
+        "last": 99.67,
+        "change_pct": 4.45
+      },
+      "dxy": {
+        "last": 98.06,
+        "change_pct": 0.23
+      },
+      "us10y": {
+        "last": 4.36,
+        "change_pct": -0.64
+      },
+      "gift_nifty": {
+        "last": 24176.15,
+        "change_pct": -0.62
+      },
+      "india_vix": {
+        "last": 16.84,
+        "change_pct": 1.32
+      }
+    },
+    "fii_dii": {},
+    "news": {
+      "bias_score": -0.188,
+      "confidence": 0.072,
+      "event_count": 7,
+      "dominant_type": "other",
+      "hot_title": "Sensex Today | Nifty 50 | Stock Market Live Updates: GIFT Nifty signals a negative start; Asian shares trade higher"
+    },
+    "events": []
+  }
+}

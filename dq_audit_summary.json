@@ -1,0 +1,15 @@
+{
+  "raw_rows": 209734,
+  "duplicate_full_rows": 0,
+  "duplicate_timestamps": 0,
+  "weekend_timestamps": 390,
+  "outside_hours_timestamps": 135,
+  "intraday_gaps": 8,
+  "zero_volume_days": 2761,
+  "total_days": 2809,
+  "class_counts": {
+    "CALL": 18650,
+    "PUT": 20120,
+    "SKIP": 170829
+  }
+}

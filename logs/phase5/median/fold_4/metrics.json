@@ -1,0 +1,22 @@
+{
+  "ensemble_type": "median",
+  "fold_id": 4,
+  "n_trades": 7,
+  "n_test_bars": 4575,
+  "n_bars_traded": 120,
+  "brains_used": [
+    "cat",
+    "lgb",
+    "mlp",
+    "xgb"
+  ],
+  "input_source": "calibrated_isotonic",
+  "weights_summary": {
+    "kind": "median",
+    "operation": "elementwise_median_then_renormalise"
+  },
+  "fit_elapsed_s": 0.003,
+  "transform_elapsed_s": 0.002,
+  "simulate_elapsed_s": 0.026,
+  "n_oof_bars": 84953
+}

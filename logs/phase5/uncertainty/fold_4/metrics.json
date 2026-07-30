@@ -1,0 +1,29 @@
+{
+  "ensemble_type": "uncertainty",
+  "fold_id": 4,
+  "n_trades": 4,
+  "n_test_bars": 4575,
+  "n_bars_traded": 54,
+  "brains_used": [
+    "cat",
+    "lgb",
+    "mlp",
+    "xgb"
+  ],
+  "input_source": "calibrated_isotonic",
+  "weights_summary": {
+    "kind": "uncertainty",
+    "operation": "inverse_entropy per bar, softmax-normalised",
+    "epsilon": 1e-09,
+    "brains": [
+      "cat",
+      "lgb",
+      "mlp",
+      "xgb"
+    ]
+  },
+  "fit_elapsed_s": 0.005,
+  "transform_elapsed_s": 0.002,
+  "simulate_elapsed_s": 0.028,
+  "n_oof_bars": 84953
+}

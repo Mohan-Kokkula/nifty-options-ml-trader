@@ -1,0 +1,418 @@
+[
+  {
+    "cluster_id": 122,
+    "representative": "rsi14",
+    "rep_importance": 0.017460793256759644,
+    "members": [
+      "rsi7",
+      "rsi14",
+      "st14",
+      "wr14",
+      "cci20",
+      "bbp",
+      "zscore_20"
+    ],
+    "redundant": [
+      {
+        "feature": "wr14",
+        "importance": 0.009280537255108356,
+        "corr_with_rep": 0.9161061811719892
+      },
+      {
+        "feature": "st14",
+        "importance": 0.008657519705593586,
+        "corr_with_rep": 0.9161061811714858
+      },
+      {
+        "feature": "rsi7",
+        "importance": 0.0079768355935812,
+        "corr_with_rep": 0.9368906403741802
+      },
+      {
+        "feature": "zscore_20",
+        "importance": 0.00604510772973299,
+        "corr_with_rep": 0.9412102762122987
+      },
+      {
+        "feature": "bbp",
+        "importance": 0.005985198076814413,
+        "corr_with_rep": 0.9412102762122975
+      },
+      {
+        "feature": "cci20",
+        "importance": 0.0058495583944022655,
+        "corr_with_rep": 0.9084886440240291
+      }
+    ]
+  },
+  {
+    "cluster_id": 120,
+    "representative": "de21",
+    "rep_importance": 0.022021541371941566,
+    "members": [
+      "m6",
+      "m9",
+      "de9",
+      "de13",
+      "de21",
+      "eslp"
+    ],
+    "redundant": [
+      {
+        "feature": "de13",
+        "importance": 0.009111697785556316,
+        "corr_with_rep": 0.9720152515475352
+      },
+      {
+        "feature": "de9",
+        "importance": 0.004768651444464922,
+        "corr_with_rep": 0.9166972581720059
+      },
+      {
+        "feature": "eslp",
+        "importance": 0.003403156064450741,
+        "corr_with_rep": 0.9174733496444797
+      },
+      {
+        "feature": "m9",
+        "importance": 0.0021374141797423363,
+        "corr_with_rep": 0.8789366165185996
+      },
+      {
+        "feature": "m6",
+        "importance": 0.0020344711374491453,
+        "corr_with_rep": 0.8138812493776306
+      }
+    ]
+  },
+  {
+    "cluster_id": 95,
+    "representative": "e13s",
+    "rep_importance": 0.01326452661305666,
+    "members": [
+      "m24",
+      "de50",
+      "e13s",
+      "tf15_ema_dist"
+    ],
+    "redundant": [
+      {
+        "feature": "de50",
+        "importance": 0.012389258481562138,
+        "corr_with_rep": 0.9400074742707353
+      },
+      {
+        "feature": "m24",
+        "importance": 0.010670091025531292,
+        "corr_with_rep": 0.9296381332619627
+      },
+      {
+        "feature": "tf15_ema_dist",
+        "importance": 0.0071295504458248615,
+        "corr_with_rep": 0.9304052978007543
+      }
+    ]
+  },
+  {
+    "cluster_id": 61,
+    "representative": "gkv",
+    "rep_importance": 0.010605772957205772,
+    "members": [
+      "a10",
+      "a14",
+      "park",
+      "gkv"
+    ],
+    "redundant": [
+      {
+        "feature": "a10",
+        "importance": 0.010050198063254356,
+        "corr_with_rep": 0.9554680105484973
+      },
+      {
+        "feature": "a14",
+        "importance": 0.00897286832332611,
+        "corr_with_rep": 0.9384065365045193
+      },
+      {
+        "feature": "park",
+        "importance": 0.0061793276108801365,
+        "corr_with_rep": 0.9873118390977053
+      }
+    ]
+  },
+  {
+    "cluster_id": 34,
+    "representative": "vix_rank_30d",
+    "rep_importance": 0.004504958167672157,
+    "members": [
+      "vix_pct20",
+      "vix_rank_30d",
+      "vix_zscore_20d",
+      "vix_above_ma20"
+    ],
+    "redundant": [
+      {
+        "feature": "vix_pct20",
+        "importance": 0.0032191930804401636,
+        "corr_with_rep": 0.95121281887561
+      },
+      {
+        "feature": "vix_zscore_20d",
+        "importance": 0.002782759489491582,
+        "corr_with_rep": 0.9289178468665791
+      },
+      {
+        "feature": "vix_above_ma20",
+        "importance": 0.000659522193018347,
+        "corr_with_rep": 0.8564053742295429
+      }
+    ]
+  },
+  {
+    "cluster_id": 104,
+    "representative": "zscore_50",
+    "rep_importance": 0.011022225953638554,
+    "members": [
+      "zscore_50",
+      "tf15_rsi",
+      "tf15_bb_pos"
+    ],
+    "redundant": [
+      {
+        "feature": "tf15_rsi",
+        "importance": 0.0076677571050822735,
+        "corr_with_rep": 0.8493731773312427
+      },
+      {
+        "feature": "tf15_bb_pos",
+        "importance": 0.006529177073389292,
+        "corr_with_rep": 0.8972822400202415
+      }
+    ]
+  },
+  {
+    "cluster_id": 112,
+    "representative": "de5",
+    "rep_importance": 0.0026508457958698273,
+    "members": [
+      "m3",
+      "de5"
+    ],
+    "redundant": [
+      {
+        "feature": "m3",
+        "importance": 0.0016774259274825454,
+        "corr_with_rep": 0.9088713601378924
+      }
+    ]
+  },
+  {
+    "cluster_id": 119,
+    "representative": "e9s",
+    "rep_importance": 0.016375871375203133,
+    "members": [
+      "m12",
+      "e9s"
+    ],
+    "redundant": [
+      {
+        "feature": "m12",
+        "importance": 0.002212963765487075,
+        "corr_with_rep": 0.8969124668149124
+      }
+    ]
+  },
+  {
+    "cluster_id": 59,
+    "representative": "rv20",
+    "rep_importance": 0.0030950666405260563,
+    "members": [
+      "rv20",
+      "bbw"
+    ],
+    "redundant": [
+      {
+        "feature": "bbw",
+        "importance": 0.0027224631048738956,
+        "corr_with_rep": 0.8875486196134255
+      }
+    ]
+  },
+  {
+    "cluster_id": 48,
+    "representative": "tf30_ema_bull",
+    "rep_importance": 0.006688065826892853,
+    "members": [
+      "dow_primary",
+      "tf30_ema_bull"
+    ],
+    "redundant": [
+      {
+        "feature": "dow_primary",
+        "importance": 0.005179352127015591,
+        "corr_with_rep": 0.8550428818641403
+      }
+    ]
+  },
+  {
+    "cluster_id": 10,
+    "representative": "dte",
+    "rep_importance": 0.002060377737507224,
+    "members": [
+      "dte",
+      "dte_norm"
+    ],
+    "redundant": [
+      {
+        "feature": "dte_norm",
+        "importance": 0.0014150989009067416,
+        "corr_with_rep": 1.0000000000000062
+      }
+    ]
+  },
+  {
+    "cluster_id": 12,
+    "representative": "expiry_dow",
+    "rep_importance": 0.0022659916430711746,
+    "members": [
+      "expiry_dow",
+      "expiry_is_tue"
+    ],
+    "redundant": [
+      {
+        "feature": "expiry_is_tue",
+        "importance": 0.0,
+        "corr_with_rep": -0.9856943613203764
+      }
+    ]
+  },
+  {
+    "cluster_id": 97,
+    "representative": "tf60_rsi",
+    "rep_importance": 0.013983887620270252,
+    "members": [
+      "tf30_rsi",
+      "tf60_rsi"
+    ],
+    "redundant": [
+      {
+        "feature": "tf30_rsi",
+        "importance": 0.009990035556256771,
+        "corr_with_rep": 0.9180928392324261
+      }
+    ]
+  },
+  {
+    "cluster_id": 92,
+    "representative": "dist_prev_high",
+    "rep_importance": 0.010418102145195007,
+    "members": [
+      "tf30_ema_dist",
+      "dist_prev_high"
+    ],
+    "redundant": [
+      {
+        "feature": "tf30_ema_dist",
+        "importance": 0.009805073961615562,
+        "corr_with_rep": 0.8658427284962117
+      }
+    ]
+  },
+  {
+    "cluster_id": 42,
+    "representative": "dist_week_high",
+    "rep_importance": 0.008105216547846794,
+    "members": [
+      "tf60_ema_dist",
+      "dist_week_high"
+    ],
+    "redundant": [
+      {
+        "feature": "tf60_ema_dist",
+        "importance": 0.00567480456084013,
+        "corr_with_rep": 0.8830949123540373
+      }
+    ]
+  },
+  {
+    "cluster_id": 43,
+    "representative": "day_ema9_dist",
+    "rep_importance": 0.004784898366779089,
+    "members": [
+      "day_ema9_dist",
+      "day_ema_dist"
+    ],
+    "redundant": [
+      {
+        "feature": "day_ema_dist",
+        "importance": 0.003001793520525098,
+        "corr_with_rep": 0.9257875383526367
+      }
+    ]
+  },
+  {
+    "cluster_id": 52,
+    "representative": "day_atr_pct",
+    "rep_importance": 0.02142852544784546,
+    "members": [
+      "day_atr_pct",
+      "vix_level"
+    ],
+    "redundant": [
+      {
+        "feature": "vix_level",
+        "importance": 0.01609112322330475,
+        "corr_with_rep": 0.8956291380183408
+      }
+    ]
+  },
+  {
+    "cluster_id": 86,
+    "representative": "dist_from_open",
+    "rep_importance": 0.004626056645065546,
+    "members": [
+      "dist_from_open",
+      "day_move_pct"
+    ],
+    "redundant": [
+      {
+        "feature": "day_move_pct",
+        "importance": 0.004203852266073227,
+        "corr_with_rep": 1.0
+      }
+    ]
+  },
+  {
+    "cluster_id": 85,
+    "representative": "intraday_pos",
+    "rep_importance": 0.008849372155964375,
+    "members": [
+      "intraday_pos",
+      "vwap_dist_atr"
+    ],
+    "redundant": [
+      {
+        "feature": "vwap_dist_atr",
+        "importance": 0.0027775780763477087,
+        "corr_with_rep": 0.8501849985799931
+      }
+    ]
+  },
+  {
+    "cluster_id": 84,
+    "representative": "above_vwap",
+    "rep_importance": 0.0003267312131356448,
+    "members": [
+      "above_vwap",
+      "below_vwap"
+    ],
+    "redundant": [
+      {
+        "feature": "below_vwap",
+        "importance": 0.0,
+        "corr_with_rep": -0.9999521698732716
+      }
+    ]
+  }
+]

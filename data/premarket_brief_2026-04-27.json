@@ -1,0 +1,76 @@
+{
+  "date": "2026-04-27",
+  "regime": "event_day",
+  "bias": "neutral",
+  "risk_appetite": 0.4,
+  "max_trades_today": 2,
+  "min_confidence_boost": 8,
+  "avoid_otm2_otm3": true,
+  "key_levels": {
+    "support": 23747.95,
+    "resistance": 24047.95
+  },
+  "rationale": "Heuristic: VIX=19.7, US overnight=+0.73%, Asia=+0.74%, FII net=+0cr, news_bias=+0.31, events=[]",
+  "_payload": {
+    "date": "2026-04-27",
+    "global": {
+      "dow": {
+        "last": 49230.71,
+        "change_pct": -0.16
+      },
+      "nasdaq": {
+        "last": 24836.6,
+        "change_pct": 1.63
+      },
+      "sp500": {
+        "last": 7165.08,
+        "change_pct": 0.8
+      },
+      "nikkei": {
+        "last": 60584.37,
+        "change_pct": 1.45
+      },
+      "hangseng": {
+        "last": 25986.51,
+        "change_pct": 0.03
+      },
+      "ftse": {
+        "last": 10379.1,
+        "change_pct": -0.74
+      },
+      "dax": {
+        "last": 24128.98,
+        "change_pct": -0.11
+      },
+      "crude": {
+        "last": 95.36,
+        "change_pct": 1.02
+      },
+      "dxy": {
+        "last": 98.45,
+        "change_pct": -0.06
+      },
+      "us10y": {
+        "last": 4.31,
+        "change_pct": -0.3
+      },
+      "gift_nifty": {
+        "last": 23897.95,
+        "change_pct": -1.14
+      },
+      "india_vix": {
+        "last": 19.71,
+        "change_pct": 6.02
+      }
+    },
+    "fii_dii": {},
+    "news": {
+      "bias_score": 0.313,
+      "confidence": 0.095,
+      "event_count": 8,
+      "dominant_type": "other",
+      "hot_title": "Sensex, Nifty 50 | Stock Market LIVE Updates: Gift Nifty signals positive start for Indian market; RIL, Paytm in focus"
+    },
+    "events": []
+  }
+}

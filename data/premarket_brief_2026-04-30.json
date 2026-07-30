@@ -1,0 +1,79 @@
+{
+  "date": "2026-04-30",
+  "regime": "trend_down",
+  "bias": "bearish",
+  "risk_appetite": 0.7,
+  "max_trades_today": 4,
+  "min_confidence_boost": 0,
+  "avoid_otm2_otm3": true,
+  "key_levels": {
+    "support": 24027.65,
+    "resistance": 24327.65
+  },
+  "rationale": "Heuristic: VIX=17.4, US overnight=-0.26%, Asia=-1.06%, FII net=+0cr, news_bias=-0.54, events=['banknifty_weekly_expiry', 'monthly_expiry']",
+  "_payload": {
+    "date": "2026-04-30",
+    "global": {
+      "dow": {
+        "last": 48861.81,
+        "change_pct": -0.57
+      },
+      "nasdaq": {
+        "last": 24673.24,
+        "change_pct": 0.04
+      },
+      "sp500": {
+        "last": 7135.95,
+        "change_pct": -0.04
+      },
+      "nikkei": {
+        "last": 59304.62,
+        "change_pct": -1.02
+      },
+      "hangseng": {
+        "last": 25822.08,
+        "change_pct": -1.11
+      },
+      "ftse": {
+        "last": 10213.1,
+        "change_pct": -1.16
+      },
+      "dax": {
+        "last": 23954.56,
+        "change_pct": -0.27
+      },
+      "crude": {
+        "last": 108.88,
+        "change_pct": 8.96
+      },
+      "dxy": {
+        "last": 99.02,
+        "change_pct": 0.4
+      },
+      "us10y": {
+        "last": 4.42,
+        "change_pct": 1.47
+      },
+      "gift_nifty": {
+        "last": 24177.65,
+        "change_pct": 0.76
+      },
+      "india_vix": {
+        "last": 17.44,
+        "change_pct": -3.38
+      }
+    },
+    "fii_dii": {},
+    "news": {
+      "bias_score": -0.536,
+      "confidence": 0.089,
+      "event_count": 6,
+      "dominant_type": "other",
+      "hot_title": "Indian refiners limit use of special FX credit line, sources say, spelling more rupee strain"
+    },
+    "events": [
+      "banknifty_weekly_expiry",
+      "monthly_expiry"
+    ]
+  }
+}

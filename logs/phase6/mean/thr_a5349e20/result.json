@@ -1,0 +1,128 @@
+{
+  "threshold_values": {
+    "call_thr": 0.32,
+    "put_thr": 0.15,
+    "skip_ceil": 0.6,
+    "min_edge": 0.03
+  },
+  "per_fold": {
+    "1": {
+      "n": 1,
+      "pf": Infinity,
+      "wr": 1.0,
+      "net": 1348.7500180391758,
+      "avg": 1348.7500180391758,
+      "dd": -0.0,
+      "sharpe": NaN,
+      "sortino": NaN,
+      "expectancy": 1348.7500180391758,
+      "avg_win": 1348.7500180391758,
+      "avg_loss": 0.0
+    },
+    "2": {
+      "n": 0,
+      "pf": NaN,
+      "wr": NaN,
+      "net": 0.0,
+      "avg": 0.0,
+      "dd": 0.0,
+      "sharpe": NaN,
+      "sortino": NaN,
+      "expectancy": 0.0,
+      "avg_win": 0.0,
+      "avg_loss": 0.0
+    },
+    "3": {
+      "n": 0,
+      "pf": NaN,
+      "wr": NaN,
+      "net": 0.0,
+      "avg": 0.0,
+      "dd": 0.0,
+      "sharpe": NaN,
+      "sortino": NaN,
+      "expectancy": 0.0,
+      "avg_win": 0.0,
+      "avg_loss": 0.0
+    },
+    "4": {
+      "n": 2,
+      "pf": 1.7865683509625152,
+      "wr": 0.5,
+      "net": 933.8470898287701,
+      "avg": 466.92354491438505,
+      "dd": 1187.242136917957,
+      "sharpe": 0.19959597066413268,
+      "sortino": 0.3932841754812576,
+      "expectancy": 466.92354491438505,
+      "avg_win": 2121.089226746727,
+      "avg_loss": -1187.242136917957
+    },
+    "5": {
+      "n": 0,
+      "pf": NaN,
+      "wr": NaN,
+      "net": 0.0,
+      "avg": 0.0,
+      "dd": 0.0,
+      "sharpe": NaN,
+      "sortino": NaN,
+      "expectancy": 0.0,
+      "avg_win": 0.0,
+      "avg_loss": 0.0
+    },
+    "6": {
+      "n": 0,
+      "pf": NaN,
+      "wr": NaN,
+      "net": 0.0,
+      "avg": 0.0,
+      "dd": 0.0,
+      "sharpe": NaN,
+      "sortino": NaN,
+      "expectancy": 0.0,
+      "avg_win": 0.0,
+      "avg_loss": 0.0
+    },
+    "7": {
+      "n": 14,
+      "pf": 12.983889326271463,
+      "wr": 0.35714285714285715,
+      "net": 19844.187902779922,
+      "avg": 1417.4419930557087,
+      "dd": 837.9887005676519,
+      "sharpe": 0.5122036610543852,
+      "sortino": 6.4424063741602895,
+      "expectancy": 1417.441993055709,
+      "avg_win": 4300.018674815206,
+      "avg_loss": -183.98949681067847
+    },
+    "8": {
+      "n": 0,
+      "pf": NaN,
+      "wr": NaN,
+      "net": 0.0,
+      "avg": 0.0,
+      "dd": 0.0,
+      "sharpe": NaN,
+      "sortino": NaN,
+      "expectancy": 0.0,
+      "avg_win": 0.0,
+      "avg_loss": 0.0
+    }
+  },
+  "pooled": {
+    "n": 17,
+    "pf": 8.782496043020052,
+    "wr": 0.4117647058823529,
+    "net": 22126.785010647876,
+    "avg": 1301.5755888616397,
+    "dd": 1629.9416424258936,
+    "sharpe": 0.5042266800212467,
+    "sortino": 3.0300244296076597,
+    "expectancy": 1301.5755888616395,
+    "avg_win": 3567.1332312659906,
+    "avg_loss": -284.3147608214063
+  },
+  "passes_min_trades": false
+}

@@ -1,0 +1,105 @@
+//@version=5
+indicator("OpenClaw — Trend State (ADX)", overlay=true, max_bars_back=500)
+
+// ── Inputs ────────────────────────────────────────────────────────
+adx_len       = input.int(14,    "ADX Length",          minval=5)
+adx_strong    = input.int(25,    "Strong trend (ADX >)",  minval=15)
+adx_weak      = input.int(20,    "Weak trend (ADX >)",    minval=10)
+show_bg       = input.bool(true, "Show background colour")
+show_adx_line = input.bool(true, "Show ADX line (separate pane)")
+show_signals  = input.bool(true, "Show trade / skip labels")
+show_labels   = input.bool(true, "Show state label on bar")
+atr_gate      = input.bool(true, "Also require ATR expansion (ar > 0.85)")
+
+// ── ADX Calculation ───────────────────────────────────────────────
+[diplus, diminus, adx_val] = ta.dmi(adx_len, adx_len)
+
+// ATR ratio  (same logic as ml_engine.py  ar = atr10/atr14)
+atr10 = ta.atr(10)
+atr14 = ta.atr(14)
+ar    = atr10 / atr14
+
+// ── State Logic ───────────────────────────────────────────────────
+atr_ok        = atr_gate ? ar > 0.85 : true
+
+is_strong     = adx_val > adx_strong and atr_ok   // trade normally
+is_weak       = adx_val > adx_weak   and adx_val <= adx_strong and atr_ok  // small size
+is_sideways   = not is_strong and not is_weak      // skip / sell premium
+
+trend_up      = is_strong and diplus  > diminus
+trend_down    = is_strong and diminus > diplus
+weak_up       = is_weak   and diplus  > diminus
+weak_down     = is_weak   and diminus > diplus
+
+// ── Background Colours ────────────────────────────────────────────
+col_strong_up   = color.new(color.green,  88)
+col_strong_down = color.new(color.red,    88)
+col_weak        = color.new(color.orange, 92)
+col_sideways    = color.new(color.gray,   94)
+
+bg_col = trend_up   ? col_strong_up   :
+         trend_down ? col_strong_down :
+         is_weak    ? col_weak        :
+         col_sideways
+
+bgcolor(show_bg ? bg_col : na, title="Trend state background")
+
+// ── ADX Line (plots in separate pane via plot — will show below) ──
+plot(show_adx_line ? adx_val  : na, "ADX",    color=color.new(color.white, 20), linewidth=2)
+plot(show_adx_line ? diplus   : na, "DI+",    color=color.new(color.green, 30), linewidth=1)
+plot(show_adx_line ? diminus  : na, "DI-",    color=color.new(color.red,   30), linewidth=1)
+hline(adx_strong, "Strong threshold", color=color.new(color.green, 50), linestyle=hline.style_dashed)
+hline(adx_weak,   "Weak threshold",   color=color.new(color.orange,50), linestyle=hline.style_dashed)
+
+// ── State Label on bar ────────────────────────────────────────────
+var label lbl = na
+if show_labels and barstate.islast
+    label.delete(lbl)
+    state_txt = trend_up   ? "TREND UP ▲"   :
+                trend_down ? "TREND DOWN ▼" :
+                is_weak    ? "WEAK TREND ~"  :
+                             "SIDEWAYS ─"
+    lbl := label.new(bar_index, high * 1.001, state_txt,
+         color      = trend_up ? color.green : trend_down ? color.red : is_weak ? color.orange : color.gray,
+         textcolor  = color.white,
+         style      = label.style_label_down,
+         size       = size.small)
+
+// ── Trade / Skip Signals ──────────────────────────────────────────
+// Only show on the bars where OpenClaw would be allowed to trade
+
+long_allowed  = trend_up   and hour >= 10 and hour < 15
+short_allowed = trend_down and hour >= 10 and hour < 15
+skip_bar      = is_sideways or is_weak
+
+// Rising edge — new trend start (ADX just crossed above threshold)
+new_strong_up   = ta.crossover(adx_val,  adx_strong) and diplus  > diminus
+new_strong_down = ta.crossover(adx_val,  adx_strong) and diminus > diplus
+sideways_start  = ta.crossunder(adx_val, adx_weak)
+
+plotshape(show_signals and new_strong_up,
+     title="Trend UP confirmed", location=location.belowbar,
+     style=shape.triangleup, color=color.green, size=size.small)
+
+plotshape(show_signals and new_strong_down,
+     title="Trend DOWN confirmed", location=location.abovebar,
+     style=shape.triangledown, color=color.red, size=size.small)
+
+plotshape(show_signals and sideways_start,
+     title="Gone sideways — skip", location=location.abovebar,
+     style=shape.xcross, color=color.gray, size=size.tiny)
+
+// ── Alerts ────────────────────────────────────────────────────────
+// Wire these to OpenClaw webhook in TradingView alert settings
+
+alertcondition(new_strong_up,
+     title   = "OpenClaw — Trend UP confirmed",
+     message = '{"state":"TREND_UP","adx":{{plot_0}},"symbol":"{{ticker}}","tf":"{{interval}}","time":"{{time}}"}')
+
+alertcondition(new_strong_down,
+     title   = "OpenClaw — Trend DOWN confirmed",
+     message = '{"state":"TREND_DOWN","adx":{{plot_0}},"symbol":"{{ticker}}","tf":"{{interval}}","time":"{{time}}"}')
+
+alertcondition(sideways_start,
+     title   = "OpenClaw — Gone sideways, halt trading",
+     message = '{"state":"SIDEWAYS","adx":{{plot_0}},"symbol":"{{ticker}}","tf":"{{interval}}","time":"{{time}}"}')

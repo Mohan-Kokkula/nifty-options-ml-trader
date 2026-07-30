@@ -1,0 +1,78 @@
+{
+  "protocol_version": "2.5",
+  "code_hash": {
+    "backtest_threshold_sweep.py": "d698ab202dd29c5b24c45321ee631e37ea8a37dc0fc5d0108d0035c1bd1bda02",
+    "backtest_options.py": "f47f390b73d00050721321c93dae68c65f430ff9a91a6729ed5a16ef07ec5438",
+    "phase5_run_single_fold.py": "1c6553a943187dbce8c751b14e3d56305ae0fdaf5c25f2efda35fe4e474ef043",
+    "brains/__init__.py": "e26ebe1d84c4bec82adced6159d162a73e3d87ccf153cfe74dd335b0076aa8c2",
+    "brains/_base.py": "fb5d128764351899efba4f71d3fc23b40064041c1ecf25eafff72d7ba8dd0cfc",
+    "brains/_hpo.py": "a8d18c10cdaafd8ffe344f823c3865ec5cd686c57ea5ddfa6d5f1d319fdbfd3f",
+    "calibrators/__init__.py": "cd326b41ae3eacce9620646bedecead5bf18ac02115bcfaf43fd38192a7a5984",
+    "calibrators/_base.py": "acde3fad59c2c9e5774cda3fd8eb55beffcb361e8f844d27a94561238a55be12",
+    "ensembles/__init__.py": "78dd4a64a11e2c628fac2e6d6e3eac64611aa6462d864e9068a705e169b755ed",
+    "ensembles/_base.py": "36024130423aa163a2b383e0dd84f68d295939e28d78f57cbf30a8298baa0d6d",
+    "ensembles/_validation.py": "6e8fae61e91294fde90f4e30aae759edd445d8c2742c39951b86234c0004ed29",
+    "ensembles/_selection.py": "cd7c0dd5790621d069f61bda12495ef19d22dcf95f7ce526b457302166ad99ab",
+    "ensembles/_diversity.py": "7f603e106f410559e4c4b4dd588e6604b5ffceb331a093b6808e520a3cf073b0",
+    "ensembles/_meta.py": "0204b1023c2a197a63379053fed6f0bf597dde4e8b684b69f8ead896e9647806",
+    "ensembles/_oof.py": "68bcc633627c83b5d1de8400a71d41b9820bbd88285ac1135063b74b3567a46e",
+    "ensembles/mean_probability.py": "8380ae083e48c309c8e74ca35f51d6eb952a91c3403174aeb79f30f5a284815e",
+    "ensembles/median_probability.py": "37bde1dc34f59939ed23150099bda6602647dfd0da251e92e21e7fdf6798a2ed",
+    "ensembles/weighted_probability.py": "0a0dc5921ee7ae9b7efdbdb976ecaf95b7d24be7b59dbc53013a18433075ca51",
+    "ensembles/performance_weighted.py": "f884ad2bd3a84a5dab48767893395c16d5a113d89f22354a73a8514231e1244f",
+    "ensembles/min_variance.py": "7a2a17e442c9aef5653ae5d9918c8f8af6669b162ee4bb1cda03e97ce19a149b",
+    "ensembles/stacking.py": "6e369852bfc41946afa34337f3a72610a861e25b5aea7bddde96bbf9b5e46214",
+    "ensembles/confidence_weighted.py": "753535df3ed515ac9cfd6e988387108a2027b1facd74e9f1f3d1e53f1f7fe2d4",
+    "ensembles/uncertainty_weighted.py": "5843e66e9fa4f2888843d74782e4637c6611a483d2b84d1210c705f1cf67cc5a"
+  },
+  "data_hash": {
+    "cat:isotonic_predictions.csv": "53524bef6073bd440c95c2322f050dc6d2a3fa5812a10a47bc4c581df15b2e53",
+    "lgb:isotonic_predictions.csv": "6afb9f8fb6cd4994caa29ef5bc340c71d241802786634a73bf8e53cf96b83997",
+    "mlp:isotonic_predictions.csv": "71ace66cd6392fcc39c61451f30e76c1ae1711cc9402088ecb98cc8f9cef92d0",
+    "xgb:isotonic_predictions.csv": "0459e7c0b5ca7684b5b80e5c2ec99c75ce2eaaf41ebe64fc8fb9fb048141b85c"
+  },
+  "random_seed": 42,
+  "fold_id": 7,
+  "test_start": "2026-01-01",
+  "test_end": "2026-04-01",
+  "timestamp_utc": "2026-07-12T06:00:55.099117+00:00",
+  "ensemble_type": "stacking",
+  "participating_brains": [
+    "cat",
+    "lgb",
+    "mlp",
+    "xgb"
+  ],
+  "input_source": "calibrated_isotonic",
+  "weights_summary": {
+    "kind": "stacking",
+    "n_meta_features": 12,
+    "classes": [
+      0,
+      1,
+      2
+    ],
+    "coef_shape": [
+      3,
+      12
+    ],
+    "coef_first_row_head": [
+      2.4167590146365123,
+      -1.9777376719900697,
+      -0.26302359066568215,
+      1.4384558012291409,
+      -0.41665561398669526,
+      -0.8458024352616703
+    ],
+    "intercept": [
+      0.18975418187369975,
+      0.055575269003531165,
+      -0.24532945087720637
+    ]
+  },
+  "n_test_bars": 4350,
+  "n_oof_bars": 90965,
+  "k_inner": 3,
+  "preregistration_frozen_at": "2026-07-12T05:12:34+00:00",
+  "phase5_version": "1.0"
+}

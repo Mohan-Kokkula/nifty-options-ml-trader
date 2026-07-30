@@ -1,0 +1,72 @@
+[
+  {
+    "regime": "BEAR_TREND|MIDDAY",
+    "label": "FP",
+    "n": 12711,
+    "pnl_sum": -571125.0,
+    "pnl_mean": -44.93155534576351
+  },
+  {
+    "regime": "BEAR_TREND|AFTERNOON",
+    "label": "FN",
+    "n": 10739,
+    "pnl_sum": -517120.6023437502,
+    "pnl_mean": -48.153515443127866
+  },
+  {
+    "regime": "BULL_TREND|AFTERNOON",
+    "label": "FN",
+    "n": 10006,
+    "pnl_sum": -470775.8343750001,
+    "pnl_mean": -47.04935382520489
+  },
+  {
+    "regime": "BULL_TREND|MIDDAY",
+    "label": "FP",
+    "n": 9417,
+    "pnl_sum": -437025.0,
+    "pnl_mean": -46.40809174896464
+  },
+  {
+    "regime": "BULL_TREND|MIDDAY",
+    "label": "FN",
+    "n": 7979,
+    "pnl_sum": -263134.78867187526,
+    "pnl_mean": -32.97841692842152
+  },
+  {
+    "regime": "BEAR_TREND|MIDDAY",
+    "label": "FN",
+    "n": 7620,
+    "pnl_sum": -251414.123046875,
+    "pnl_mean": -32.99397940247703
+  },
+  {
+    "regime": "BULL_TREND|MORNING",
+    "label": "FN",
+    "n": 6961,
+    "pnl_sum": -231457.3023437497,
+    "pnl_mean": -33.25058214965518
+  },
+  {
+    "regime": "SIDEWAYS|AFTERNOON",
+    "label": "FN",
+    "n": 4835,
+    "pnl_sum": -228626.44531250003,
+    "pnl_mean": -47.28571774819029
+  },
+  {
+    "regime": "UNCLASSIFIED|AFTERNOON",
+    "label": "FN",
+    "n": 4581,
+    "pnl_sum": -219261.24804687494,
+    "pnl_mean": -47.86318446777449
+  },
+  {
+    "regime": "BEAR_TREND|MORNING",
+    "label": "FN",
+    "n": 5732,
+    "pnl_sum": -205588.94765625003,
+    "pnl_mean": -35.86687851644278
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "iterations": 700,
+  "depth": 5,
+  "learning_rate": 0.03,
+  "l2_leaf_reg": 3.0,
+  "loss_function": "MultiClass",
+  "classes_count": 3,
+  "verbose": false,
+  "early_stopping_rounds": 50
+}

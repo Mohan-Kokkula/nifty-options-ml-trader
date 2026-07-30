@@ -1,0 +1,166 @@
+{
+  "correction_version": "1.0",
+  "phase": 7,
+  "supplements_but_does_not_replace": [
+    "logs/phase7/mean/manifest.json",
+    "logs/phase7/stacking/manifest.json"
+  ],
+  "timestamp_utc_started":  "2026-07-12T10:56:14Z",
+  "timestamp_utc_completed": "2026-07-12T11:14:33Z",
+  "author": "Assistant (Claude), acting on user-approved audit findings",
+  "experiments_rerun": false,
+  "provenance_preserved": true,
+  "protocol_version": "2.5",
+  "phase7_version": "1.0",
+
+  "corrected_files": [
+    {
+      "path": "phase7_robustness_v9/_stats.py",
+      "change_type": "source_code_fix",
+      "description": "Fixed DM sign-convention bug in dm_winner_vs_baseline_by_fold; extended docstring; added 'hypothesis' and 'interpretation_positive_stat' keys to result dict.",
+      "new_sha256_prefix16": "26eec0f762947815"
+    },
+    {
+      "path": "logs/phase7/summary.json",
+      "change_type": "additive_json_edit",
+      "description": "Added per_target.<t>.r7_statistical_tests (DM + SPA p_lower) and root-level r7_correction metadata block.",
+      "new_sha256_prefix16": "e9d3becf53efa9fa"
+    },
+    {
+      "path": "logs/phase7/stress_report.json",
+      "change_type": "additive_json_edit",
+      "description": "Same additions as summary.json."
+    },
+    {
+      "path": "logs/phase7/robustness.json",
+      "change_type": "additive_json_edit",
+      "description": "Same additions as summary.json."
+    },
+    {
+      "path": "logs/phase7/Phase7_Report.md",
+      "change_type": "markdown_rewrite_in_place",
+      "description": "Rewrote §3 with corrected DM, replaced hand-cited rolling-window figure with a full table, added stacking paired-CI numerical-artifact note, added §7 'Corrections applied (post-audit)'. Backup preserved verbatim at Phase7_Report.md.pre-r7-correction.bak."
+    }
+  ],
+
+  "new_files": [
+    "logs/phase7/r7_correction.json",
+    "logs/phase7/Phase7_Report.md.pre-r7-correction.bak",
+    "logs/phase7/PHASE7_CORRECTIONS.md",
+    "logs/phase7/correction_manifest.json"
+  ],
+
+  "unchanged_files": {
+    "phase_0_to_6_artifacts": "All files under logs/phase0/ … logs/phase6/ have mtimes strictly earlier than the original Phase 7 run start (2026-07-12T10:37:29Z). Verified 0 mismatches.",
+    "phase7_charts_and_data": [
+      "logs/phase7/mean/manifest.json",
+      "logs/phase7/mean/charts/chart_data.json",
+      "logs/phase7/mean/charts/slippage_sensitivity.png",
+      "logs/phase7/mean/charts/tcost_sensitivity.png",
+      "logs/phase7/mean/charts/delay_stress.png",
+      "logs/phase7/mean/charts/rolling_pf.png",
+      "logs/phase7/mean/charts/tornado.png",
+      "logs/phase7/stacking/manifest.json",
+      "logs/phase7/stacking/charts/chart_data.json",
+      "logs/phase7/stacking/charts/slippage_sensitivity.png",
+      "logs/phase7/stacking/charts/tcost_sensitivity.png",
+      "logs/phase7/stacking/charts/delay_stress.png",
+      "logs/phase7/stacking/charts/rolling_pf.png",
+      "logs/phase7/stacking/charts/tornado.png",
+      "logs/phase7/bootstrap.json",
+      "logs/phase7/jackknife.json",
+      "logs/phase7/run_full.out"
+    ],
+    "phase7_source_untouched": [
+      "phase7_robustness_v9/__init__.py",
+      "phase7_robustness_v9/_base.py",
+      "phase7_robustness_v9/_bootstrap.py",
+      "phase7_robustness_v9/_cache.py",
+      "phase7_robustness_v9/_delay.py",
+      "phase7_robustness_v9/_jackknife.py",
+      "phase7_robustness_v9/_regime.py",
+      "phase7_robustness_v9/_replay.py",
+      "phase7_robustness_v9/_reports.py",
+      "phase7_robustness_v9/_slippage.py",
+      "phase7_robustness_v9/_stability.py",
+      "phase7_robustness_v9/_tcost.py",
+      "phase7_robustness_v9/_visualize.py",
+      "phase7_robustness_v9/_walkforward.py",
+      "phase7_robustness_v9/tests/*",
+      "phase7_robustness.py"
+    ]
+  },
+
+  "cached_inputs_used": {
+    "phase6_cached_pnl": {
+      "mean": {
+        "winner_hash":   "c0b9a0e0",
+        "baseline_hash": "9e6157c7",
+        "files": "logs/phase6/mean/thr_{winner_hash|baseline_hash}/trade_pnl_fold_{1..8}.csv"
+      },
+      "stacking": {
+        "winner_hash":   "9a379df3",
+        "baseline_hash": "9e6157c7",
+        "files": "logs/phase6/stacking/thr_{winner_hash|baseline_hash}/trade_pnl_fold_{1..8}.csv"
+      }
+    },
+    "phase7_original_report_transcript": "logs/phase7/Phase7_Report.md.pre-r7-correction.bak (SPA p_lower transcribed verbatim)"
+  },
+
+  "recomputation_scope": {
+    "diebold_mariano_winner_vs_baseline_by_fold": {
+      "recomputed": true,
+      "consumed": "Phase 6 cached per-fold trade PnLs",
+      "no_replay": true
+    },
+    "hansen_spa_over_delay_variants": {
+      "recomputed": false,
+      "reason": "delay-shifted per-fold PnLs were not persisted in the original Phase 7 run and cannot be recomputed under the 'no replay' constraint of this correction cycle. Original run's p_lower values were transcribed verbatim from the pre-correction markdown."
+    },
+    "white_reality_check_over_delay_variants": {
+      "recomputed": false,
+      "reason": "same as SPA, and the value was never surfaced in the original markdown; marked null on disk. Deferred to a future Phase 7 refresh."
+    },
+    "all_other_R1_R2_R3_R4_R5_R6": {
+      "recomputed": false,
+      "reason": "No stress test, bootstrap, walk-forward, jackknife, slippage or tcost experiment was re-executed."
+    }
+  },
+
+  "recomputed_values_dm": {
+    "mean": {
+      "statistic": 1.4471,
+      "pvalue": 0.0739,
+      "mean_loss_diff_rs": 2508.46,
+      "hypothesis": "H1: E[winner_perf - baseline_perf] > 0"
+    },
+    "stacking": {
+      "statistic": 1.6797,
+      "pvalue": 0.0465,
+      "mean_loss_diff_rs": 2976.77,
+      "hypothesis": "H1: E[winner_perf - baseline_perf] > 0"
+    }
+  },
+
+  "transcribed_values_spa_p_lower": {
+    "mean": 0.0355,
+    "stacking": 0.0013,
+    "source": "logs/phase7/Phase7_Report.md.pre-r7-correction.bak"
+  },
+
+  "final_verdicts": {
+    "mean":     "REJECT",
+    "stacking": "REJECT",
+    "unchanged_from_original_run": true,
+    "production_recommendation": "DO NOT deploy without further evidence"
+  },
+
+  "remaining_known_limitations": [
+    "WRC pvalue over delay variants is not available on disk; recomputing it requires persisting delay-shifted per-fold PnLs, which is deferred.",
+    "N = 8 folds limits statistical power. Paired-bootstrap CIs remain wide.",
+    "Rolling-window PFs with n < 30 trades are denominator-driven and should not be interpreted as evidence of persistent edge.",
+    "Stacking's paired-bootstrap ΔPF lower bound of ≈ -55 is a numerical artifact caused by near-zero per-fold gross losses on at least one fold — flagged in the report but not corrected numerically.",
+    "Phase 7 does not retrain models. ±1 fold shift is implemented as edge-fold drop, not re-splitting the training window.",
+    "Slippage and tcost stress reuse the analytical round_trip_cost decomposition; a gap or jump-diffusion overlay would require real re-simulation with a different fill model."
+  ]
+}

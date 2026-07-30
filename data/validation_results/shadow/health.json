@@ -1,0 +1,8 @@
+{
+ "last_update": "2026-06-19T14:55:12",
+ "model_loaded": true,
+ "model_dir": "models/htf36",
+ "n_features": 34,
+ "total_observations": 277,
+ "consecutive_errors": 0
+}

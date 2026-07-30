@@ -1,0 +1,76 @@
+{
+  "date": "2026-05-06",
+  "regime": "trend_up",
+  "bias": "bullish",
+  "risk_appetite": 0.7,
+  "max_trades_today": 4,
+  "min_confidence_boost": 0,
+  "avoid_otm2_otm3": false,
+  "key_levels": {
+    "support": 23882.8,
+    "resistance": 24182.8
+  },
+  "rationale": "Heuristic: VIX=17.9, US overnight=+0.88%, Asia=+0.46%, FII net=+0cr, news_bias=+0.07, events=[]",
+  "_payload": {
+    "date": "2026-05-06",
+    "global": {
+      "dow": {
+        "last": 49298.25,
+        "change_pct": 0.73
+      },
+      "nasdaq": {
+        "last": 25326.12,
+        "change_pct": 1.03
+      },
+      "sp500": {
+        "last": 7259.22,
+        "change_pct": 0.81
+      },
+      "nikkei": {
+        "last": 59513.12,
+        "change_pct": 0.38
+      },
+      "hangseng": {
+        "last": 26037.06,
+        "change_pct": 0.53
+      },
+      "ftse": {
+        "last": 10219.1,
+        "change_pct": -1.4
+      },
+      "dax": {
+        "last": 24401.7,
+        "change_pct": 1.71
+      },
+      "crude": {
+        "last": 100.71,
+        "change_pct": -5.37
+      },
+      "dxy": {
+        "last": 98.31,
+        "change_pct": -0.17
+      },
+      "us10y": {
+        "last": 4.42,
+        "change_pct": -0.67
+      },
+      "gift_nifty": {
+        "last": 24032.8,
+        "change_pct": -0.36
+      },
+      "india_vix": {
+        "last": 17.91,
+        "change_pct": -2.13
+      }
+    },
+    "fii_dii": {},
+    "news": {
+      "bias_score": 0.068,
+      "confidence": 0.105,
+      "event_count": 10,
+      "dominant_type": "other",
+      "hot_title": "Sensex, Nifty 50 | Stock Market LIVE: Gift Nifty signals strong start for Indian market; Nasdaq, Kospi at record high"
+    },
+    "events": []
+  }
+}

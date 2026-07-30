@@ -1,0 +1,78 @@
+{
+  "date": "2026-04-28",
+  "regime": "event_day",
+  "bias": "neutral",
+  "risk_appetite": 0.5,
+  "max_trades_today": 3,
+  "min_confidence_boost": 3,
+  "avoid_otm2_otm3": true,
+  "key_levels": {
+    "support": 23942.7,
+    "resistance": 24242.7
+  },
+  "rationale": "Heuristic: VIX=18.4, US overnight=+0.04%, Asia=-0.54%, FII net=+0cr, news_bias=+0.15, events=['nifty_weekly_expiry']",
+  "_payload": {
+    "date": "2026-04-28",
+    "global": {
+      "dow": {
+        "last": 49167.79,
+        "change_pct": -0.13
+      },
+      "nasdaq": {
+        "last": 24887.1,
+        "change_pct": 0.2
+      },
+      "sp500": {
+        "last": 7173.91,
+        "change_pct": 0.12
+      },
+      "nikkei": {
+        "last": 60238.21,
+        "change_pct": -0.49
+      },
+      "hangseng": {
+        "last": 25773.98,
+        "change_pct": -0.59
+      },
+      "ftse": {
+        "last": 10321.1,
+        "change_pct": -0.56
+      },
+      "dax": {
+        "last": 24083.53,
+        "change_pct": -0.19
+      },
+      "crude": {
+        "last": 97.28,
+        "change_pct": 3.05
+      },
+      "dxy": {
+        "last": 98.58,
+        "change_pct": 0.07
+      },
+      "us10y": {
+        "last": 4.34,
+        "change_pct": 0.6
+      },
+      "gift_nifty": {
+        "last": 24092.7,
+        "change_pct": 0.81
+      },
+      "india_vix": {
+        "last": 18.38,
+        "change_pct": -6.75
+      }
+    },
+    "fii_dii": {},
+    "news": {
+      "bias_score": 0.155,
+      "confidence": 0.05,
+      "event_count": 5,
+      "dominant_type": "other",
+      "hot_title": "Sun Pharma among 6 stocks showing bullish RSI upswing"
+    },
+    "events": [
+      "nifty_weekly_expiry"
+    ]
+  }
+}

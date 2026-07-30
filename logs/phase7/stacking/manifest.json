@@ -1,0 +1,54 @@
+{
+  "phase7_version": "1.0",
+  "manifest_schema_version": "1.0",
+  "protocol_version": "2.5",
+  "experiment_type": "phase7_full",
+  "target": "stacking",
+  "candidate": {
+    "call_thr": 0.4,
+    "put_thr": 0.15,
+    "skip_ceil": 0.75,
+    "min_edge": 0.05
+  },
+  "random_seed": 42,
+  "code_hash": {
+    "stat_utils/__init__.py": "355bfd8b838c70aa27a60f2526b0832e1e4f9cf1cc5822f56bed81ff26a01288",
+    "stat_utils/metrics.py": "9d3ddb4352815c14b37b046259063f352291d20ed8f32658320239fd51115033",
+    "stat_utils/dm.py": "b5b04f88781367b65b835ebad6123faea26f927f3abdd6ae2b8ae66bfbc501ce",
+    "stat_utils/spa.py": "e6f1ae608ea11827502a736bf832285f94093c8d1d40f22eae4555755807a14f",
+    "stat_utils/white_rc.py": "b314c58bd8a80b28dde80e0c82c39c464f8337f6d0d571c5e95f9b42b205a79b",
+    "stat_utils/bootstrap.py": "8c3e60bc39e5087e58312b3a09b41f4e8aac6120564723b78a5c268a0cc3dd0e",
+    "backtest_options.py": "f47f390b73d00050721321c93dae68c65f430ff9a91a6729ed5a16ef07ec5438",
+    "backtest_threshold_sweep.py": "d698ab202dd29c5b24c45321ee631e37ea8a37dc0fc5d0108d0035c1bd1bda02",
+    "threshold_opt/__init__.py": "568894696978b7c408b2e0ffac69feb5c36758e1e9ffdfce32364caec46f1e79",
+    "threshold_opt/_base.py": "91c2ddd70ce9c3fba6d1067adeafd71f1e5b985e5ef7710902947f6c1e101f6e",
+    "threshold_opt/_evaluate.py": "169d7beeba35d6871baf3d37df2927f18c64ca546d08304e26e6e057891dcb45",
+    "phase7_robustness_v9/_base.py": "6da229bf75752e4667d8c7741f514e1f378b2b6d97728a6eaf197a032467bea8",
+    "phase7_robustness_v9/_replay.py": "dd16cc354dedff7d158ed8379201959ba25d5ae57479b5ba38d39fe3857bef55",
+    "phase7_robustness_v9/_walkforward.py": "1ee0a1ac4325195ac046b4cad8e93148be432c7eb4f5585c65be81e9394451df",
+    "phase7_robustness_v9/_jackknife.py": "fe725ec6b5995abacc9cfdf7be8968be88c5c64d4a162a71bb68135d6bb77040",
+    "phase7_robustness_v9/_slippage.py": "2567d29806fb57241eb68f1ee08e6b89a0a534cb438a4bca3c7887dabaf45715",
+    "phase7_robustness_v9/_tcost.py": "b10f94b3196a6a07fd6192edc563dfdfc6545e62b699bfc0d7c19ae735d34c89",
+    "phase7_robustness_v9/_delay.py": "de73a13c61def676a5d1859965b2c0d324dd408a32e78ca949ac13744c0ab965",
+    "phase7_robustness_v9/_bootstrap.py": "3a6b7a81f3ceb05562e024c4e815c87dc5842e07c1a2dd4e847a0604aaa2e762",
+    "phase7_robustness_v9/_stability.py": "8f4fe81bb4c347f94a53096c2964a3b7ab37ab6f001e836a7dc8222b029b0482",
+    "phase7_robustness_v9/_stats.py": "da977368fba7c094f199ce01ab2acf940f55b2efa364e3affd079cb631f29fd1",
+    "phase7_robustness_v9/_regime.py": "7e2ca2d67215edcc0b0d28a2df10492b096b3d41cb0af46345c9ea9cd58b9c19",
+    "phase7_robustness_v9/_reports.py": "47fe7e291910fffeaa319b41c6d8f1007fd3a0174b47392383367a1fd6fa11de"
+  },
+  "input_hash": {
+    "phase5/stacking/fold_1/predictions.csv": "d818c4d863eaffd60ecfcd787d832d73d432a1d874920f62bbdf12a62ce9dab9",
+    "phase5/stacking/fold_2/predictions.csv": "914d91ba984f53022a40cc88049e4bda541b5f6bcb15d5bb96ff134253afc1b2",
+    "phase5/stacking/fold_3/predictions.csv": "67b25a3b01f807254bd0a0c2c6647ab95dab52642afc131c9b00344eb8889d5c",
+    "phase5/stacking/fold_4/predictions.csv": "c68a4bbebc680c59d0128fdf222e6d5e8bf0926bfc6b05db7f0f8b88bd06163f",
+    "phase5/stacking/fold_5/predictions.csv": "f4b6c35fa9ba1f188ead5032ae6682e8859f53703e7ec66bdc0fefa26f4f8ffe",
+    "phase5/stacking/fold_6/predictions.csv": "9d007ecfaedff344385626b13e5ce9f36fcdc0935d1d94730855213c51acdc96",
+    "phase5/stacking/fold_7/predictions.csv": "7c22f60636ffd569bdc23919b9976ddf17f64a83ebc461813b5b6b728c754309",
+    "phase5/stacking/fold_8/predictions.csv": "930cc34f44c31e451a5c520e97f8ed59cb7fae3c0054c0aa820c2ee2fcb19de6",
+    "phase6/summary.json": "b78070d2b0f1390e6aea30189a7412a9f8a6abc7440924e8c799593231b611b6"
+  },
+  "timestamp_utc": "2026-07-12T10:39:59.126782+00:00",
+  "extra": {
+    "h_rob_verdict": "REJECT"
+  }
+}

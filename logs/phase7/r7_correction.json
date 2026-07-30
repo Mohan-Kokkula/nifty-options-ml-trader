@@ -1,0 +1,71 @@
+{
+  "correction_meta": {
+    "issue": "Original Phase 7 R7 block was not persisted to disk and the underlying DM implementation had an inverted sign convention.",
+    "fix": "Corrected phase7_robustness_v9._stats.dm_winner_vs_baseline_by_fold to call diebold_mariano(-baseline_perf, -winner_perf, alternative='greater') so a positive statistic means the winner outperforms the baseline in per-fold net PnL.",
+    "recomputed_at_utc": "2026-07-12T11:10:01.921836+00:00",
+    "recomputed_from": "Phase 6 cache (logs/phase6/<target>/thr_<hash8>/trade_pnl_fold_*.csv)",
+    "cached_hashes_used": {
+      "mean": {
+        "winner_hash": "c0b9a0e0",
+        "baseline_hash": "9e6157c7"
+      },
+      "stacking": {
+        "winner_hash": "9a379df3",
+        "baseline_hash": "9e6157c7"
+      }
+    },
+    "notes_on_spa_wrc": "SPA/WRC over execution-delay variants was ORIGINALLY intended to operate on per-fold PnLs from delay-shifted replays. Those replays were not persisted to disk during the original Phase 7 run and cannot be recomputed under the current 'no replay' constraint. SPA/WRC values quoted in the original Phase 7 prose are unverified; the corrected report marks them as UNAVAILABLE and defers their recomputation to a future Phase 7 refresh that persists the delay-shifted per-fold PnLs before writing the stats block."
+  },
+  "dm_results": {
+    "mean": {
+      "common_folds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "statistic": 1.4470763402616145,
+      "pvalue": 0.0739377718542289,
+      "alternative": "greater",
+      "lag": 1,
+      "n": 8,
+      "mean_loss_diff": 2508.46058016448,
+      "se_loss_diff": 1733.4680350802912,
+      "ci_lower": -342.84060454177916,
+      "ci_upper": 5359.761764870738,
+      "hypothesis": "H1: E[winner_perf - baseline_perf] > 0 (winner outperforms baseline in per-fold net PnL)",
+      "interpretation_positive_stat": "positive statistic \u2192 winner has lower loss than baseline (better)"
+    },
+    "stacking": {
+      "common_folds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "statistic": 1.6796567522548984,
+      "pvalue": 0.046512059412330276,
+      "alternative": "greater",
+      "lag": 1,
+      "n": 8,
+      "mean_loss_diff": 2976.7748274736805,
+      "se_loss_diff": 1772.2518743650644,
+      "ci_lower": 61.67990405275941,
+      "ci_upper": 5891.869750894602,
+      "hypothesis": "H1: E[winner_perf - baseline_perf] > 0 (winner outperforms baseline in per-fold net PnL)",
+      "interpretation_positive_stat": "positive statistic \u2192 winner has lower loss than baseline (better)"
+    }
+  },
+  "verdicts_unchanged": {
+    "mean": "REJECT",
+    "stacking": "REJECT"
+  }
+}

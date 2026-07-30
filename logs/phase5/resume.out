@@ -1,0 +1,13 @@
+[Phase 5 / Fold 6] discover brains ...
+  brains: ['cat', 'lgb', 'mlp', 'xgb']
+  ensembles: ['confidence', 'mean', 'median', 'min_variance', 'performance', 'stacking', 'uncertainty', 'weighted']
+[Phase 5 / Fold 6] build_frame for OOF ...
+Building V9 (leak-fixed) feature + label frame...
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  OOF: cat
+  OOF: lgb
+  OOF: mlp

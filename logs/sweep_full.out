@@ -1,0 +1,108 @@
+Building V9 (leak-fixed) feature + label frame...
+04:04:30 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+04:04:30 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+04:04:30 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+04:04:30 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+04:04:30 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+04:04:33 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+04:04:33 [V9]   5-min features computed: 98 cols
+04:04:33 [V9]   15-min features: 14 cols
+04:04:33 [V9]   30-min features: 7 cols
+04:04:35 [V9]   60-min features: 13 cols
+04:04:35 [V9]   Daily features: 17 cols
+04:04:35 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+04:04:36 [V9]   VIX features: 15 cols (with options-pricing additions)
+04:04:36 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+04:04:38 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+04:04:38 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+04:04:39 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+04:04:39 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+04:04:40 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+04:04:40 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+04:04:40 [V9]   VIX>35 forced SKIP: 3,225 bars
+04:04:40 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+04:04:40 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+IV calibrated for 461 days
+
+======================================================================
+  LEAK-CLEAN (V9) WALK-FORWARD THRESHOLD SWEEP | 8 fold(s)
+  test 2024-07-01 -> 2026-05-01 | embargo 3d | XGB+LGB
+======================================================================
+
+  Fold 1/8: train < 2024-06-28 (174,334) -> test 2024-07-01..2024-10-01 (4,800)
+    A_current     89 trades  net Rs.-19,767
+    B_put020     101 trades  net Rs.-15,166
+    C_skip070     89 trades  net Rs.-20,607
+    D_both       104 trades  net Rs.-16,978
+    E_loose      104 trades  net Rs.-16,630
+
+  Fold 2/8: train < 2024-09-28 (179,134) -> test 2024-10-01..2025-01-01 (4,575)
+    A_current    113 trades  net Rs.+20,199
+    B_put020     113 trades  net Rs.+17,794
+    C_skip070    112 trades  net Rs.+20,225
+    D_both       114 trades  net Rs.+18,344
+    E_loose      114 trades  net Rs.+19,903
+
+  Fold 3/8: train < 2024-12-29 (183,634) -> test 2025-01-01..2025-04-01 (4,650)
+    A_current     94 trades  net Rs.-24,772
+    B_put020      96 trades  net Rs.-28,887
+    C_skip070     96 trades  net Rs.-27,270
+    D_both        99 trades  net Rs.-31,406
+    E_loose       99 trades  net Rs.-31,406
+
+  Fold 4/8: train < 2025-03-29 (188,434) -> test 2025-04-01..2025-07-01 (4,575)
+    A_current     87 trades  net Rs.-3,672
+    B_put020      88 trades  net Rs.-7,379
+    C_skip070     85 trades  net Rs.-2,369
+    D_both        85 trades  net Rs.-7,008
+    E_loose       85 trades  net Rs.-7,008
+
+  Fold 5/8: train < 2025-06-28 (192,934) -> test 2025-07-01..2025-10-01 (4,800)
+    A_current     57 trades  net Rs.-1,485
+    B_put020      64 trades  net Rs.-4,356
+    C_skip070     58 trades  net Rs.-2,963
+    D_both        70 trades  net Rs.-4,902
+    E_loose       73 trades  net Rs.-1,577
+
+  Fold 6/8: train < 2025-09-28 (197,659) -> test 2025-10-01..2026-01-01 (4,587)
+    A_current     50 trades  net Rs.-9,216
+    B_put020      65 trades  net Rs.-15,660
+    C_skip070     54 trades  net Rs.-10,941
+    D_both        77 trades  net Rs.-9,696
+    E_loose       77 trades  net Rs.-968
+
+  Fold 7/8: train < 2025-12-29 (202,171) -> test 2026-01-01..2026-04-01 (4,350)
+    A_current     96 trades  net Rs.-29,919
+    B_put020     100 trades  net Rs.-27,095
+    C_skip070     97 trades  net Rs.-32,469
+    D_both       103 trades  net Rs.-30,096
+    E_loose      104 trades  net Rs.-30,499
+
+  Fold 8/8: train < 2026-03-29 (206,671) -> test 2026-04-01..2026-05-01 (1,415)
+    A_current     32 trades  net Rs.-24,799
+    B_put020      32 trades  net Rs.-22,456
+    C_skip070     31 trades  net Rs.-24,493
+    D_both        31 trades  net Rs.-22,150
+    E_loose       31 trades  net Rs.-22,150
+
+====================================================================================================
+  AGGREGATE OUT-OF-SAMPLE PERFORMANCE BY CONFIG (real option P&L, post-friction)
+====================================================================================================
+  Config       Trd   Win%     PF   Shrp  Calmar       MaxDD    AvgTrd           Net  PUTwr  CALLwr
+  --------------------------------------------------------------------------------------------------
+  A_current    618    32%   0.75  -1.50   -0.89  Rs.104,472   Rs.-151    Rs.-93,430    32%     31%
+  B_put020     659    32%   0.74  -1.59   -0.87  Rs.118,420   Rs.-157   Rs.-103,206    33%     31%
+  C_skip070    622    31%   0.73  -1.61   -0.91  Rs.110,788   Rs.-162   Rs.-100,888    32%     31%
+  D_both       683    33%   0.74  -1.60   -0.88  Rs.117,566   Rs.-152   Rs.-103,892    33%     30%
+  E_loose      687    33%   0.77  -1.40   -0.85  Rs.105,917   Rs.-131    Rs.-90,337    34%     30%
+====================================================================================================
+  Sharp = annualized Sharpe (trade-level).  Calmar = NetProfit / MaxDD (proxy).
+  PUTwr/CALLwr = per-side net win rate.  All P&L after spread+STT+brokerage+GST.
+
+  Per-config trade CSVs -> logs/sweep_<config>.csv
+

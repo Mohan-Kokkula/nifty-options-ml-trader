@@ -1,0 +1,76 @@
+{
+  "date": "2026-05-13",
+  "regime": "event_day",
+  "bias": "neutral",
+  "risk_appetite": 0.5,
+  "max_trades_today": 3,
+  "min_confidence_boost": 3,
+  "avoid_otm2_otm3": true,
+  "key_levels": {
+    "support": 23229.55,
+    "resistance": 23529.55
+  },
+  "rationale": "Heuristic: VIX=19.3, US overnight=-0.30%, Asia=+0.02%, FII net=+0cr, news_bias=-0.29, events=[]",
+  "_payload": {
+    "date": "2026-05-13",
+    "global": {
+      "dow": {
+        "last": 49760.56,
+        "change_pct": 0.11
+      },
+      "nasdaq": {
+        "last": 26088.2,
+        "change_pct": -0.71
+      },
+      "sp500": {
+        "last": 7400.96,
+        "change_pct": -0.16
+      },
+      "nikkei": {
+        "last": 62930.2,
+        "change_pct": 0.3
+      },
+      "hangseng": {
+        "last": 26281.05,
+        "change_pct": -0.25
+      },
+      "ftse": {
+        "last": 10265.3,
+        "change_pct": -0.04
+      },
+      "dax": {
+        "last": 23954.93,
+        "change_pct": -1.62
+      },
+      "crude": {
+        "last": 101.39,
+        "change_pct": 3.39
+      },
+      "dxy": {
+        "last": 98.3,
+        "change_pct": 0.36
+      },
+      "us10y": {
+        "last": 4.46,
+        "change_pct": 1.2
+      },
+      "gift_nifty": {
+        "last": 23379.55,
+        "change_pct": -1.83
+      },
+      "india_vix": {
+        "last": 19.28,
+        "change_pct": 3.94
+      }
+    },
+    "fii_dii": {},
+    "news": {
+      "bias_score": -0.287,
+      "confidence": 0.072,
+      "event_count": 6,
+      "dominant_type": "other",
+      "hot_title": "From tariffs to war: why Indian stocks keep losing momentum"
+    },
+    "events": []
+  }
+}

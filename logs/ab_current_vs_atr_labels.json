@@ -1,0 +1,607 @@
+{
+  "status": "complete",
+  "thresholds_used": {
+    "call_thr": 0.32,
+    "put_thr": 0.25,
+    "skip_ceil": 0.65,
+    "min_edge": 0.05
+  },
+  "folds": [
+    {
+      "start": "2024-07-01",
+      "end": "2024-10-01"
+    },
+    {
+      "start": "2024-10-01",
+      "end": "2025-01-01"
+    },
+    {
+      "start": "2025-01-01",
+      "end": "2025-04-01"
+    },
+    {
+      "start": "2025-04-01",
+      "end": "2025-07-01"
+    },
+    {
+      "start": "2025-07-01",
+      "end": "2025-10-01"
+    },
+    {
+      "start": "2025-10-01",
+      "end": "2026-01-01"
+    },
+    {
+      "start": "2026-01-01",
+      "end": "2026-04-01"
+    },
+    {
+      "start": "2026-04-01",
+      "end": "2026-05-01"
+    }
+  ],
+  "per_fold": {
+    "fold1": {
+      "test_start": "2024-07-01",
+      "test_end": "2024-10-01",
+      "n_train": 174334,
+      "n_test": 4800,
+      "A_CurrentLabel": {
+        "auc": 0.7948778953712371,
+        "precision": 0.4256802490862326,
+        "recall": 0.40378817004428996,
+        "f1": 0.40273011141591314,
+        "trade_count": 92,
+        "win_rate": 0.2608695652173913,
+        "pf": 0.7202686972380111,
+        "expectancy": -190.37934380946936,
+        "max_drawdown_pts": 34936.20669294987,
+        "net_pts": -17514.89963047118,
+        "fit_time_s": 134.14
+      },
+      "B_ATRBarrierLabel": {
+        "auc": 0.6195829602664329,
+        "precision": 0.396871359249053,
+        "recall": 0.37005831380653537,
+        "f1": 0.349065196638457,
+        "trade_count": 94,
+        "win_rate": 0.3404255319148936,
+        "pf": 0.49870864198569587,
+        "expectancy": -346.2079402227348,
+        "max_drawdown_pts": 37940.13785449482,
+        "net_pts": -32543.546380937074,
+        "fit_time_s": 55.41
+      }
+    },
+    "fold2": {
+      "test_start": "2024-10-01",
+      "test_end": "2025-01-01",
+      "n_train": 179134,
+      "n_test": 4575,
+      "A_CurrentLabel": {
+        "auc": 0.7363576425732988,
+        "precision": 0.4380985127511842,
+        "recall": 0.4917217248954975,
+        "f1": 0.4426137356857302,
+        "trade_count": 116,
+        "win_rate": 0.3620689655172413,
+        "pf": 1.209294572692529,
+        "expectancy": 98.1988789773124,
+        "max_drawdown_pts": 17205.39012812636,
+        "net_pts": 11391.06996136824,
+        "fit_time_s": 133.01
+      },
+      "B_ATRBarrierLabel": {
+        "auc": 0.5755530846187277,
+        "precision": 0.3890899332778878,
+        "recall": 0.3595090824294798,
+        "f1": 0.32356250538528053,
+        "trade_count": 76,
+        "win_rate": 0.47368421052631576,
+        "pf": 1.3533088528197208,
+        "expectancy": 174.5743967567642,
+        "max_drawdown_pts": 8989.923079163545,
+        "net_pts": 13267.654153514079,
+        "fit_time_s": 40.2
+      }
+    },
+    "fold3": {
+      "test_start": "2025-01-01",
+      "test_end": "2025-04-01",
+      "n_train": 183634,
+      "n_test": 4650,
+      "A_CurrentLabel": {
+        "auc": 0.7464144554678608,
+        "precision": 0.4262486958607328,
+        "recall": 0.4498399465327081,
+        "f1": 0.43185598548080706,
+        "trade_count": 104,
+        "win_rate": 0.3557692307692308,
+        "pf": 0.736457436084764,
+        "expectancy": -132.53712930851015,
+        "max_drawdown_pts": 21422.347866003205,
+        "net_pts": -13783.861448085054,
+        "fit_time_s": 154.82
+      },
+      "B_ATRBarrierLabel": {
+        "auc": 0.5713468252369457,
+        "precision": 0.3636552461973625,
+        "recall": 0.355354009931014,
+        "f1": 0.3251022770515401,
+        "trade_count": 92,
+        "win_rate": 0.391304347826087,
+        "pf": 0.98946725803804,
+        "expectancy": -5.652538423718085,
+        "max_drawdown_pts": 9677.805871247978,
+        "net_pts": -520.0335349820639,
+        "fit_time_s": 96.68
+      }
+    },
+    "fold4": {
+      "test_start": "2025-04-01",
+      "test_end": "2025-07-01",
+      "n_train": 188434,
+      "n_test": 4575,
+      "A_CurrentLabel": {
+        "auc": 0.7886980711355065,
+        "precision": 0.4379006076571579,
+        "recall": 0.4709202823064674,
+        "f1": 0.4482461681227364,
+        "trade_count": 83,
+        "win_rate": 0.30120481927710846,
+        "pf": 1.2091183302475679,
+        "expectancy": 135.391010326625,
+        "max_drawdown_pts": 26777.157818877055,
+        "net_pts": 11237.453857109876,
+        "fit_time_s": 180.74
+      },
+      "B_ATRBarrierLabel": {
+        "auc": 0.5811292233252042,
+        "precision": 0.30127312269383966,
+        "recall": 0.3352358068227193,
+        "f1": 0.24781128352981674,
+        "trade_count": 74,
+        "win_rate": 0.33783783783783783,
+        "pf": 0.5109016951105462,
+        "expectancy": -370.46902720269605,
+        "max_drawdown_pts": 37720.05340509926,
+        "net_pts": -27414.70801299951,
+        "fit_time_s": 33.86
+      }
+    },
+    "fold5": {
+      "test_start": "2025-07-01",
+      "test_end": "2025-10-01",
+      "n_train": 192934,
+      "n_test": 4800,
+      "A_CurrentLabel": {
+        "auc": 0.7583237562066255,
+        "precision": 0.4222279160967675,
+        "recall": 0.35564615185550474,
+        "f1": 0.3612909011413043,
+        "trade_count": 57,
+        "win_rate": 0.40350877192982454,
+        "pf": 0.9264913013520848,
+        "expectancy": -28.689020553337954,
+        "max_drawdown_pts": 6444.513055300325,
+        "net_pts": -1635.2741715402633,
+        "fit_time_s": 142.33
+      },
+      "B_ATRBarrierLabel": {
+        "auc": 0.6296835642397739,
+        "precision": 0.5060776550670278,
+        "recall": 0.33360171765968866,
+        "f1": 0.22809604036056028,
+        "trade_count": 84,
+        "win_rate": 0.2857142857142857,
+        "pf": 0.31230575648181874,
+        "expectancy": -394.73965663586864,
+        "max_drawdown_pts": 32893.75083667124,
+        "net_pts": -33158.131157412965,
+        "fit_time_s": 39.13
+      }
+    },
+    "fold6": {
+      "test_start": "2025-10-01",
+      "test_end": "2026-01-01",
+      "n_train": 197659,
+      "n_test": 4587,
+      "A_CurrentLabel": {
+        "auc": 0.7322012436433316,
+        "precision": 0.29816112084063046,
+        "recall": 0.33219512195121953,
+        "f1": 0.3142593447161975,
+        "trade_count": 45,
+        "win_rate": 0.4444444444444444,
+        "pf": 0.9281755579808437,
+        "expectancy": -37.17006559275713,
+        "max_drawdown_pts": 10705.310602217585,
+        "net_pts": -1672.6529516740711,
+        "fit_time_s": 143.7
+      },
+      "B_ATRBarrierLabel": {
+        "auc": 0.62800481518318,
+        "precision": 0.4649721273777372,
+        "recall": 0.3473384845629816,
+        "f1": 0.26373368237413625,
+        "trade_count": 72,
+        "win_rate": 0.38888888888888895,
+        "pf": 0.6115177093330127,
+        "expectancy": -206.78179794854083,
+        "max_drawdown_pts": 21726.445606950336,
+        "net_pts": -14888.28945229494,
+        "fit_time_s": 97.75
+      }
+    },
+    "fold7": {
+      "test_start": "2026-01-01",
+      "test_end": "2026-04-01",
+      "n_train": 202171,
+      "n_test": 4350,
+      "A_CurrentLabel": {
+        "auc": 0.756350061377673,
+        "precision": 0.4397076697849074,
+        "recall": 0.4816155545328178,
+        "f1": 0.4463037436082642,
+        "trade_count": 86,
+        "win_rate": 0.37209302325581395,
+        "pf": 0.7138780481047204,
+        "expectancy": -175.814004020472,
+        "max_drawdown_pts": 21763.5188992663,
+        "net_pts": -15120.004345760592,
+        "fit_time_s": 165.66
+      },
+      "B_ATRBarrierLabel": {
+        "auc": 0.6389166813104118,
+        "precision": 0.4565141441372654,
+        "recall": 0.3550045423024366,
+        "f1": 0.2896943436775465,
+        "trade_count": 84,
+        "win_rate": 0.32142857142857145,
+        "pf": 0.8682248917448756,
+        "expectancy": -91.59637132876455,
+        "max_drawdown_pts": 17418.546392428296,
+        "net_pts": -7694.095191616222,
+        "fit_time_s": 100.47
+      }
+    },
+    "fold8": {
+      "test_start": "2026-04-01",
+      "test_end": "2026-05-01",
+      "n_train": 206671,
+      "n_test": 1415,
+      "A_CurrentLabel": {
+        "auc": 0.7295164398521768,
+        "precision": 0.44607731196298,
+        "recall": 0.4598656220087988,
+        "f1": 0.44960064710055986,
+        "trade_count": 30,
+        "win_rate": 0.2333333333333333,
+        "pf": 0.24463596713946956,
+        "expectancy": -773.739182371182,
+        "max_drawdown_pts": 23326.947006402253,
+        "net_pts": -23212.17547113546,
+        "fit_time_s": 150.61
+      },
+      "B_ATRBarrierLabel": {
+        "auc": 0.650470783766491,
+        "precision": 0.41148150750160023,
+        "recall": 0.36649807702439285,
+        "f1": 0.30536592753536806,
+        "trade_count": 34,
+        "win_rate": 0.4117647058823529,
+        "pf": 1.3351657665056844,
+        "expectancy": 119.98798653935823,
+        "max_drawdown_pts": 4183.786924545711,
+        "net_pts": 4079.59154233818,
+        "fit_time_s": 80.06
+      }
+    }
+  },
+  "summary": {
+    "A_CurrentLabel": {
+      "auc": {
+        "mean": 0.7553424457034639,
+        "std": 0.024865876217980976,
+        "worst": {
+          "fold": "fold8",
+          "value": 0.7295164398521768
+        },
+        "best": {
+          "fold": "fold1",
+          "value": 0.7948778953712371
+        }
+      },
+      "precision": {
+        "mean": 0.4167627605050741,
+        "std": 0.048629144882574596,
+        "worst": {
+          "fold": "fold6",
+          "value": 0.29816112084063046
+        },
+        "best": {
+          "fold": "fold8",
+          "value": 0.44607731196298
+        }
+      },
+      "recall": {
+        "mean": 0.430699071765913,
+        "std": 0.06001336098525689,
+        "worst": {
+          "fold": "fold6",
+          "value": 0.33219512195121953
+        },
+        "best": {
+          "fold": "fold2",
+          "value": 0.4917217248954975
+        }
+      },
+      "f1": {
+        "mean": 0.4121125796589391,
+        "std": 0.04992319673665371,
+        "worst": {
+          "fold": "fold6",
+          "value": 0.3142593447161975
+        },
+        "best": {
+          "fold": "fold8",
+          "value": 0.44960064710055986
+        }
+      },
+      "pf": {
+        "mean": 0.8360399888549988,
+        "std": 0.3124051329491027,
+        "worst": {
+          "fold": "fold8",
+          "value": 0.24463596713946956
+        },
+        "best": {
+          "fold": "fold2",
+          "value": 1.209294572692529
+        }
+      },
+      "expectancy": {
+        "mean": -138.0923570439739,
+        "std": 283.09909878628883,
+        "worst": {
+          "fold": "fold8",
+          "value": -773.739182371182
+        },
+        "best": {
+          "fold": "fold4",
+          "value": 135.391010326625
+        }
+      },
+      "win_rate": {
+        "mean": 0.34166151921804855,
+        "std": 0.07154425251167928,
+        "worst": {
+          "fold": "fold8",
+          "value": 0.2333333333333333
+        },
+        "best": {
+          "fold": "fold6",
+          "value": 0.4444444444444444
+        }
+      },
+      "max_drawdown_pts": {
+        "mean": 20322.67400864287,
+        "std": 8962.948819112456,
+        "worst": {
+          "fold": "fold1",
+          "value": 34936.20669294987
+        },
+        "best": {
+          "fold": "fold5",
+          "value": 6444.513055300325
+        }
+      },
+      "trade_count": {
+        "mean": 76.625,
+        "std": 29.818199140793194,
+        "worst": {
+          "fold": "fold8",
+          "value": 30.0
+        },
+        "best": {
+          "fold": "fold2",
+          "value": 116.0
+        }
+      },
+      "fit_time_s": {
+        "mean": 150.62625,
+        "std": 16.25409305594836,
+        "worst": {
+          "fold": "fold4",
+          "value": 180.74
+        },
+        "best": {
+          "fold": "fold2",
+          "value": 133.01
+        }
+      }
+    },
+    "B_ATRBarrierLabel": {
+      "auc": {
+        "mean": 0.6118359922433959,
+        "std": 0.031086792554585907,
+        "worst": {
+          "fold": "fold3",
+          "value": 0.5713468252369457
+        },
+        "best": {
+          "fold": "fold8",
+          "value": 0.650470783766491
+        }
+      },
+      "precision": {
+        "mean": 0.4112418869377217,
+        "std": 0.06434864295122582,
+        "worst": {
+          "fold": "fold4",
+          "value": 0.30127312269383966
+        },
+        "best": {
+          "fold": "fold5",
+          "value": 0.5060776550670278
+        }
+      },
+      "recall": {
+        "mean": 0.35282500431740604,
+        "std": 0.013356536901866105,
+        "worst": {
+          "fold": "fold5",
+          "value": 0.33360171765968866
+        },
+        "best": {
+          "fold": "fold1",
+          "value": 0.37005831380653537
+        }
+      },
+      "f1": {
+        "mean": 0.2915539070690882,
+        "std": 0.04203077897942351,
+        "worst": {
+          "fold": "fold5",
+          "value": 0.22809604036056028
+        },
+        "best": {
+          "fold": "fold1",
+          "value": 0.349065196638457
+        }
+      },
+      "pf": {
+        "mean": 0.8099500715024243,
+        "std": 0.3927993111622967,
+        "worst": {
+          "fold": "fold5",
+          "value": 0.31230575648181874
+        },
+        "best": {
+          "fold": "fold2",
+          "value": 1.3533088528197208
+        }
+      },
+      "expectancy": {
+        "mean": -140.11061855827506,
+        "std": 224.22330908504762,
+        "worst": {
+          "fold": "fold5",
+          "value": -394.73965663586864
+        },
+        "best": {
+          "fold": "fold2",
+          "value": 174.5743967567642
+        }
+      },
+      "win_rate": {
+        "mean": 0.36888104750240414,
+        "std": 0.05936289634311767,
+        "worst": {
+          "fold": "fold5",
+          "value": 0.2857142857142857
+        },
+        "best": {
+          "fold": "fold2",
+          "value": 0.47368421052631576
+        }
+      },
+      "max_drawdown_pts": {
+        "mean": 21318.806246325148,
+        "std": 13500.001316812584,
+        "worst": {
+          "fold": "fold1",
+          "value": 37940.13785449482
+        },
+        "best": {
+          "fold": "fold8",
+          "value": 4183.786924545711
+        }
+      },
+      "trade_count": {
+        "mean": 76.25,
+        "std": 18.86606931580003,
+        "worst": {
+          "fold": "fold8",
+          "value": 34.0
+        },
+        "best": {
+          "fold": "fold1",
+          "value": 94.0
+        }
+      },
+      "fit_time_s": {
+        "mean": 67.945,
+        "std": 28.878290907085997,
+        "worst": {
+          "fold": "fold7",
+          "value": 100.47
+        },
+        "best": {
+          "fold": "fold4",
+          "value": 33.86
+        }
+      }
+    }
+  },
+  "paired_bootstrap_net_pnl": {
+    "mean_diff": -6070.151729275251,
+    "ci_lo": -20802.641562624674,
+    "ci_hi": 8198.222890400772,
+    "p_value": 0.4186,
+    "n": 8
+  },
+  "mcnemar_paired_correctness_vs_realized_pnl": {
+    "n_pairs": 44,
+    "b01": 2,
+    "b10": 1,
+    "statistic": 0.0,
+    "p_value": 1.0
+  },
+  "calibration": {
+    "A_CurrentLabel": {
+      "brier_score": 0.3547104814249368,
+      "ece": 0.10858494336488315
+    },
+    "B_ATRBarrierLabel": {
+      "brier_score": 0.5830707133641836,
+      "ece": 0.0187717910694388
+    }
+  },
+  "class_balance": {
+    "A_CurrentLabel": {
+      "0": 0.08076558426167338,
+      "1": 0.08272102393932211,
+      "2": 0.8365133917990045
+    },
+    "B_ATRBarrierLabel": {
+      "0": 0.21856482578810144,
+      "1": 0.2391265702773169,
+      "2": 0.5423086039345817
+    }
+  },
+  "label_stability": {
+    "A_CurrentLabel_flip_rate": 0.182128432473771,
+    "B_ATRBarrierLabel_flip_rate": 0.23267930119733288
+  },
+  "feature_importance_stability": {
+    "A_CurrentLabel": {
+      "mean_top20_jaccard": 0.8533112849883037,
+      "mean_spearman_rank_corr": 0.8788044698885414
+    },
+    "B_ATRBarrierLabel": {
+      "mean_top20_jaccard": 0.6966321463215875,
+      "mean_spearman_rank_corr": 0.8001407277993228
+    }
+  },
+  "verdict": {
+    "folds_where_B_net_pnl_higher": 4,
+    "folds_total": 8,
+    "bootstrap_p_value": 0.4186,
+    "mcnemar_p_value": 1.0,
+    "statistically_significant_at_0.05": false,
+    "consistent_majority_improvement": false,
+    "recommend_replacing_current_label": false
+  },
+  "total_wall_time_s": 1769.9
+}

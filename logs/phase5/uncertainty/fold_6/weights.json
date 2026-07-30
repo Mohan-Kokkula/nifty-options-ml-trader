@@ -1,0 +1,11 @@
+{
+  "kind": "uncertainty",
+  "operation": "inverse_entropy per bar, softmax-normalised",
+  "epsilon": 1e-09,
+  "brains": [
+    "cat",
+    "lgb",
+    "mlp",
+    "xgb"
+  ]
+}

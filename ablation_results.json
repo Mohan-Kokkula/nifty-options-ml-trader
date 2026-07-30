@@ -1,0 +1,188 @@
+{
+  "folds": {
+    "1": {
+      "A": {
+        "n_signals_fired": 1961,
+        "trades": 1502,
+        "win_rate": 0.7010652463382158,
+        "pf": 1.1726057906458798,
+        "net_pnl": 3875,
+        "gross_profit": 26325,
+        "gross_loss": 22450,
+        "expectancy": 2.5798934753661786,
+        "max_drawdown_pts": 1650.0,
+        "avg_holding_bars": 2.9241011984021306,
+        "timeout_rate_pct": 23.406425293217744
+      },
+      "B": {
+        "n_signals_fired": 1961,
+        "trades": 672,
+        "win_rate": 0.8273809523809523,
+        "pf": 2.530965842995732,
+        "net_pnl": 17234.904698453185,
+        "gross_profit": 28492.441747567605,
+        "gross_loss": 11257.537049114437,
+        "expectancy": 25.64717961079343,
+        "max_drawdown_pts": 837.4431273952432,
+        "avg_holding_bars": 4.095238095238095,
+        "timeout_rate_pct": 65.7317695053544
+      },
+      "C": {
+        "n_signals_fired": 1961,
+        "trades": 1090,
+        "win_rate": 0.7623853211009174,
+        "pf": 1.5216568738165468,
+        "net_pnl": 15632.55595723946,
+        "gross_profit": 45599.67944756852,
+        "gross_loss": 29967.123490329057,
+        "expectancy": 14.34179445618299,
+        "max_drawdown_pts": 3273.16621952682,
+        "avg_holding_bars": 7.113761467889908,
+        "timeout_rate_pct": 44.41611422743498
+      },
+      "D": {
+        "n_signals_fired": 1961,
+        "trades": 1845,
+        "win_rate": 0.6845528455284553,
+        "pf": 1.0850515463917525,
+        "net_pnl": 2475,
+        "gross_profit": 31575,
+        "gross_loss": 29100,
+        "expectancy": 1.3414634146341464,
+        "max_drawdown_pts": 1950.0,
+        "avg_holding_bars": 4.413550135501355,
+        "timeout_rate_pct": 5.915349311575727
+      }
+    },
+    "2": {
+      "A": {
+        "n_signals_fired": 144,
+        "trades": 82,
+        "win_rate": 0.7804878048780488,
+        "pf": 1.7777777777777777,
+        "net_pnl": 700,
+        "gross_profit": 1600,
+        "gross_loss": 900,
+        "expectancy": 8.536585365853659,
+        "max_drawdown_pts": 200.0,
+        "avg_holding_bars": 3.2560975609756095,
+        "timeout_rate_pct": 43.05555555555556
+      },
+      "B": {
+        "n_signals_fired": 144,
+        "trades": 55,
+        "win_rate": 0.9090909090909091,
+        "pf": 5.520083870520543,
+        "net_pnl": 1588.8023955764486,
+        "gross_profit": 1940.3008281472312,
+        "gross_loss": 351.4984325707828,
+        "expectancy": 28.887316283208158,
+        "max_drawdown_pts": 83.0688227524829,
+        "avg_holding_bars": 3.9272727272727272,
+        "timeout_rate_pct": 61.80555555555556
+      },
+      "C": {
+        "n_signals_fired": 144,
+        "trades": 75,
+        "win_rate": 0.84,
+        "pf": 2.7504199176419446,
+        "net_pnl": 1574.1901279577921,
+        "gross_profit": 2473.5115491162305,
+        "gross_loss": 899.3214211584391,
+        "expectancy": 20.989201706103895,
+        "max_drawdown_pts": 344.5973491143766,
+        "avg_holding_bars": 5.386666666666667,
+        "timeout_rate_pct": 47.91666666666667
+      },
+      "D": {
+        "n_signals_fired": 144,
+        "trades": 125,
+        "win_rate": 0.656,
+        "pf": 0.9534883720930233,
+        "net_pnl": -100,
+        "gross_profit": 2050,
+        "gross_loss": 2150,
+        "expectancy": -0.8,
+        "max_drawdown_pts": 625.0,
+        "avg_holding_bars": 6.12,
+        "timeout_rate_pct": 13.194444444444445
+      }
+    },
+    "3": {
+      "A": {
+        "n_signals_fired": 2267,
+        "trades": 1950,
+        "win_rate": 0.6938461538461539,
+        "pf": 1.1331658291457287,
+        "net_pnl": 3975,
+        "gross_profit": 33825,
+        "gross_loss": 29850,
+        "expectancy": 2.0384615384615383,
+        "max_drawdown_pts": 1775.0,
+        "avg_holding_bars": 2.842051282051282,
+        "timeout_rate_pct": 13.983237759153067
+      },
+      "B": {
+        "n_signals_fired": 2267,
+        "trades": 859,
+        "win_rate": 0.8242142025611175,
+        "pf": 2.328094793951592,
+        "net_pnl": 21641.791057299593,
+        "gross_profit": 37937.157288581075,
+        "gross_loss": 16295.366231281518,
+        "expectancy": 25.194168867636314,
+        "max_drawdown_pts": 1098.7889242746023,
+        "avg_holding_bars": 4.129220023282887,
+        "timeout_rate_pct": 62.10851345390383
+      },
+      "C": {
+        "n_signals_fired": 2267,
+        "trades": 1447,
+        "win_rate": 0.7470628887353145,
+        "pf": 1.4978707712131358,
+        "net_pnl": 20439.787004138558,
+        "gross_profit": 61494.18944341785,
+        "gross_loss": 41054.40243927938,
+        "expectancy": 14.125630272383246,
+        "max_drawdown_pts": 2631.4202769251533,
+        "avg_holding_bars": 7.328265376641327,
+        "timeout_rate_pct": 36.171151301279224
+      },
+      "D": {
+        "n_signals_fired": 2267,
+        "trades": 2234,
+        "win_rate": 0.6705461056401074,
+        "pf": 1.017663043478261,
+        "net_pnl": 650,
+        "gross_profit": 37450,
+        "gross_loss": 36800,
+        "expectancy": 0.2909579230080573,
+        "max_drawdown_pts": 3675.0,
+        "avg_holding_bars": 3.829006266786034,
+        "timeout_rate_pct": 1.4556682840758712
+      }
+    }
+  },
+  "config": {
+    "K_TP": 1.7054751701639095,
+    "K_SL": 3.410950340327819,
+    "mean_atr_pre_test": 14.6586713411942,
+    "BASE_BARS": 7,
+    "HOLD_CAP": 30,
+    "D_BARS": 16
+  },
+  "_fired_bars_c": {
+    "1": {
+      "mean": 15.352881183069861,
+      "n": 1961
+    },
+    "2": {
+      "mean": 11.194444444444445,
+      "n": 144
+    },
+    "3": {
+      "mean": 16.34274371415968,
+      "n": 2267
+    }
+  }
+}

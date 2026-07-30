@@ -1,0 +1,12 @@
+{
+  "kind": "min_variance",
+  "weights": {
+    "cat": 0.1263131194595839,
+    "lgb": 0.021077125811995154,
+    "mlp": 0.852609754728421,
+    "xgb": 0.0
+  },
+  "shrinkage": 0.2268352771705835,
+  "n_inner_folds": 3,
+  "weights_fallback": null
+}

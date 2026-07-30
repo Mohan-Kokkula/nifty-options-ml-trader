@@ -1,0 +1,113 @@
+Phase 7 root: logs\phase7
+Targets: ('mean', 'stacking')   seed: 42   smoke: False
+
+[Phase 7 / mean] loading fold data ...
+Building V9 (leak-fixed) feature + label frame...
+16:08:59 [V9] 5-min : 209,599 bars | 2015-01-09 → 2026-06-04
+16:08:59 [V9] 15-min: 70,079 bars | 2015-01-09 → 2026-06-04
+16:09:00 [V9] 30-min: 36,490 bars | 2015-01-09 → 2026-06-04
+16:09:00 [V9] 60min: 19,665 bars | 2015-01-09 → 2026-06-04
+16:09:00 [V9] Daily: 2,830 bars | 2015-01-01 → 2026-06-04
+16:09:05 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:09:05 [V9]   5-min features computed: 98 cols
+16:09:05 [V9]   15-min features: 14 cols
+16:09:06 [V9]   30-min features: 7 cols
+16:09:08 [V9]   60-min features: 13 cols
+16:09:09 [V9]   Daily features: 17 cols
+16:09:10 [V9] VIX : 3,925 days | 2010-07-23 → 2026-06-04
+16:09:10 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:09:10 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:09:15 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:09:15 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:09:16 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:09:16 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:09:17 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:09:17 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:09:17 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:09:17 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:09:17 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  regime counts: {'SIDEWAYS': 1, 'BULL': 4, 'BEAR': 3}
+  replaying baseline candidate ...
+    baseline pooled: PF=1.640 Net=Rs.+7,416 n=19  (0.5s)
+  replaying Phase-6 winner candidate ...
+    winner   pooled: PF=1.938 Net=Rs.+27,483 n=61  (0.5s)
+  R1 walk-forward variants ...
+  R2 jackknife LOO ...
+  R3 slippage stress ...
+  R4 tcost stress + break-even solvers ...
+  R3b execution-delay stress ...
+  R5 block/paired bootstrap ...
+  R6 stability diagnostics ...
+  R7 DM/SPA/WRC on delay variants ...
+16:09:29 [V9] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+16:09:29 [V9] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+16:09:29 [V9] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+16:09:29 [V9] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+  H_rob verdict for mean: REJECT
+
+[Phase 7 / stacking] loading fold data ...
+Building V9 (leak-fixed) feature + label frame...
+16:09:30 [V9] 5-min : 209,599 bars | 2015-01-09 → 2026-06-04
+16:09:30 [V9] 15-min: 70,079 bars | 2015-01-09 → 2026-06-04
+16:09:30 [V9] 30-min: 36,490 bars | 2015-01-09 → 2026-06-04
+16:09:30 [V9] 60min: 19,665 bars | 2015-01-09 → 2026-06-04
+16:09:30 [V9] Daily: 2,830 bars | 2015-01-01 → 2026-06-04
+16:09:35 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+16:09:35 [V9]   5-min features computed: 98 cols
+16:09:36 [V9]   15-min features: 14 cols
+16:09:36 [V9]   30-min features: 7 cols
+16:09:39 [V9]   60-min features: 13 cols
+16:09:40 [V9]   Daily features: 17 cols
+16:09:40 [V9] VIX : 3,925 days | 2010-07-23 → 2026-06-04
+16:09:40 [V9]   VIX features: 15 cols (with options-pricing additions)
+16:09:40 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+16:09:45 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:09:45 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+16:09:46 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:09:46 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+16:09:47 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+16:09:47 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+16:09:47 [V9]   VIX>35 forced SKIP: 3,225 bars
+16:09:47 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+16:09:47 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  regime counts: {'SIDEWAYS': 1, 'BULL': 4, 'BEAR': 3}
+  replaying baseline candidate ...
+    baseline pooled: PF=0.756 Net=Rs.-17,925 n=90  (0.5s)
+  replaying Phase-6 winner candidate ...
+    winner   pooled: PF=1.119 Net=Rs.+5,889 n=93  (0.5s)
+  R1 walk-forward variants ...
+  R2 jackknife LOO ...
+  R3 slippage stress ...
+  R4 tcost stress + break-even solvers ...
+  R3b execution-delay stress ...
+  R5 block/paired bootstrap ...
+  R6 stability diagnostics ...
+  R7 DM/SPA/WRC on delay variants ...
+16:09:59 [V9] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+16:09:59 [V9] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+16:09:59 [V9] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+16:09:59 [V9] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+  H_rob verdict for stacking: REJECT
+
+Writing reports ...
+  summary: logs\phase7\summary.json
+  robustness: logs\phase7\robustness.json
+  stress: logs\phase7\stress_report.json
+  jackknife: logs\phase7\jackknife.json
+  bootstrap: logs\phase7\bootstrap.json
+  markdown: logs\phase7\Phase7_Report.md
+
+=========================================================
+  mean: REJECT
+  stacking: REJECT
+=========================================================

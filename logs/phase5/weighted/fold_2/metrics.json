@@ -1,0 +1,27 @@
+{
+  "ensemble_type": "weighted",
+  "fold_id": 2,
+  "n_trades": 3,
+  "n_test_bars": 4575,
+  "n_bars_traded": 14,
+  "brains_used": [
+    "cat",
+    "lgb",
+    "mlp",
+    "xgb"
+  ],
+  "input_source": "calibrated_isotonic",
+  "weights_summary": {
+    "kind": "weighted",
+    "weights": {
+      "cat": 0.25,
+      "lgb": 0.25,
+      "mlp": 0.25,
+      "xgb": 0.25
+    }
+  },
+  "fit_elapsed_s": 0.01,
+  "transform_elapsed_s": 0.002,
+  "simulate_elapsed_s": 0.147,
+  "n_oof_bars": 80828
+}

@@ -1,0 +1,19 @@
+{
+  "shap_near_zero": [
+    "vix_extreme_low",
+    "below_vwap",
+    "expiry_is_tue",
+    "above_vwap"
+  ],
+  "gain_zero": [
+    "expiry_is_tue",
+    "vix_extreme_low",
+    "below_vwap"
+  ],
+  "combined": [
+    "above_vwap",
+    "below_vwap",
+    "expiry_is_tue",
+    "vix_extreme_low"
+  ]
+}

@@ -1,0 +1,612 @@
+{
+  "real_result": {
+    "trades": 650,
+    "pf": 2.942336661585177,
+    "net_pnl": 23732.488906249986,
+    "win_rate": 0.9123076923076923
+  },
+  "null_results": [
+    {
+      "trades": 2,
+      "pf": Infinity,
+      "net_pnl": 109.38000000000102,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 0,
+      "pf": null,
+      "net_pnl": 0.0,
+      "win_rate": null
+    },
+    {
+      "trades": 0,
+      "pf": null,
+      "net_pnl": 0.0,
+      "win_rate": null
+    },
+    {
+      "trades": 0,
+      "pf": null,
+      "net_pnl": 0.0,
+      "win_rate": null
+    },
+    {
+      "trades": 0,
+      "pf": null,
+      "net_pnl": 0.0,
+      "win_rate": null
+    },
+    {
+      "trades": 2,
+      "pf": Infinity,
+      "net_pnl": 71.28968749999986,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 4,
+      "pf": Infinity,
+      "net_pnl": 160.83976562499956,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 72.90000000000146,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 5,
+      "pf": 0.078499249954668,
+      "net_pnl": -559.0099999999934,
+      "win_rate": 0.2
+    },
+    {
+      "trades": 3,
+      "pf": 0.7204108596513691,
+      "net_pnl": -65.59999999999854,
+      "win_rate": 0.6666666666666666
+    },
+    {
+      "trades": 0,
+      "pf": null,
+      "net_pnl": 0.0,
+      "win_rate": null
+    },
+    {
+      "trades": 3,
+      "pf": Infinity,
+      "net_pnl": 235.8900000000016,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 72.92999999999957,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 2,
+      "pf": 0.569007768913932,
+      "net_pnl": -82.65999999999548,
+      "win_rate": 0.5
+    },
+    {
+      "trades": 2,
+      "pf": Infinity,
+      "net_pnl": 163.67999999999955,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 0,
+      "pf": null,
+      "net_pnl": 0.0,
+      "win_rate": null
+    },
+    {
+      "trades": 2,
+      "pf": Infinity,
+      "net_pnl": 99.96999999999971,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 111.04000000000015,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 4,
+      "pf": Infinity,
+      "net_pnl": 290.6807031250013,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 4,
+      "pf": Infinity,
+      "net_pnl": 232.9504687500048,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 0,
+      "pf": null,
+      "net_pnl": 0.0,
+      "win_rate": null
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 111.04000000000015,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 3,
+      "pf": Infinity,
+      "net_pnl": 296.8400000000008,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 4,
+      "pf": Infinity,
+      "net_pnl": 294.16984375000317,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 1,
+      "pf": 0.0,
+      "net_pnl": -217.50000000000435,
+      "win_rate": 0.0
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 54.409999999999854,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 71.6199999999997,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 3,
+      "pf": Infinity,
+      "net_pnl": 183.62999999999883,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 30.129999999999562,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 5,
+      "pf": Infinity,
+      "net_pnl": 315.31999999999607,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 5,
+      "pf": Infinity,
+      "net_pnl": 237.85070312500102,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 0,
+      "pf": null,
+      "net_pnl": 0.0,
+      "win_rate": null
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 23.220000000001164,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 4,
+      "pf": Infinity,
+      "net_pnl": 201.8900000000016,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 7,
+      "pf": 1.550186453445556,
+      "net_pnl": 119.59953124999592,
+      "win_rate": 0.8571428571428571
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 27.13000000000029,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 2,
+      "pf": 0.6433045113361419,
+      "net_pnl": -45.20070312499956,
+      "win_rate": 0.5
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 65.03000000000102,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 4,
+      "pf": Infinity,
+      "net_pnl": 284.32984375000086,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 8,
+      "pf": 1.6071754194018926,
+      "net_pnl": 133.18999999999863,
+      "win_rate": 0.75
+    },
+    {
+      "trades": 4,
+      "pf": Infinity,
+      "net_pnl": 235.1399999999987,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 0,
+      "pf": null,
+      "net_pnl": 0.0,
+      "win_rate": null
+    },
+    {
+      "trades": 2,
+      "pf": Infinity,
+      "net_pnl": 147.980000000001,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 2,
+      "pf": Infinity,
+      "net_pnl": 174.25000000000216,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 3,
+      "pf": Infinity,
+      "net_pnl": 227.42999999999665,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 5,
+      "pf": 1.5990934426924217,
+      "net_pnl": 70.66906249999884,
+      "win_rate": 0.8
+    },
+    {
+      "trades": 2,
+      "pf": 0.3845629288667319,
+      "net_pnl": -144.39999999999708,
+      "win_rate": 0.5
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 119.76999999999971,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 12,
+      "pf": Infinity,
+      "net_pnl": 621.1108593749989,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 0,
+      "pf": null,
+      "net_pnl": 0.0,
+      "win_rate": null
+    },
+    {
+      "trades": 5,
+      "pf": Infinity,
+      "net_pnl": 135.63999999999868,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 10,
+      "pf": 2.479137335448108,
+      "net_pnl": 311.24007812499474,
+      "win_rate": 0.9
+    },
+    {
+      "trades": 0,
+      "pf": null,
+      "net_pnl": 0.0,
+      "win_rate": null
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 25.790000000000873,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 3,
+      "pf": Infinity,
+      "net_pnl": 193.79999999999853,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 36.990234375,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 51.45,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 2,
+      "pf": 0.29702255809258166,
+      "net_pnl": -213.5516406250012,
+      "win_rate": 0.5
+    },
+    {
+      "trades": 5,
+      "pf": 2.0280768557422686,
+      "net_pnl": 168.8307812499981,
+      "win_rate": 0.8
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 24.830000000001018,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 4,
+      "pf": Infinity,
+      "net_pnl": 220.5399999999994,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 5,
+      "pf": Infinity,
+      "net_pnl": 277.6095312499965,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 10,
+      "pf": 0.9801817690663761,
+      "net_pnl": -10.339765624999586,
+      "win_rate": 0.8
+    },
+    {
+      "trades": 4,
+      "pf": Infinity,
+      "net_pnl": 299.8800000000032,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 9,
+      "pf": Infinity,
+      "net_pnl": 516.2202343750024,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 6,
+      "pf": Infinity,
+      "net_pnl": 291.21156250000206,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 4,
+      "pf": Infinity,
+      "net_pnl": 276.44000000000085,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 2,
+      "pf": Infinity,
+      "net_pnl": 160.61000000000132,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 7,
+      "pf": Infinity,
+      "net_pnl": 541.1299999999967,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 2,
+      "pf": 0.20185056348786615,
+      "net_pnl": -146.54117187499867,
+      "win_rate": 0.5
+    },
+    {
+      "trades": 4,
+      "pf": Infinity,
+      "net_pnl": 224.25007812499825,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 5,
+      "pf": 1.2947913788737104,
+      "net_pnl": 64.01984375000319,
+      "win_rate": 0.8
+    },
+    {
+      "trades": 2,
+      "pf": Infinity,
+      "net_pnl": 147.4200781249994,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 2,
+      "pf": Infinity,
+      "net_pnl": 110.0300000000003,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 0,
+      "pf": null,
+      "net_pnl": 0.0,
+      "win_rate": null
+    },
+    {
+      "trades": 3,
+      "pf": Infinity,
+      "net_pnl": 213.60000000000218,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 63.490000000000144,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 0,
+      "pf": null,
+      "net_pnl": 0.0,
+      "win_rate": null
+    },
+    {
+      "trades": 6,
+      "pf": Infinity,
+      "net_pnl": 319.16999999999825,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 3,
+      "pf": Infinity,
+      "net_pnl": 146.1900000000016,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 5,
+      "pf": Infinity,
+      "net_pnl": 367.3200000000004,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 5,
+      "pf": 0.8635597302504947,
+      "net_pnl": -33.98999999999651,
+      "win_rate": 0.6
+    },
+    {
+      "trades": 2,
+      "pf": Infinity,
+      "net_pnl": 126.84999999999927,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 3,
+      "pf": Infinity,
+      "net_pnl": 147.30039062500072,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 3,
+      "pf": 0.7096604646273734,
+      "net_pnl": -55.239999999995035,
+      "win_rate": 0.6666666666666666
+    },
+    {
+      "trades": 5,
+      "pf": 0.5949654146231163,
+      "net_pnl": -138.7405468749981,
+      "win_rate": 0.8
+    },
+    {
+      "trades": 7,
+      "pf": Infinity,
+      "net_pnl": 390.5203906249983,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 2,
+      "pf": Infinity,
+      "net_pnl": 76.45000000000073,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 10,
+      "pf": 0.7408454799973567,
+      "net_pnl": -136.8802343749943,
+      "win_rate": 0.7
+    },
+    {
+      "trades": 5,
+      "pf": Infinity,
+      "net_pnl": 255.05007812500114,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 8,
+      "pf": Infinity,
+      "net_pnl": 398.28960937499795,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 2,
+      "pf": Infinity,
+      "net_pnl": 172.13999999999942,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 0,
+      "pf": null,
+      "net_pnl": 0.0,
+      "win_rate": null
+    },
+    {
+      "trades": 5,
+      "pf": 0.632225656877897,
+      "net_pnl": -142.77000000000035,
+      "win_rate": 0.6
+    },
+    {
+      "trades": 1,
+      "pf": 0.0,
+      "net_pnl": -338.13046875,
+      "win_rate": 0.0
+    },
+    {
+      "trades": 3,
+      "pf": 0.7519551016652833,
+      "net_pnl": -53.920000000001124,
+      "win_rate": 0.6666666666666666
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 45.94000000000015,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 1,
+      "pf": Infinity,
+      "net_pnl": 40.679999999998834,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 6,
+      "pf": Infinity,
+      "net_pnl": 326.1677343750001,
+      "win_rate": 1.0
+    },
+    {
+      "trades": 5,
+      "pf": 1.7430597752700625,
+      "net_pnl": 96.30054687500012,
+      "win_rate": 0.8
+    }
+  ],
+  "n_shuffles": 100,
+  "subsample_n": 50000
+}

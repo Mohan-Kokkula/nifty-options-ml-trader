@@ -1,0 +1,318 @@
+{
+ "spec": {
+  "challenger": "HTF36 \u2014 tf15_*/tf30_*/tf60_* only (28 cols), no other families",
+  "champion": "current V9 production champion (models/sandbox_clean, 170-feature clean pipeline)",
+  "pipeline": "scripts/phase0_retrain_clean.build_features + train_model_v9.create_labels (clean, leak-fixed)",
+  "split": "train_model_v9.purged_train_val_test_split (85/7.5/7.5, purge=FWD_BARS, embargo=EMBARGO_BARS)",
+  "hyperparams": "train_model_v9._fit_ensemble (unchanged, pre-trained artifacts loaded as-is)",
+  "gate": "NEW_VARIANT (phase1_edge_discovery), CONF=0.22, unmodified",
+  "bootstrap": {
+   "dir_acc_IC": "2000x row resample with replacement on frozen-test predictions",
+   "trade_sim": "5000x trade resample with replacement, metrics() recomputed each draw"
+  },
+  "no_tuning": true,
+  "no_gate_changes": true
+ },
+ "champion": {
+  "n_features": 170,
+  "rows": 209073,
+  "train_end": "2024-08-30 15:25:00",
+  "val_end": "2025-07-07 09:35:00",
+  "test_range": [
+   "2025-07-08 09:55:00",
+   "2026-06-04 15:10:00"
+  ],
+  "test_span_years": 0.906229,
+  "val": {
+   "dir_acc": 0.571893,
+   "n_signals": 4091,
+   "IC": 0.007633,
+   "IC_p": 0.340411,
+   "dir_acc_ci": [
+    0.544669,
+    0.596218
+   ],
+   "IC_ci": [
+    -0.009627,
+    0.023772
+   ]
+  },
+  "test": {
+   "dir_acc": 0.586785,
+   "n_signals": 2507,
+   "IC": 0.003556,
+   "IC_p": 0.656116,
+   "dir_acc_ci": [
+    0.558025,
+    0.616798
+   ],
+   "IC_ci": [
+    -0.012099,
+    0.019318
+   ]
+  },
+  "sim": {
+   "trades": 40,
+   "wr": 0.475,
+   "pf": 1.704165,
+   "sharpe": 4.06876,
+   "sortino": 9.991827,
+   "cagr": 0.204883,
+   "maxdd": -3832.5,
+   "avg_r": 0.222864,
+   "expectancy": 460.020209,
+   "net": 18400.808343,
+   "recovery": 4.801255
+  },
+  "sim_ci": {
+   "wr_ci": [
+    0.325,
+    0.625
+   ],
+   "pf_ci": [
+    0.764226,
+    3.711813
+   ],
+   "sharpe_ci": [
+    -1.704819,
+    7.625523
+   ],
+   "sortino_ci": [
+    -2.623133,
+    32.057216
+   ],
+   "maxdd_ci": [
+    -18589.759375,
+    -3924.75
+   ],
+   "expectancy_ci": [
+    -209.073115,
+    1135.164607
+   ],
+   "net_ci": [
+    -8362.924586,
+    45406.584275
+   ],
+   "recovery_ci": [
+    -0.528075,
+    10.492199
+   ]
+  }
+ },
+ "htf36": {
+  "n_features": 28,
+  "rows": 209537,
+  "train_end": "2024-08-30 09:35:00",
+  "val_end": "2025-07-04 12:55:00",
+  "test_range": [
+   "2025-07-07 13:15:00",
+   "2026-06-04 15:10:00"
+  ],
+  "test_span_years": 0.908966,
+  "val": {
+   "dir_acc": 0.562427,
+   "n_signals": 2749,
+   "IC": 0.001666,
+   "IC_p": 0.834981,
+   "dir_acc_ci": [
+    0.529131,
+    0.594673
+   ],
+   "IC_ci": [
+    -0.014553,
+    0.01798
+   ]
+  },
+  "test": {
+   "dir_acc": 0.56077,
+   "n_signals": 2361,
+   "IC": 0.008726,
+   "IC_p": 0.274,
+   "dir_acc_ci": [
+    0.527881,
+    0.594969
+   ],
+   "IC_ci": [
+    -0.007103,
+    0.025363
+   ]
+  },
+  "sim": {
+   "trades": 33,
+   "wr": 0.636364,
+   "pf": 2.024062,
+   "sharpe": 5.220757,
+   "sortino": 16.540569,
+   "cagr": 0.221011,
+   "maxdd": -3714.405357,
+   "avg_r": 0.285771,
+   "expectancy": 603.080628,
+   "net": 19901.660714,
+   "recovery": 5.357967
+  },
+  "sim_ci": {
+   "wr_ci": [
+    0.454545,
+    0.787879
+   ],
+   "pf_ci": [
+    0.881971,
+    4.976298
+   ],
+   "sharpe_ci": [
+    -0.793825,
+    9.403834
+   ],
+   "sortino_ci": [
+    -1.160299,
+    45.581331
+   ],
+   "maxdd_ci": [
+    -14130.647009,
+    -2405.205357
+   ],
+   "expectancy_ci": [
+    -98.018019,
+    1314.483285
+   ],
+   "net_ci": [
+    -3234.594643,
+    43377.948393
+   ],
+   "recovery_ci": [
+    -0.273957,
+    13.25072
+   ]
+  }
+ },
+ "decision": {
+  "decision": "SHADOW",
+  "summary": "HTF36 (28 tf15_/tf30_/tf60_ features, clean pipeline, identical purged split/hyperparameters/NEW gate, CONF=0.22) does NOT clear the promotion bar: its directional accuracy is below the current V9 champion on BOTH the validation set (0.5624 vs 0.5719) and the frozen test (0.5608 vs 0.5868), and neither model's test IC is significant (p=0.27 vs p=0.66). The frozen-test trade-sim (NEW gate, unmodified) nominally favors HTF36 (PF 2.02 vs 1.70, expectancy Rs603 vs Rs460, Sharpe 5.22 vs 4.07) but on only 33 vs 40 trades \u2014 bootstrap 95% CIs for PF/expectancy/Sharpe overlap almost completely between the two models AND each model's own CI spans breakeven (PF CI lower bound <1.0, expectancy/Sharpe CIs cross 0). The evidence is therefore underpowered and directionally mixed: not a basis to promote HTF36 to champion, but also not strong enough to declare the tf15/30/60 family valueless (test IC point estimate is even nominally higher than the champion's, +0.0087 vs +0.0036).",
+  "promote_blockers": [
+   "HTF36 test dir_acc (0.5608) is below champion (0.5868); same direction on val (0.5624 vs 0.5719).",
+   "Neither model's test IC is significant at p<0.05 (champion p=0.656, htf36 p=0.274); no demonstrated directional edge to promote on.",
+   "HTF36 vs champion PF bootstrap CIs overlap heavily (champion [0.764226, 3.711813], htf36 [0.881971, 4.976298]); the apparent PF/expectancy/Sharpe advantage is not distinguishable from noise at n=33 trades.",
+   "HTF36's own PF 95% CI [0.881971, 4.976298] includes 1.0 (breakeven) \u2014 its trade-sim edge is not statistically established in isolation either."
+  ],
+  "strong_negative_evidence": [],
+  "reasons_not_to_reject_outright": [
+   "test dir_acc CIs overlap substantially (champion [0.558025, 0.616798], htf36 [0.527881, 0.594969]) \u2014 the dir_acc shortfall is not statistically conclusive evidence of a worse model, just a point-estimate disadvantage.",
+   "HTF36's test IC point estimate (+0.0087) is actually directionally HIGHER than champion's (+0.0036), though neither is significant \u2014 insufficient to declare the family valueless.",
+   "HTF36's frozen-test trade-sim is nominally profitable (PF 2.02, expectancy Rs603, n=33) \u2014 not a clear negative result that would justify discarding the family outright."
+  ],
+  "recommendation": "SHADOW. Do not promote HTF36 or change the V9 champion/gate. Continue the existing pre-registered HTF36 shadow-logging (models/htf36, data/shadow_model_log.jsonl) toward its >=15 sessions / >=1000 cycles review point, where live data will sharpen these CIs well beyond the ~33-40 trade / ~2,300-2,500 signal sample available on the frozen historical test. Re-run this same validation (validate_htf36.py) at that checkpoint with the extended data window before any promote/reject call.",
+  "comparison": {
+   "test_dir_acc": {
+    "champion": 0.586785,
+    "htf36": 0.56077,
+    "delta": -0.026,
+    "champion_ci": [
+     0.558025,
+     0.616798
+    ],
+    "htf36_ci": [
+     0.527881,
+     0.594969
+    ],
+    "ci_overlap": true
+   },
+   "val_dir_acc": {
+    "champion": 0.571893,
+    "htf36": 0.562427,
+    "delta": -0.0095,
+    "champion_ci": [
+     0.544669,
+     0.596218
+    ],
+    "htf36_ci": [
+     0.529131,
+     0.594673
+    ],
+    "ci_overlap": true
+   },
+   "test_IC": {
+    "champion": 0.003556,
+    "htf36": 0.008726,
+    "champion_p": 0.656116,
+    "htf36_p": 0.274,
+    "delta": 0.0052,
+    "champion_ci": [
+     -0.012099,
+     0.019318
+    ],
+    "htf36_ci": [
+     -0.007103,
+     0.025363
+    ],
+    "ci_overlap": true,
+    "either_significant_p<0.05": false
+   },
+   "sim_pf": {
+    "champion": 1.704165,
+    "htf36": 2.024062,
+    "champion_ci": [
+     0.764226,
+     3.711813
+    ],
+    "htf36_ci": [
+     0.881971,
+     4.976298
+    ],
+    "ci_overlap": true,
+    "champion_ci_excludes_1.0": false,
+    "htf36_ci_excludes_1.0": false
+   },
+   "sim_expectancy": {
+    "champion": 460.020209,
+    "htf36": 603.080628,
+    "champion_ci": [
+     -209.073115,
+     1135.164607
+    ],
+    "htf36_ci": [
+     -98.018019,
+     1314.483285
+    ],
+    "ci_overlap": true,
+    "champion_ci_excludes_0": false,
+    "htf36_ci_excludes_0": false
+   },
+   "sim_sharpe": {
+    "champion": 4.06876,
+    "htf36": 5.220757,
+    "champion_ci": [
+     -1.704819,
+     7.625523
+    ],
+    "htf36_ci": [
+     -0.793825,
+     9.403834
+    ],
+    "ci_overlap": true
+   },
+   "sim_maxdd": {
+    "champion": -3832.5,
+    "htf36": -3714.405357,
+    "champion_ci": [
+     -18589.759375,
+     -3924.75
+    ],
+    "htf36_ci": [
+     -14130.647009,
+     -2405.205357
+    ]
+   },
+   "trade_count": {
+    "champion": 40,
+    "htf36": 33
+   }
+  },
+  "personas": {
+   "jane_street_research_lead": "Signal quality is the deciding factor, not the gate-sim P&L. HTF36's dir_acc is lower than the champion's on both the validation fold and the frozen test, and its test IC (+0.0087, p=0.27) is not significant. A 28-feature model that underperforms a 170-feature model on out-of-sample accuracy is not a research win, even if it happens to look better after a 33-trade gate replay.",
+   "citadel_systematic_pm": "From a portfolio-risk lens, n=33 trades over <1 year is far too thin to size or re-allocate capital on. MaxDD point estimates (-3714 vs -3832) are close and both carry bootstrap tails past -14k/-18.6k. PF/Sharpe CIs cross breakeven for both books. No action on capital allocation is warranted from this evidence; keep monitoring in shadow at zero capital risk.",
+   "xgboost_specialist": "Same hyperparameters (_fit_ensemble), same purged split, no tuning \u2014 clean comparison. A 28-feature ensemble matching ~96% of a 170-feature ensemble's dir_acc would be a strong parsimony result; here it underperforms by ~2.6pp on the frozen test, which (given dir_acc CI widths of ~6-7pp) is plausibly noise but is the wrong direction to claim a win. No evidence of overfitting in the 170-feature model relative to HTF36 \u2014 val and test dir_acc move together for both.",
+   "quant_researcher": "Both models' test IC bootstrap CIs straddle zero (champion [-0.012, 0.019], htf36 [-0.007, 0.025]); the 'true edge approx zero' finding from Phase 0 still holds for this family. The apparent gate-sim PF/expectancy edge for HTF36 is consistent with sampling variation given the heavy CI overlap with the champion's own gate-sim distribution.",
+   "qa_engineer": "Pipeline integrity verified: re-ran train_htf36.py end-to-end and reproduced identical val/test dir_acc/IC to the existing models/htf36 artifacts (deterministic). Champion artifacts (models/sandbox_clean) loaded unmodified \u2014 no retraining, no hyperparameter or gate edits. HTF36 feature set verified as a strict subset of the champion's 170 features and verified to contain ONLY tf15_/tf30_/tf60_ columns (28/28), per spec."
+  }
+ }
+}

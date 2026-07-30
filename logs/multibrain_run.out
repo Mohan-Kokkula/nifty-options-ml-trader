@@ -1,0 +1,112 @@
+Building V9 (leak-fixed) feature + label frame...
+23:26:17 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+23:26:17 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+23:26:17 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+23:26:18 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+23:26:18 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+23:26:20 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+23:26:20 [V9]   5-min features computed: 98 cols
+23:26:20 [V9]   15-min features: 14 cols
+23:26:21 [V9]   30-min features: 7 cols
+23:26:22 [V9]   60-min features: 13 cols
+23:26:23 [V9]   Daily features: 17 cols
+23:26:23 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+23:26:23 [V9]   VIX features: 15 cols (with options-pricing additions)
+23:26:23 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+23:26:25 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+23:26:25 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+23:26:26 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+23:26:26 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+23:26:27 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+23:26:27 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+23:26:27 [V9]   VIX>35 forced SKIP: 3,225 bars
+23:26:27 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+23:26:27 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+
+  Fold 1/8: train<2024-06-28 -> test 2024-07-01..2024-10-01
+    XGB+LGB trained.
+    RF trained.
+    baseline       89 trades net Rs.-19,767
+    avg3           79 trades net Rs.-17,447
+    vote_2of3      83 trades net Rs.-14,776
+    vote_3of3      44 trades net Rs.-12,853
+
+  Fold 2/8: train<2024-09-28 -> test 2024-10-01..2025-01-01
+    XGB+LGB trained.
+    RF trained.
+    baseline      113 trades net Rs.+20,199
+    avg3          107 trades net Rs.+10,214
+    vote_2of3     103 trades net Rs.+11,075
+    vote_3of3      74 trades net Rs.+2,612
+
+  Fold 3/8: train<2024-12-29 -> test 2025-01-01..2025-04-01
+    XGB+LGB trained.
+    RF trained.
+    baseline       94 trades net Rs.-24,772
+    avg3           90 trades net Rs.-24,816
+    vote_2of3      92 trades net Rs.-28,886
+    vote_3of3      59 trades net Rs.-16,818
+
+  Fold 4/8: train<2025-03-29 -> test 2025-04-01..2025-07-01
+    XGB+LGB trained.
+    RF trained.
+    baseline       87 trades net Rs.-3,672
+    avg3           78 trades net Rs.+9,159
+    vote_2of3      82 trades net Rs.+7,027
+    vote_3of3      43 trades net Rs.-25,528
+
+  Fold 5/8: train<2025-06-28 -> test 2025-07-01..2025-10-01
+    XGB+LGB trained.
+    RF trained.
+    baseline       57 trades net Rs.-1,485
+    avg3           60 trades net Rs.+92
+    vote_2of3      61 trades net Rs.+2,752
+    vote_3of3      43 trades net Rs.-14,593
+
+  Fold 6/8: train<2025-09-28 -> test 2025-10-01..2026-01-01
+    XGB+LGB trained.
+    RF trained.
+    baseline       50 trades net Rs.-9,216
+    avg3           44 trades net Rs.-4,322
+    vote_2of3      43 trades net Rs.+918
+    vote_3of3      31 trades net Rs.-12,080
+
+  Fold 7/8: train<2025-12-29 -> test 2026-01-01..2026-04-01
+    XGB+LGB trained.
+    RF trained.
+    baseline       96 trades net Rs.-29,919
+    avg3           93 trades net Rs.-30,689
+    vote_2of3      90 trades net Rs.-31,682
+    vote_3of3      71 trades net Rs.-15,393
+
+  Fold 8/8: train<2026-03-29 -> test 2026-04-01..2026-05-01
+    XGB+LGB trained.
+    RF trained.
+    baseline       32 trades net Rs.-24,799
+    avg3           29 trades net Rs.-19,140
+    vote_2of3      30 trades net Rs.-19,415
+    vote_3of3      13 trades net Rs.-1,381
+
+====================================================================================================
+  MULTI-BRAIN AGGREGATE (real option P&L, post-friction, identical gate)
+====================================================================================================
+  Config         Trd   Win%     PF  Sharpe        MaxDD    AvgTrd          Net
+  ------------------------------------------------------------------------------------------------
+  baseline       618    32%   0.75   -1.50   Rs.104,472   Rs.-151   Rs.-93,430
+  avg3           580    33%   0.78   -1.24    Rs.87,286   Rs.-133   Rs.-76,949
+  vote_2of3      584    33%   0.80   -1.14    Rs.84,906   Rs.-125   Rs.-72,988
+  vote_3of3      378    29%   0.61   -2.24    Rs.98,701   Rs.-254   Rs.-96,035
+====================================================================================================
+
+  Baseline (XGB+LGB) PF: 0.75
+  Best voting config PF: 0.80
+  [STEP-1 FAIL] Voting does NOT materially improve PF.
+                NN unlikely to fix. Multi-brain hypothesis closed.
+
+  Per-config trade CSVs -> logs/multibrain_<config>.csv
+

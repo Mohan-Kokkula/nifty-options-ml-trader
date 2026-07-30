@@ -1,0 +1,29 @@
+{
+  "ensemble_type": "confidence",
+  "fold_id": 1,
+  "n_trades": 0,
+  "n_test_bars": 4800,
+  "n_bars_traded": 0,
+  "brains_used": [
+    "cat",
+    "lgb",
+    "mlp",
+    "xgb"
+  ],
+  "input_source": "calibrated_isotonic",
+  "weights_summary": {
+    "kind": "confidence",
+    "operation": "softmax(top1_confidence / temperature) per bar",
+    "temperature": 1.0,
+    "brains": [
+      "cat",
+      "lgb",
+      "mlp",
+      "xgb"
+    ]
+  },
+  "fit_elapsed_s": 0.006,
+  "transform_elapsed_s": 0.0,
+  "simulate_elapsed_s": 0.048,
+  "n_oof_bars": 78503
+}

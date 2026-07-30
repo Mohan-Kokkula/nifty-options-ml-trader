@@ -1,0 +1,112 @@
+{
+  "per_target": {
+    "mean": {
+      "pf_ci": {
+        "stat_name": "pooled_pf",
+        "point_estimate": 1.9380797810451544,
+        "lower": 0.7695107104271147,
+        "upper": 7.802018852211657,
+        "ci_level": 0.9,
+        "n_resamples": 10000,
+        "n_valid_resamples": 10000,
+        "n_blocks": 8,
+        "block_unit": "fold",
+        "method": "percentile",
+        "seed": 42,
+        "paired": false
+      },
+      "net_ci": {
+        "stat_name": "pooled_net",
+        "point_estimate": 27483.365785079313,
+        "lower": -8933.271044425715,
+        "upper": 69120.57963400656,
+        "ci_level": 0.9,
+        "n_resamples": 10000,
+        "n_valid_resamples": 10000,
+        "n_blocks": 8,
+        "block_unit": "fold",
+        "method": "percentile",
+        "seed": 42,
+        "paired": false
+      },
+      "paired_delta_pf": {
+        "stat_name": "delta_pf_a_minus_b",
+        "point_estimate": 0.29810161911434685,
+        "lower": 0.13599776372061276,
+        "upper": 2.003495318079775,
+        "ci_level": 0.9,
+        "n_resamples": 10000,
+        "n_valid_resamples": 42,
+        "n_blocks": 8,
+        "block_unit": "fold",
+        "method": "percentile",
+        "seed": 42,
+        "paired": true,
+        "common_folds": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ]
+      }
+    },
+    "stacking": {
+      "pf_ci": {
+        "stat_name": "pooled_pf",
+        "point_estimate": 1.1185820282063177,
+        "lower": 0.6380086037206365,
+        "upper": 2.5447743906850517,
+        "ci_level": 0.9,
+        "n_resamples": 10000,
+        "n_valid_resamples": 10000,
+        "n_blocks": 8,
+        "block_unit": "fold",
+        "method": "percentile",
+        "seed": 42,
+        "paired": false
+      },
+      "net_ci": {
+        "stat_name": "pooled_net",
+        "point_estimate": 5889.181012188431,
+        "lower": -24478.501912760814,
+        "upper": 44286.43632040156,
+        "ci_level": 0.9,
+        "n_resamples": 10000,
+        "n_valid_resamples": 10000,
+        "n_blocks": 8,
+        "block_unit": "fold",
+        "method": "percentile",
+        "seed": 42,
+        "paired": false
+      },
+      "paired_delta_pf": {
+        "stat_name": "delta_pf_a_minus_b",
+        "point_estimate": 0.36254856103202593,
+        "lower": -55.27041984116504,
+        "upper": 10.516688850300069,
+        "ci_level": 0.9,
+        "n_resamples": 10000,
+        "n_valid_resamples": 975,
+        "n_blocks": 8,
+        "block_unit": "fold",
+        "method": "percentile",
+        "seed": 42,
+        "paired": true,
+        "common_folds": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ]
+      }
+    }
+  }
+}

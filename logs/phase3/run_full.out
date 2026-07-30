@@ -1,0 +1,1086 @@
+[pre-flight] Windows sleep prevention: True
+[xgb/fold 1] cache MISS (missing trades.csv); recomputing
+[Phase 3 / xgb / Fold 1] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:35:05 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:35:06 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:35:06 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:35:06 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:35:06 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:35:10 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:35:10 [V9]   5-min features computed: 98 cols
+19:35:10 [V9]   15-min features: 14 cols
+19:35:10 [V9]   30-min features: 7 cols
+19:35:12 [V9]   60-min features: 13 cols
+19:35:13 [V9]   Daily features: 17 cols
+19:35:13 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:35:13 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:35:14 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:35:17 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:35:17 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:35:18 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:35:18 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:35:19 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:35:19 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:35:19 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:35:19 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:35:19 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=174,334, test=4,800, gap=4d
+  training xgb on outer_train ...
+[xgb Fold 1] n_trades=97 PF=0.704 Net=Rs.-19,081 WR=25.8% train=93s
+[xgb/fold 2] cache MISS (missing trades.csv); recomputing
+[Phase 3 / xgb / Fold 2] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:36:58 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:36:58 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:36:58 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:36:58 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:36:58 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:37:02 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:37:02 [V9]   5-min features computed: 98 cols
+19:37:02 [V9]   15-min features: 14 cols
+19:37:03 [V9]   30-min features: 7 cols
+19:37:04 [V9]   60-min features: 13 cols
+19:37:05 [V9]   Daily features: 17 cols
+19:37:05 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:37:05 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:37:06 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:37:09 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:37:09 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:37:10 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:37:10 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:37:11 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:37:11 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:37:11 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:37:11 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:37:11 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=179,134, test=4,575, gap=4d
+  training xgb on outer_train ...
+[xgb Fold 2] n_trades=100 PF=1.206 Net=Rs.+10,447 WR=34.0% train=68s
+[xgb/fold 3] cache MISS (missing trades.csv); recomputing
+[Phase 3 / xgb / Fold 3] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:38:24 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:38:24 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:38:24 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:38:24 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:38:24 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:38:29 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:38:29 [V9]   5-min features computed: 98 cols
+19:38:29 [V9]   15-min features: 14 cols
+19:38:29 [V9]   30-min features: 7 cols
+19:38:31 [V9]   60-min features: 13 cols
+19:38:32 [V9]   Daily features: 17 cols
+19:38:32 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:38:32 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:38:32 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:38:35 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:38:35 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:38:36 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:38:36 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:38:37 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:38:37 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:38:37 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:38:37 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:38:37 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=183,634, test=4,650, gap=5d
+  training xgb on outer_train ...
+[xgb Fold 3] n_trades=95 PF=1.021 Net=Rs.+961 WR=38.9% train=101s
+[xgb/fold 4] cache MISS (missing trades.csv); recomputing
+[Phase 3 / xgb / Fold 4] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:40:24 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:40:25 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:40:25 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:40:25 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:40:25 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:40:29 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:40:29 [V9]   5-min features computed: 98 cols
+19:40:29 [V9]   15-min features: 14 cols
+19:40:29 [V9]   30-min features: 7 cols
+19:40:31 [V9]   60-min features: 13 cols
+19:40:32 [V9]   Daily features: 17 cols
+19:40:32 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:40:32 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:40:32 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:40:35 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:40:35 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:40:36 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:40:36 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:40:37 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:40:37 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:40:37 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:40:37 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:40:37 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=188,434, test=4,575, gap=4d
+  training xgb on outer_train ...
+[xgb Fold 4] n_trades=83 PF=1.077 Net=Rs.+4,662 WR=28.9% train=104s
+[xgb/fold 5] cache MISS (missing trades.csv); recomputing
+[Phase 3 / xgb / Fold 5] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:42:28 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:42:28 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:42:28 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:42:28 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:42:28 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:42:32 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:42:32 [V9]   5-min features computed: 98 cols
+19:42:32 [V9]   15-min features: 14 cols
+19:42:32 [V9]   30-min features: 7 cols
+19:42:34 [V9]   60-min features: 13 cols
+19:42:35 [V9]   Daily features: 17 cols
+19:42:35 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:42:35 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:42:35 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:42:38 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:42:38 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:42:39 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:42:39 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:42:40 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:42:40 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:42:40 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:42:40 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:42:40 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=192,934, test=4,800, gap=4d
+  training xgb on outer_train ...
+[xgb Fold 5] n_trades=56 PF=1.714 Net=Rs.+13,714 WR=46.4% train=101s
+[xgb/fold 6] cache MISS (missing trades.csv); recomputing
+[Phase 3 / xgb / Fold 6] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:44:27 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:44:28 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:44:28 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:44:28 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:44:28 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:44:32 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:44:32 [V9]   5-min features computed: 98 cols
+19:44:32 [V9]   15-min features: 14 cols
+19:44:32 [V9]   30-min features: 7 cols
+19:44:34 [V9]   60-min features: 13 cols
+19:44:34 [V9]   Daily features: 17 cols
+19:44:35 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:44:35 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:44:35 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:44:38 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:44:38 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:44:39 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:44:39 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:44:40 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:44:40 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:44:40 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:44:40 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:44:40 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=197,659, test=4,587, gap=5d
+  training xgb on outer_train ...
+[xgb Fold 6] n_trades=46 PF=0.835 Net=Rs.-4,558 WR=39.1% train=105s
+[xgb/fold 7] cache MISS (missing trades.csv); recomputing
+[Phase 3 / xgb / Fold 7] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:46:31 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:46:31 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:46:31 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:46:31 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:46:31 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:46:35 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:46:35 [V9]   5-min features computed: 98 cols
+19:46:35 [V9]   15-min features: 14 cols
+19:46:36 [V9]   30-min features: 7 cols
+19:46:38 [V9]   60-min features: 13 cols
+19:46:38 [V9]   Daily features: 17 cols
+19:46:38 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:46:38 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:46:39 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:46:42 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:46:42 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:46:43 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:46:43 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:46:44 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:46:44 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:46:44 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:46:44 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:46:44 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=202,171, test=4,350, gap=6d
+  training xgb on outer_train ...
+[xgb Fold 7] n_trades=92 PF=0.393 Net=Rs.-36,368 WR=30.4% train=113s
+[xgb/fold 8] cache MISS (missing trades.csv); recomputing
+[Phase 3 / xgb / Fold 8] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:48:43 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:48:43 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:48:43 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:48:43 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:48:43 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:48:48 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:48:48 [V9]   5-min features computed: 98 cols
+19:48:48 [V9]   15-min features: 14 cols
+19:48:48 [V9]   30-min features: 7 cols
+19:48:50 [V9]   60-min features: 13 cols
+19:48:51 [V9]   Daily features: 17 cols
+19:48:51 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:48:51 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:48:52 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:48:55 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:48:55 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:48:56 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:48:56 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:48:57 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:48:57 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:48:57 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:48:57 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:48:57 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=206,671, test=1,415, gap=5d
+  training xgb on outer_train ...
+[xgb Fold 8] n_trades=29 PF=0.449 Net=Rs.-14,687 WR=27.6% train=117s
+[lgb/fold 1] cache HIT; skipping (ok)
+[lgb/fold 2] cache MISS (missing trades.csv); recomputing
+[Phase 3 / lgb / Fold 2] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:51:00 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:51:01 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:51:01 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:51:01 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:51:01 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:51:04 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:51:04 [V9]   5-min features computed: 98 cols
+19:51:05 [V9]   15-min features: 14 cols
+19:51:05 [V9]   30-min features: 7 cols
+19:51:07 [V9]   60-min features: 13 cols
+19:51:08 [V9]   Daily features: 17 cols
+19:51:08 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:51:08 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:51:08 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:51:11 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:51:11 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:51:12 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:51:12 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:51:13 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:51:13 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:51:13 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:51:13 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:51:13 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=179,134, test=4,575, gap=4d
+  training lgb on outer_train ...
+[lgb Fold 2] n_trades=120 PF=1.356 Net=Rs.+21,246 WR=38.3% train=45s
+[lgb/fold 3] cache MISS (missing trades.csv); recomputing
+[Phase 3 / lgb / Fold 3] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:52:04 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:52:04 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:52:04 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:52:05 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:52:05 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:52:08 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:52:08 [V9]   5-min features computed: 98 cols
+19:52:08 [V9]   15-min features: 14 cols
+19:52:09 [V9]   30-min features: 7 cols
+19:52:11 [V9]   60-min features: 13 cols
+19:52:11 [V9]   Daily features: 17 cols
+19:52:11 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:52:11 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:52:12 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:52:15 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:52:15 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:52:16 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:52:16 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:52:17 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:52:17 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:52:17 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:52:17 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:52:17 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=183,634, test=4,650, gap=5d
+  training lgb on outer_train ...
+[lgb Fold 3] n_trades=105 PF=0.532 Net=Rs.-33,264 WR=32.4% train=37s
+[lgb/fold 4] cache MISS (missing trades.csv); recomputing
+[Phase 3 / lgb / Fold 4] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:53:00 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:53:01 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:53:01 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:53:01 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:53:01 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:53:04 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:53:04 [V9]   5-min features computed: 98 cols
+19:53:05 [V9]   15-min features: 14 cols
+19:53:05 [V9]   30-min features: 7 cols
+19:53:07 [V9]   60-min features: 13 cols
+19:53:07 [V9]   Daily features: 17 cols
+19:53:08 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:53:08 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:53:08 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:53:11 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:53:11 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:53:12 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:53:12 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:53:13 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:53:13 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:53:13 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:53:13 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:53:13 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=188,434, test=4,575, gap=4d
+  training lgb on outer_train ...
+[lgb Fold 4] n_trades=87 PF=0.899 Net=Rs.-6,056 WR=26.4% train=64s
+[lgb/fold 5] cache MISS (missing trades.csv); recomputing
+[Phase 3 / lgb / Fold 5] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:54:23 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:54:23 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:54:24 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:54:24 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:54:24 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:54:27 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:54:27 [V9]   5-min features computed: 98 cols
+19:54:27 [V9]   15-min features: 14 cols
+19:54:28 [V9]   30-min features: 7 cols
+19:54:30 [V9]   60-min features: 13 cols
+19:54:30 [V9]   Daily features: 17 cols
+19:54:30 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:54:30 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:54:31 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:54:34 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:54:34 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:54:35 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:54:35 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:54:36 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:54:36 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:54:36 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:54:36 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:54:36 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=192,934, test=4,800, gap=4d
+  training lgb on outer_train ...
+[lgb Fold 5] n_trades=59 PF=0.903 Net=Rs.-2,123 WR=39.0% train=51s
+[lgb/fold 6] cache MISS (missing trades.csv); recomputing
+[Phase 3 / lgb / Fold 6] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:55:33 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:55:34 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:55:34 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:55:34 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:55:34 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:55:37 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:55:37 [V9]   5-min features computed: 98 cols
+19:55:38 [V9]   15-min features: 14 cols
+19:55:38 [V9]   30-min features: 7 cols
+19:55:40 [V9]   60-min features: 13 cols
+19:55:40 [V9]   Daily features: 17 cols
+19:55:41 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:55:41 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:55:41 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:55:44 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:55:44 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:55:45 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:55:45 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:55:46 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:55:46 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:55:46 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:55:46 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:55:46 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=197,659, test=4,587, gap=5d
+  training lgb on outer_train ...
+[lgb Fold 6] n_trades=46 PF=0.887 Net=Rs.-2,214 WR=39.1% train=67s
+[lgb/fold 7] cache MISS (missing trades.csv); recomputing
+[Phase 3 / lgb / Fold 7] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:56:59 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:57:00 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:57:00 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:57:00 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:57:00 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:57:03 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:57:03 [V9]   5-min features computed: 98 cols
+19:57:03 [V9]   15-min features: 14 cols
+19:57:04 [V9]   30-min features: 7 cols
+19:57:06 [V9]   60-min features: 13 cols
+19:57:06 [V9]   Daily features: 17 cols
+19:57:07 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:57:07 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:57:07 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:57:10 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:57:10 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:57:11 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:57:11 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:57:12 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:57:12 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:57:12 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:57:12 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:57:12 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=202,171, test=4,350, gap=6d
+  training lgb on outer_train ...
+[lgb Fold 7] n_trades=88 PF=0.763 Net=Rs.-13,146 WR=30.7% train=53s
+[lgb/fold 8] cache MISS (missing trades.csv); recomputing
+[Phase 3 / lgb / Fold 8] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:58:11 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:58:12 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:58:12 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:58:12 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:58:12 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:58:15 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:58:15 [V9]   5-min features computed: 98 cols
+19:58:16 [V9]   15-min features: 14 cols
+19:58:16 [V9]   30-min features: 7 cols
+19:58:18 [V9]   60-min features: 13 cols
+19:58:18 [V9]   Daily features: 17 cols
+19:58:19 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:58:19 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:58:19 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:58:22 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:58:22 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:58:23 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:58:23 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:58:24 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:58:24 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:58:24 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:58:24 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:58:24 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=206,671, test=1,415, gap=5d
+  training lgb on outer_train ...
+[lgb Fold 8] n_trades=29 PF=0.240 Net=Rs.-21,486 WR=20.7% train=58s
+[cat/fold 1] cache HIT; skipping (ok)
+[cat/fold 2] cache MISS (missing trades.csv); recomputing
+[Phase 3 / cat / Fold 2] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+19:59:29 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+19:59:29 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+19:59:29 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+19:59:29 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+19:59:29 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+19:59:33 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+19:59:33 [V9]   5-min features computed: 98 cols
+19:59:33 [V9]   15-min features: 14 cols
+19:59:33 [V9]   30-min features: 7 cols
+19:59:35 [V9]   60-min features: 13 cols
+19:59:36 [V9]   Daily features: 17 cols
+19:59:36 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+19:59:36 [V9]   VIX features: 15 cols (with options-pricing additions)
+19:59:37 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+19:59:40 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:59:40 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+19:59:41 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:59:41 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+19:59:42 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+19:59:42 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+19:59:42 [V9]   VIX>35 forced SKIP: 3,225 bars
+19:59:42 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+19:59:42 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=179,134, test=4,575, gap=4d
+  training cat on outer_train ...
+[cat Fold 2] n_trades=99 PF=1.222 Net=Rs.+10,603 WR=35.4% train=85s
+[cat/fold 3] cache MISS (missing trades.csv); recomputing
+[Phase 3 / cat / Fold 3] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+20:01:13 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+20:01:13 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+20:01:14 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+20:01:14 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+20:01:14 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+20:01:17 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+20:01:17 [V9]   5-min features computed: 98 cols
+20:01:18 [V9]   15-min features: 14 cols
+20:01:18 [V9]   30-min features: 7 cols
+20:01:20 [V9]   60-min features: 13 cols
+20:01:21 [V9]   Daily features: 17 cols
+20:01:21 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+20:01:21 [V9]   VIX features: 15 cols (with options-pricing additions)
+20:01:21 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+20:01:25 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:01:25 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+20:01:26 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:01:26 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+20:01:27 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:01:27 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+20:01:27 [V9]   VIX>35 forced SKIP: 3,225 bars
+20:01:27 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+20:01:27 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=183,634, test=4,650, gap=5d
+  training cat on outer_train ...
+[cat Fold 3] n_trades=111 PF=0.673 Net=Rs.-20,209 WR=31.5% train=93s
+[cat/fold 4] cache MISS (missing trades.csv); recomputing
+[Phase 3 / cat / Fold 4] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+20:03:06 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+20:03:06 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+20:03:07 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+20:03:07 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+20:03:07 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+20:03:10 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+20:03:10 [V9]   5-min features computed: 98 cols
+20:03:11 [V9]   15-min features: 14 cols
+20:03:11 [V9]   30-min features: 7 cols
+20:03:13 [V9]   60-min features: 13 cols
+20:03:14 [V9]   Daily features: 17 cols
+20:03:14 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+20:03:14 [V9]   VIX features: 15 cols (with options-pricing additions)
+20:03:15 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+20:03:18 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:03:18 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+20:03:19 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:03:19 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+20:03:20 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:03:20 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+20:03:20 [V9]   VIX>35 forced SKIP: 3,225 bars
+20:03:20 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+20:03:20 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=188,434, test=4,575, gap=4d
+  training cat on outer_train ...
+[cat Fold 4] n_trades=80 PF=0.939 Net=Rs.-4,070 WR=28.7% train=102s
+[cat/fold 5] cache MISS (missing trades.csv); recomputing
+[Phase 3 / cat / Fold 5] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+20:05:08 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+20:05:08 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+20:05:08 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+20:05:09 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+20:05:09 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+20:05:12 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+20:05:12 [V9]   5-min features computed: 98 cols
+20:05:12 [V9]   15-min features: 14 cols
+20:05:13 [V9]   30-min features: 7 cols
+20:05:15 [V9]   60-min features: 13 cols
+20:05:16 [V9]   Daily features: 17 cols
+20:05:16 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+20:05:16 [V9]   VIX features: 15 cols (with options-pricing additions)
+20:05:16 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+20:05:20 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:05:20 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+20:05:21 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:05:21 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+20:05:22 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:05:22 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+20:05:22 [V9]   VIX>35 forced SKIP: 3,225 bars
+20:05:22 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+20:05:22 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=192,934, test=4,800, gap=4d
+  training cat on outer_train ...
+[cat Fold 5] n_trades=71 PF=1.291 Net=Rs.+7,307 WR=42.3% train=107s
+[cat/fold 6] cache MISS (missing trades.csv); recomputing
+[Phase 3 / cat / Fold 6] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+20:07:15 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+20:07:15 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+20:07:15 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+20:07:15 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+20:07:15 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+20:07:19 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+20:07:19 [V9]   5-min features computed: 98 cols
+20:07:19 [V9]   15-min features: 14 cols
+20:07:20 [V9]   30-min features: 7 cols
+20:07:22 [V9]   60-min features: 13 cols
+20:07:23 [V9]   Daily features: 17 cols
+20:07:23 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+20:07:23 [V9]   VIX features: 15 cols (with options-pricing additions)
+20:07:23 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+20:07:26 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:07:26 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+20:07:27 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:07:27 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+20:07:28 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:07:28 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+20:07:28 [V9]   VIX>35 forced SKIP: 3,225 bars
+20:07:28 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+20:07:28 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=197,659, test=4,587, gap=5d
+  training cat on outer_train ...
+[cat Fold 6] n_trades=57 PF=0.607 Net=Rs.-13,098 WR=35.1% train=108s
+[cat/fold 7] cache MISS (missing trades.csv); recomputing
+[Phase 3 / cat / Fold 7] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+20:09:23 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+20:09:23 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+20:09:23 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+20:09:23 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+20:09:23 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+20:09:27 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+20:09:27 [V9]   5-min features computed: 98 cols
+20:09:27 [V9]   15-min features: 14 cols
+20:09:28 [V9]   30-min features: 7 cols
+20:09:30 [V9]   60-min features: 13 cols
+20:09:30 [V9]   Daily features: 17 cols
+20:09:31 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+20:09:31 [V9]   VIX features: 15 cols (with options-pricing additions)
+20:09:31 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+20:09:34 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:09:34 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+20:09:35 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:09:35 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+20:09:36 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:09:36 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+20:09:36 [V9]   VIX>35 forced SKIP: 3,225 bars
+20:09:36 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+20:09:36 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=202,171, test=4,350, gap=6d
+  training cat on outer_train ...
+[cat Fold 7] n_trades=94 PF=0.395 Net=Rs.-36,844 WR=30.9% train=112s
+[cat/fold 8] cache MISS (missing trades.csv); recomputing
+[Phase 3 / cat / Fold 8] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+20:11:35 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+20:11:35 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+20:11:35 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+20:11:35 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+20:11:35 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+20:11:40 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+20:11:40 [V9]   5-min features computed: 98 cols
+20:11:40 [V9]   15-min features: 14 cols
+20:11:40 [V9]   30-min features: 7 cols
+20:11:42 [V9]   60-min features: 13 cols
+20:11:43 [V9]   Daily features: 17 cols
+20:11:43 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+20:11:43 [V9]   VIX features: 15 cols (with options-pricing additions)
+20:11:44 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+20:11:47 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:11:47 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+20:11:48 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:11:48 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+20:11:49 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:11:49 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+20:11:49 [V9]   VIX>35 forced SKIP: 3,225 bars
+20:11:49 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+20:11:49 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=206,671, test=1,415, gap=5d
+  training cat on outer_train ...
+[cat Fold 8] n_trades=31 PF=0.880 Net=Rs.-2,549 WR=25.8% train=117s
+[mlp/fold 1] cache HIT; skipping (ok)
+[mlp/fold 2] cache MISS (missing trades.csv); recomputing
+[Phase 3 / mlp / Fold 2] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+20:13:53 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+20:13:53 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+20:13:53 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+20:13:53 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+20:13:53 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+20:13:57 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+20:13:57 [V9]   5-min features computed: 98 cols
+20:13:57 [V9]   15-min features: 14 cols
+20:13:58 [V9]   30-min features: 7 cols
+20:14:00 [V9]   60-min features: 13 cols
+20:14:01 [V9]   Daily features: 17 cols
+20:14:01 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+20:14:01 [V9]   VIX features: 15 cols (with options-pricing additions)
+20:14:02 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+20:14:05 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:14:05 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+20:14:06 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:14:06 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+20:14:07 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:14:07 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+20:14:07 [V9]   VIX>35 forced SKIP: 3,225 bars
+20:14:07 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+20:14:07 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=179,134, test=4,575, gap=4d
+  training mlp on outer_train ...
+[mlp Fold 2] n_trades=103 PF=1.281 Net=Rs.+15,298 WR=35.9% train=1687s
+[mlp/fold 3] cache MISS (missing trades.csv); recomputing
+[Phase 3 / mlp / Fold 3] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+20:42:21 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+20:42:21 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+20:42:22 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+20:42:22 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+20:42:22 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+20:42:41 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+20:42:41 [V9]   5-min features computed: 98 cols
+20:42:41 [V9]   15-min features: 14 cols
+20:42:43 [V9]   30-min features: 7 cols
+20:42:53 [V9]   60-min features: 13 cols
+20:42:54 [V9]   Daily features: 17 cols
+20:42:55 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+20:42:55 [V9]   VIX features: 15 cols (with options-pricing additions)
+20:42:56 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+20:43:09 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:43:09 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+20:43:10 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:43:10 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+20:43:11 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+20:43:11 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+20:43:11 [V9]   VIX>35 forced SKIP: 3,225 bars
+20:43:11 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+20:43:11 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=183,634, test=4,650, gap=5d
+  training mlp on outer_train ...
+[mlp Fold 3] n_trades=93 PF=0.765 Net=Rs.-13,576 WR=31.2% train=1645s
+[mlp/fold 4] cache MISS (missing trades.csv); recomputing
+[Phase 3 / mlp / Fold 4] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+21:10:49 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+21:10:49 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+21:10:49 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+21:10:49 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+21:10:49 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+21:11:10 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+21:11:10 [V9]   5-min features computed: 98 cols
+21:11:11 [V9]   15-min features: 14 cols
+21:11:12 [V9]   30-min features: 7 cols
+21:11:22 [V9]   60-min features: 13 cols
+21:11:24 [V9]   Daily features: 17 cols
+21:11:25 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+21:11:25 [V9]   VIX features: 15 cols (with options-pricing additions)
+21:11:26 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+21:11:42 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+21:11:42 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+21:11:47 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+21:11:47 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+21:11:52 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+21:11:52 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+21:11:52 [V9]   VIX>35 forced SKIP: 3,225 bars
+21:11:52 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+21:11:52 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=188,434, test=4,575, gap=4d
+  training mlp on outer_train ...
+[mlp Fold 4] n_trades=78 PF=0.761 Net=Rs.-12,910 WR=26.9% train=613s
+[mlp/fold 5] cache MISS (missing trades.csv); recomputing
+[Phase 3 / mlp / Fold 5] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+21:22:19 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+21:22:19 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+21:22:19 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+21:22:19 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+21:22:19 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+21:22:22 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+21:22:22 [V9]   5-min features computed: 98 cols
+21:22:22 [V9]   15-min features: 14 cols
+21:22:23 [V9]   30-min features: 7 cols
+21:22:24 [V9]   60-min features: 13 cols
+21:22:24 [V9]   Daily features: 17 cols
+21:22:25 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+21:22:25 [V9]   VIX features: 15 cols (with options-pricing additions)
+21:22:25 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+21:22:27 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+21:22:27 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+21:22:28 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+21:22:28 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+21:22:29 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+21:22:29 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+21:22:29 [V9]   VIX>35 forced SKIP: 3,225 bars
+21:22:29 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+21:22:29 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=192,934, test=4,800, gap=4d
+  training mlp on outer_train ...
+[mlp Fold 5] n_trades=59 PF=1.030 Net=Rs.+855 WR=40.7% train=768s
+[mlp/fold 6] cache MISS (missing trades.csv); recomputing
+[Phase 3 / mlp / Fold 6] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+21:35:22 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+21:35:22 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+21:35:22 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+21:35:22 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+21:35:22 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+21:35:26 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+21:35:26 [V9]   5-min features computed: 98 cols
+21:35:27 [V9]   15-min features: 14 cols
+21:35:27 [V9]   30-min features: 7 cols
+21:35:32 [V9]   60-min features: 13 cols
+21:35:33 [V9]   Daily features: 17 cols
+21:35:33 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+21:35:33 [V9]   VIX features: 15 cols (with options-pricing additions)
+21:35:34 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+21:35:41 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+21:35:41 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+21:35:44 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+21:35:44 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+21:35:46 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+21:35:46 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+21:35:46 [V9]   VIX>35 forced SKIP: 3,225 bars
+21:35:46 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+21:35:46 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=197,659, test=4,587, gap=5d
+  training mlp on outer_train ...
+[mlp Fold 6] n_trades=19 PF=0.353 Net=Rs.-8,312 WR=26.3% train=899s
+[mlp/fold 7] cache MISS (missing trades.csv); recomputing
+[Phase 3 / mlp / Fold 7] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+21:50:54 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+21:50:54 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+21:50:54 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+21:50:54 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+21:50:54 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+21:50:59 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+21:50:59 [V9]   5-min features computed: 98 cols
+21:50:59 [V9]   15-min features: 14 cols
+21:51:00 [V9]   30-min features: 7 cols
+21:51:04 [V9]   60-min features: 13 cols
+21:51:05 [V9]   Daily features: 17 cols
+21:51:05 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+21:51:05 [V9]   VIX features: 15 cols (with options-pricing additions)
+21:51:06 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+21:51:14 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+21:51:14 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+21:51:16 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+21:51:16 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+21:51:18 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+21:51:18 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+21:51:18 [V9]   VIX>35 forced SKIP: 3,225 bars
+21:51:18 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+21:51:18 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=202,171, test=4,350, gap=6d
+  training mlp on outer_train ...
+[mlp Fold 7] n_trades=69 PF=0.939 Net=Rs.-2,668 WR=37.7% train=653s
+[mlp/fold 8] cache MISS (missing trades.csv); recomputing
+[Phase 3 / mlp / Fold 8] build_frame ...
+Building V9 (leak-fixed) feature + label frame...
+22:02:20 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+22:02:20 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+22:02:20 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+22:02:20 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+22:02:20 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+22:02:23 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+22:02:23 [V9]   5-min features computed: 98 cols
+22:02:23 [V9]   15-min features: 14 cols
+22:02:23 [V9]   30-min features: 7 cols
+22:02:24 [V9]   60-min features: 13 cols
+22:02:25 [V9]   Daily features: 17 cols
+22:02:25 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+22:02:25 [V9]   VIX features: 15 cols (with options-pricing additions)
+22:02:25 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+22:02:28 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+22:02:28 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+22:02:28 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+22:02:28 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+22:02:29 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+22:02:29 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+22:02:29 [V9]   VIX>35 forced SKIP: 3,225 bars
+22:02:29 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+22:02:29 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  outer train=206,671, test=1,415, gap=5d
+  training mlp on outer_train ...
+[mlp Fold 8] n_trades=19 PF=0.547 Net=Rs.-5,901 WR=36.8% train=944s
+
+  Run summary:
+    xgb fold 1: ran
+    xgb fold 2: ran
+    xgb fold 3: ran
+    xgb fold 4: ran
+    xgb fold 5: ran
+    xgb fold 6: ran
+    xgb fold 7: ran
+    xgb fold 8: ran
+    lgb fold 1: cached
+    lgb fold 2: ran
+    lgb fold 3: ran
+    lgb fold 4: ran
+    lgb fold 5: ran
+    lgb fold 6: ran
+    lgb fold 7: ran
+    lgb fold 8: ran
+    cat fold 1: cached
+    cat fold 2: ran
+    cat fold 3: ran
+    cat fold 4: ran
+    cat fold 5: ran
+    cat fold 6: ran
+    cat fold 7: ran
+    cat fold 8: ran
+    mlp fold 1: cached
+    mlp fold 2: ran
+    mlp fold 3: ran
+    mlp fold 4: ran
+    mlp fold 5: ran
+    mlp fold 6: ran
+    mlp fold 7: ran
+    mlp fold 8: ran
+
+==============================================================================
+  Phase 3 — Architecture diversity aggregate
+==============================================================================
+   brain   folds   pooled_n      PF             90% CI         Net Rs.    WR%   Sharpe  Sortino
+  ------------------------------------------------------------------------------------------------
+     xgb       8        598   0.873  [+0.678, +1.074]         -44,909  33.4%   -0.038   -0.056
+     lgb       8        629   0.802  [+0.627, +0.996]         -75,399  32.1%   -0.061   -0.091
+     cat       8        625   0.813  [+0.651, +0.986]         -69,860  32.2%   -0.057   -0.084
+     mlp       8        504   0.840  [+0.680, +1.005]         -50,004  31.5%   -0.055   -0.074
+
+  Pairwise Diebold-Mariano (bar-aligned; A better than B, HAC lag=5):
+                A vs B   n_bars     stat          p  mean_diff Rs.
+            xgb vs lgb      322   -1.119     0.8684         -26.29
+            xgb vs cat      284   +0.200     0.4207          +3.74
+            xgb vs mlp       51   -0.390     0.6516         -58.68
+            lgb vs xgb      322   +1.119     0.1316         +26.29
+            lgb vs cat      238   +0.700     0.2419         +22.47
+            lgb vs mlp       49   -1.387     0.9172        -375.23
+            cat vs xgb      284   -0.200     0.5793          -3.74
+            cat vs lgb      238   -0.700     0.7581         -22.47
+            cat vs mlp       46   -0.182     0.5720         -52.20
+            mlp vs xgb       51   +0.390     0.3484         +58.68
+            mlp vs lgb       49   +1.387     0.0828        +375.23
+            mlp vs cat       46   +0.182     0.4280         +52.20
+
+  Hansen SPA across brains (per-fold PF vs benchmark 1.0):
+    K brains: 4   T folds: 8
+    pvalue_lower       : 0.9360  (pre-registered decisive metric)
+    pvalue_consistent  : 0.9282  (supplementary)
+    pvalue_upper       : 0.6674  (supplementary)
+    per-brain mean PF over benchmark:
+         xgb: -0.075
+         lgb: -0.213
+         cat: -0.149
+         mlp: -0.225
+
+  White's Reality Check (per-fold PF vs benchmark 1.0):
+    K brains: 4   T folds: 8
+    statistic          : -0.212
+    p-value            : 0.9866
+
+  Pairwise signal disagreement (1 - fraction agreement on {CALL, PUT, SKIP}):
+               xgb    lgb    cat    mlp
+       xgb   0.000  0.134  0.151  0.418 
+       lgb   0.134  0.000  0.184  0.413 
+       cat   0.151  0.184  0.000  0.433 
+       mlp   0.418  0.413  0.433  0.000 
+
+  H_arch verdict (pre-registered acceptance criteria):
+    Best non-GBDT vs best GBDT: mlp vs xgb
+    delta_PF point            : -0.033
+    90% paired CI             : [-0.233, +0.175]
+    Effect threshold          : +0.08
+    LB90 > threshold          : NO
+    SPA_l                     : 0.9360  raw alpha 0.10
+    Holm-adjusted alpha (7 hyps): 0.10/7 = 0.0143
+    SPA_l < 0.0143            : NO
+    White RC p                : 0.9866
+    DECISION                  : FAIL TO REJECT H0_arch
+
+  wrote logs/phase3/summary.json

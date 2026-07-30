@@ -1,0 +1,86 @@
+{
+  "fold1": {
+    "Existing_Ensemble": {
+      "auc": 0.7763773468299225,
+      "precision": 0.44533970104367987,
+      "recall": 0.4731358171363649,
+      "f1": 0.4549299894070849,
+      "trade_count": 1502,
+      "win_rate": 0.7010652463382158,
+      "pf": 1.1726057906458798,
+      "expectancy": 2.579893475366182,
+      "max_drawdown_pts": 1650.0,
+      "fit_time_s": 413.5,
+      "inference_time_ms": 1966.6
+    },
+    "CatBoost": {
+      "auc": 0.7865850101941626,
+      "precision": 0.4495576015400579,
+      "recall": 0.4809136917442032,
+      "f1": 0.45996119659186885,
+      "trade_count": 1506,
+      "win_rate": 0.7098273572377158,
+      "pf": 1.223112128146453,
+      "expectancy": 3.2370517928286873,
+      "max_drawdown_pts": 825.0,
+      "fit_time_s": 210.6,
+      "inference_time_ms": 25.8
+    }
+  },
+  "fold2": {
+    "Existing_Ensemble": {
+      "auc": 0.7344789558017175,
+      "precision": 0.43242407028744045,
+      "recall": 0.3511081906638626,
+      "f1": 0.35234244529555303,
+      "trade_count": 82,
+      "win_rate": 0.7804878048780488,
+      "pf": 1.7777777777777777,
+      "expectancy": 8.536585365853659,
+      "max_drawdown_pts": 200.0,
+      "fit_time_s": 326.0,
+      "inference_time_ms": 1833.3
+    },
+    "CatBoost": {
+      "auc": 0.7393534022047556,
+      "precision": 0.4351713669965009,
+      "recall": 0.3485834755935115,
+      "f1": 0.34878806552401126,
+      "trade_count": 93,
+      "win_rate": 0.7419354838709677,
+      "pf": 1.4375,
+      "expectancy": 5.64516129032258,
+      "max_drawdown_pts": 225.0,
+      "fit_time_s": 268.5,
+      "inference_time_ms": 66.4
+    }
+  },
+  "fold3": {
+    "Existing_Ensemble": {
+      "auc": 0.770646911241179,
+      "precision": 0.4527254275708068,
+      "recall": 0.47370595654200925,
+      "f1": 0.4566082558582785,
+      "trade_count": 1950,
+      "win_rate": 0.6938461538461539,
+      "pf": 1.1331658291457287,
+      "expectancy": 2.038461538461542,
+      "max_drawdown_pts": 1775.0,
+      "fit_time_s": 427.9,
+      "inference_time_ms": 1781.8
+    },
+    "CatBoost": {
+      "auc": 0.7716847832341269,
+      "precision": 0.448715022050788,
+      "recall": 0.4959783260272706,
+      "f1": 0.45925547915601356,
+      "trade_count": 2243,
+      "win_rate": 0.705305394560856,
+      "pf": 1.1966717095310135,
+      "expectancy": 2.8979045920641955,
+      "max_drawdown_pts": 2200.0,
+      "fit_time_s": 227.2,
+      "inference_time_ms": 60.6
+    }
+  }
+}

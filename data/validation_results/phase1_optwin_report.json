@@ -1,0 +1,42 @@
+{
+ "price_control": {
+  "n_features": 65,
+  "test_bars": 2136,
+  "IC_spearman": 0.0413,
+  "IC_pvalue": 0.056135,
+  "top_decile_dir_acc": 0.9143,
+  "n_top_decile_dir_labeled": 35
+ },
+ "optchain_only": {
+  "n_features": 18,
+  "test_bars": 2051,
+  "IC_spearman": -0.0251,
+  "IC_pvalue": 0.255116,
+  "top_decile_dir_acc": 0.5763,
+  "n_top_decile_dir_labeled": 59
+ },
+ "oi_only": {
+  "n_features": 8,
+  "test_bars": 2136,
+  "IC_spearman": -0.0779,
+  "IC_pvalue": 0.000313,
+  "top_decile_dir_acc": 0.5385,
+  "n_top_decile_dir_labeled": 78
+ },
+ "iv_only": {
+  "n_features": 10,
+  "test_bars": 2051,
+  "IC_spearman": 0.027,
+  "IC_pvalue": 0.221509,
+  "top_decile_dir_acc": 0.7213,
+  "n_top_decile_dir_labeled": 61
+ },
+ "price_plus_opt": {
+  "n_features": 83,
+  "test_bars": 2051,
+  "IC_spearman": 0.0257,
+  "IC_pvalue": 0.244482,
+  "top_decile_dir_acc": 0.8,
+  "n_top_decile_dir_labeled": 30
+ }
+}

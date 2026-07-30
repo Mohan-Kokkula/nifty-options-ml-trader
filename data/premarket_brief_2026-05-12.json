@@ -1,0 +1,78 @@
+{
+  "date": "2026-05-12",
+  "regime": "event_day",
+  "bias": "neutral",
+  "risk_appetite": 0.5,
+  "max_trades_today": 3,
+  "min_confidence_boost": 3,
+  "avoid_otm2_otm3": true,
+  "key_levels": {
+    "support": 23665.85,
+    "resistance": 23965.85
+  },
+  "rationale": "Heuristic: VIX=18.6, US overnight=+0.15%, Asia=+0.60%, FII net=+0cr, news_bias=-0.52, events=['nifty_weekly_expiry']",
+  "_payload": {
+    "date": "2026-05-12",
+    "global": {
+      "dow": {
+        "last": 49704.47,
+        "change_pct": 0.19
+      },
+      "nasdaq": {
+        "last": 26274.12,
+        "change_pct": 0.1
+      },
+      "sp500": {
+        "last": 7412.84,
+        "change_pct": 0.19
+      },
+      "nikkei": {
+        "last": 62805.44,
+        "change_pct": 0.62
+      },
+      "hangseng": {
+        "last": 26559.95,
+        "change_pct": 0.58
+      },
+      "ftse": {
+        "last": 10269.4,
+        "change_pct": 0.35
+      },
+      "dax": {
+        "last": 24350.28,
+        "change_pct": 0.05
+      },
+      "crude": {
+        "last": 99.08,
+        "change_pct": 3.84
+      },
+      "dxy": {
+        "last": 98.11,
+        "change_pct": 0.28
+      },
+      "us10y": {
+        "last": 4.41,
+        "change_pct": 1.05
+      },
+      "gift_nifty": {
+        "last": 23815.85,
+        "change_pct": -1.49
+      },
+      "india_vix": {
+        "last": 18.55,
+        "change_pct": 10.15
+      }
+    },
+    "fii_dii": {},
+    "news": {
+      "bias_score": -0.524,
+      "confidence": 0.138,
+      "event_count": 6,
+      "dominant_type": "other",
+      "hot_title": "Michael Burry warns of stock crash as tech jump echoes 2000 peak"
+    },
+    "events": [
+      "nifty_weekly_expiry"
+    ]
+  }
+}

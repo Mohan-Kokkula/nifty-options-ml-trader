@@ -1,0 +1,35 @@
+{
+  "ensemble_type": "performance",
+  "fold_id": 6,
+  "n_trades": 0,
+  "n_test_bars": 4587,
+  "n_bars_traded": 0,
+  "brains_used": [
+    "cat",
+    "lgb",
+    "mlp",
+    "xgb"
+  ],
+  "input_source": "calibrated_isotonic",
+  "weights_summary": {
+    "kind": "performance",
+    "weights": {
+      "cat": 0.31473919105702974,
+      "lgb": 0.31419803987747985,
+      "mlp": 0.05705366065312943,
+      "xgb": 0.314009108412361
+    },
+    "oof_log_loss": {
+      "cat": 0.7210646170428343,
+      "lgb": 0.7227854606707065,
+      "mlp": 2.4288167080693177,
+      "xgb": 0.7233869548476808
+    },
+    "temperature": 1.0,
+    "weights_fallback": null
+  },
+  "fit_elapsed_s": 0.001,
+  "transform_elapsed_s": 0.0,
+  "simulate_elapsed_s": 0.032,
+  "n_oof_bars": 88928
+}

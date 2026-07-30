@@ -1,0 +1,30 @@
+{
+  "ensemble_type": "min_variance",
+  "fold_id": 5,
+  "n_trades": 0,
+  "n_test_bars": 4800,
+  "n_bars_traded": 0,
+  "brains_used": [
+    "cat",
+    "lgb",
+    "mlp",
+    "xgb"
+  ],
+  "input_source": "calibrated_isotonic",
+  "weights_summary": {
+    "kind": "min_variance",
+    "weights": {
+      "cat": 3.060160631840336e-17,
+      "lgb": 0.5087405565133548,
+      "mlp": 0.29886229263401415,
+      "xgb": 0.19239715085263104
+    },
+    "shrinkage": 0.23576532135159706,
+    "n_inner_folds": 3,
+    "weights_fallback": null
+  },
+  "fit_elapsed_s": 0.0,
+  "transform_elapsed_s": 0.0,
+  "simulate_elapsed_s": 0.033,
+  "n_oof_bars": 86678
+}

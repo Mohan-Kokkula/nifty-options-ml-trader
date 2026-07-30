@@ -1,0 +1,37 @@
+{
+ "audited_at": "2026-06-12T10:22:48",
+ "checks": {
+  "leakage_tests": {
+   "pass": true,
+   "detail": "6/6 leakage-safety tests passed"
+  },
+  "future_timestamps": {
+   "pass": true,
+   "violations": []
+  },
+  "htf36_split_chronology": {
+   "pass": true,
+   "train_end": "2024-08-30 09:50:00",
+   "val_end": "2025-07-04 13:10:00",
+   "test_range": [
+    "2025-07-07 13:30:00",
+    "2026-06-04 15:25:00"
+   ]
+  },
+  "production_untouched": {
+   "pass": true,
+   "changed_files": [],
+   "hashes": {
+    "models/nifty_v9_models.pkl": "132d777509cf60bc",
+    "models/nifty_v9_scaler.pkl": "3f33c0264ab56909",
+    "models/feature_cols_v9.pkl": "38078ef0cdf9d922"
+   }
+  },
+  "registry_integrity": {
+   "pass": true,
+   "entries": 1,
+   "issues": []
+  }
+ },
+ "overall_pass": true
+}

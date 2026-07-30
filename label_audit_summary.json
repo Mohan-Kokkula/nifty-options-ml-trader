@@ -1,0 +1,10 @@
+{
+  "n_total": 209599,
+  "n_directional": 38770,
+  "n_ambiguous": 29317,
+  "pct_ambiguous_of_in_session": 15.203468322002166,
+  "whipsaw_count": 2941,
+  "whipsaw_pct": 7.585762187258189,
+  "noisy_directness_pct": 4.041784885220531,
+  "mislabel_vs_tradeable_pct": 0.431846223780765
+}

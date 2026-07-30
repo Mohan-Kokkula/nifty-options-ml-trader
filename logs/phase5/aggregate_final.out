@@ -1,0 +1,49 @@
+
+==================================================================================
+  Phase 5 - Full statistical aggregate
+==================================================================================
+
+        ensemble  folds  trades      PF             90% CI         Net Rs.    WR%   Sharpe  Sortino
+  ------------------------------------------------------------------------------------------------
+      confidence      3      13   0.734 [+0.000, +2.665]          -2,770   7.7%   -0.083   -0.163
+            mean      4      19   1.640 [+0.000, +6.874]          +7,416  26.3%   +0.145   +0.304
+          median      5      32   0.492 [+0.200, +1.564]         -12,664  25.0%   -0.233   -0.237
+    min_variance      4      34   0.338 [+0.108, +6.155]         -16,246  23.5%   -0.321   -0.296
+     performance      5      38   0.422 [+0.104, +1.366]         -17,748  21.1%   -0.278   -0.282
+        stacking      6      90   0.756 [+0.366, +2.093]         -17,925  27.8%   -0.092   -0.115
+     uncertainty      3       9   0.000 [+0.000, +0.000]          -9,675   0.0%   -0.981   -0.721
+        weighted      4      19   1.640 [+0.000, +6.874]          +7,416  26.3%   +0.145   +0.304
+
+  delta_PF vs baseline (mean):  paired block-bootstrap + Diebold-Mariano (bar-aligned, HAC lag=5)
+        ensemble   delta_PF          90% paired CI   DM p (grtr)   DM n   delta_Net Rs.
+  ----------------------------------------------------------------------------------
+      confidence   -1.433 [ -4.468,  -0.184]        0.9457  13500         -10,185
+          median   -1.097 [ -6.517,  +3.104]        0.8954  14915         -20,080
+    min_variance   -2.274 [ -6.495,  +0.413]        0.9893  10340         -23,661
+     performance   -1.183 [ -6.668,  +2.030]        0.9425  14915         -25,163
+        stacking   -0.817 [ -6.099,  +2.195]        0.7877  14915         -25,341
+     uncertainty   -2.168 [ -5.961,  -0.184]        0.9640  13500         -17,091
+        weighted   +0.000 [ +0.000,  +0.000]        1.0000  14915              +0
+
+  Hansen SPA (all ensembles vs mean, T=2 folds):
+    pvalue_lower       : 1.0000  (pre-reg decisive)
+    pvalue_consistent  : 1.0000  (supplementary)
+    pvalue_upper       : 1.0000  (supplementary)
+
+  White's Reality Check (K=8 ensembles):
+    statistic          : +0.000
+    p-value            : 1.0000
+
+  Diversity (mean across 2 folds):
+    Q-statistic pairwise mean:
+         cat: +0.000  +1.000  +1.000  +1.000
+         lgb: +1.000  +0.000  +1.000  +1.000
+         mlp: +1.000  +1.000  +0.000  +1.000
+         xgb: +1.000  +1.000  +1.000  +0.000
+
+  H_ens verdict (pre-registered acceptance criteria):
+    rule: LB90(delta_PF vs mean) > +0.05 AND DM_p < Holm alpha (0.0143)
+    passing ensembles : []
+    decision          : UNDECIDED (paired CI half-width > 2x effect size)
+
+  wrote logs/phase5/summary.json

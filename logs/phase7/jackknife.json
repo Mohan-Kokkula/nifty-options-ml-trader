@@ -1,0 +1,292 @@
+{
+  "per_target": {
+    "mean": {
+      "pooled_all_folds": {
+        "pf": 1.9380797810451544,
+        "net": 27483.365785079313,
+        "dd": 11811.269404972469,
+        "n": 61
+      },
+      "per_dropped_fold": {
+        "1": {
+          "kept_folds": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "pooled_pf": 1.6367378680732538,
+          "pooled_net": 17172.023726720086,
+          "pooled_max_dd": 11811.26940497247,
+          "pooled_trade_count": 56,
+          "delta_pf_vs_all": 0.3013419129719006
+        },
+        "2": {
+          "kept_folds": [
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "pooled_pf": 2.60539368728094,
+          "pooled_net": 27866.466755549936,
+          "pooled_max_dd": 11811.269404972469,
+          "pooled_trade_count": 46,
+          "delta_pf_vs_all": -0.6673139062357856
+        },
+        "3": {
+          "kept_folds": [
+            1,
+            2,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "pooled_pf": 1.790821627356105,
+          "pooled_net": 22960.514250246826,
+          "pooled_max_dd": 11811.269404972467,
+          "pooled_trade_count": 54,
+          "delta_pf_vs_all": 0.14725815368904938
+        },
+        "4": {
+          "kept_folds": [
+            1,
+            2,
+            3,
+            5,
+            6,
+            7,
+            8
+          ],
+          "pooled_pf": 3.1077495317247523,
+          "pooled_net": 36558.66132454648,
+          "pooled_max_dd": 6372.763222928568,
+          "pooled_trade_count": 50,
+          "delta_pf_vs_all": -1.1696697506795979
+        },
+        "5": {
+          "kept_folds": [
+            1,
+            2,
+            3,
+            4,
+            6,
+            7,
+            8
+          ],
+          "pooled_pf": 1.9590992177154507,
+          "pooled_net": 26836.247321653664,
+          "pooled_max_dd": 11556.97131614297,
+          "pooled_trade_count": 57,
+          "delta_pf_vs_all": -0.021019436670296265
+        },
+        "6": {
+          "kept_folds": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            7,
+            8
+          ],
+          "pooled_pf": 1.9380797810451544,
+          "pooled_net": 27483.365785079313,
+          "pooled_max_dd": 11811.269404972469,
+          "pooled_trade_count": 61,
+          "delta_pf_vs_all": 0.0
+        },
+        "7": {
+          "kept_folds": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            8
+          ],
+          "pooled_pf": 1.2037559468830297,
+          "pooled_net": 5725.313851334957,
+          "pooled_max_dd": 11811.269404972469,
+          "pooled_trade_count": 44,
+          "delta_pf_vs_all": 0.7343238341621248
+        },
+        "8": {
+          "kept_folds": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "pooled_pf": 1.957968691911694,
+          "pooled_net": 27780.967480423926,
+          "pooled_max_dd": 11811.269404972469,
+          "pooled_trade_count": 59,
+          "delta_pf_vs_all": -0.019888910866539655
+        }
+      },
+      "influence": {
+        "max_abs_delta_pf": 1.1696697506795979,
+        "mean_abs_delta_pf": 0.38260198815941177,
+        "std_delta_pf": 0.5483638599542312
+      },
+      "single_fold_dependence": "HIGH"
+    },
+    "stacking": {
+      "pooled_all_folds": {
+        "pf": 1.1185820282063177,
+        "net": 5889.181012188431,
+        "dd": 21058.68619019286,
+        "n": 93
+      },
+      "per_dropped_fold": {
+        "1": {
+          "kept_folds": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "pooled_pf": 1.0736015821791656,
+          "pooled_net": 3651.6159363526176,
+          "pooled_max_dd": 21058.686190192857,
+          "pooled_trade_count": 91,
+          "delta_pf_vs_all": 0.04498044602715212
+        },
+        "2": {
+          "kept_folds": [
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "pooled_pf": 0.7190461567307581,
+          "pooled_net": -12649.517111371453,
+          "pooled_max_dd": 21058.68619019285,
+          "pooled_trade_count": 78,
+          "delta_pf_vs_all": 0.3995358714755596
+        },
+        "3": {
+          "kept_folds": [
+            1,
+            2,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "pooled_pf": 1.150848945054494,
+          "pooled_net": 6768.603177930237,
+          "pooled_max_dd": 21058.68619019286,
+          "pooled_trade_count": 78,
+          "delta_pf_vs_all": -0.0322669168481764
+        },
+        "4": {
+          "kept_folds": [
+            1,
+            2,
+            3,
+            5,
+            6,
+            7,
+            8
+          ],
+          "pooled_pf": 1.1874411110407952,
+          "pooled_net": 7209.040073281795,
+          "pooled_max_dd": 16213.251293092588,
+          "pooled_trade_count": 73,
+          "delta_pf_vs_all": -0.0688590828344775
+        },
+        "5": {
+          "kept_folds": [
+            1,
+            2,
+            3,
+            4,
+            6,
+            7,
+            8
+          ],
+          "pooled_pf": 1.1490466848937393,
+          "pooled_net": 7204.523818076082,
+          "pooled_max_dd": 19743.34338430521,
+          "pooled_trade_count": 90,
+          "delta_pf_vs_all": -0.0304646566874216
+        },
+        "6": {
+          "kept_folds": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            7,
+            8
+          ],
+          "pooled_pf": 1.1185820282063177,
+          "pooled_net": 5889.181012188431,
+          "pooled_max_dd": 21058.68619019286,
+          "pooled_trade_count": 93,
+          "delta_pf_vs_all": 0.0
+        },
+        "7": {
+          "kept_folds": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            8
+          ],
+          "pooled_pf": 1.607733707488775,
+          "pooled_net": 15271.3664324097,
+          "pooled_max_dd": 11676.500769971586,
+          "pooled_trade_count": 64,
+          "delta_pf_vs_all": -0.4891516792824573
+        },
+        "8": {
+          "kept_folds": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "pooled_pf": 1.1692786217665136,
+          "pooled_net": 7879.453746451612,
+          "pooled_max_dd": 19068.413455929684,
+          "pooled_trade_count": 84,
+          "delta_pf_vs_all": -0.05069659356019596
+        }
+      },
+      "influence": {
+        "max_abs_delta_pf": 0.4891516792824573,
+        "mean_abs_delta_pf": 0.13949440583943007,
+        "std_delta_pf": 0.2246568916202008
+      },
+      "single_fold_dependence": "HIGH"
+    }
+  }
+}

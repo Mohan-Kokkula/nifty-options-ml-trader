@@ -1,0 +1,2 @@
+time,year,dir,reason,net_option,gross_option,cost,delta_model,prem_entry,prem_exit,iv,sl_pts,trail,entry_time,hold_min,fold,ensemble
+2025-02-14 14:20:00,2025,PUT,SL,-2331.2862473520427,-2213.799823902873,117.48642344916959,-2382.2499999999764,164.68869858579455,130.6302397565196,0.1429317610945747,73.3,False,2025-02-14 13:00:00,80.0,3,median

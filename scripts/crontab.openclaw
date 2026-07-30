@@ -1,0 +1,33 @@
+# ============================================================
+# OpenClaw v9 (Kotak) — cron schedule
+# Install:
+#     crontab scripts/crontab.openclaw
+# Verify:
+#     crontab -l
+# Edit project path below if your VPS uses a different location.
+# ============================================================
+
+CRON_TZ=Asia/Kolkata
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.local/bin
+OPENCLAW_ROOT=/opt/openclaw-v9-kotak
+
+# ── OpenAlgo auto-login ─────────────────────────────────────
+# 09:00 IST, Mon–Fri — authenticate Kotak broker in OpenAlgo before market open
+# Bot retries OpenAlgo every 5 min after 09:10, so 09:00 ensures first cycle has OI
+0 9 * * 1-5   cd $OPENCLAW_ROOT && python scripts/openalgo_auto_login.py >> logs/cron/openalgo_login.log 2>&1
+
+# ── Bot startup (if not using pm2 auto-restart) ──────────────
+# 04:00 IST, Mon–Fri — start bot if not already running
+0 4 * * 1-5   pgrep -f "python.*main.py" > /dev/null || (cd $OPENCLAW_ROOT && nohup python main.py >> logs/cron/bot_start.log 2>&1 &)
+
+# ── Daily data refresh ──────────────────────────────────────
+# 16:05 IST, Mon–Fri (after 15:30 close — lets TV settle final candles)
+5 16 * * 1-5  $OPENCLAW_ROOT/scripts/cron_refresh_data.sh
+
+# ── Weekly model retrain ────────────────────────────────────
+# Saturday 03:30 IST — market closed, VPS quiet, fresh week of data ingested
+30 3 * * 6    $OPENCLAW_ROOT/scripts/cron_train_model.sh
+
+# ── Log rotation (keep 60 days of cron logs) ────────────────
+0 4 * * 0     find $OPENCLAW_ROOT/logs/cron -type f -mtime +60 -delete

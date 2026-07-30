@@ -1,0 +1,63 @@
+{
+  "counts": {
+    "Data imbalance": 32446,
+    "Low confidence": 31599,
+    "Unattributed / residual": 21222,
+    "Probability calibration": 14278,
+    "Label ambiguity": 4886,
+    "Regime shift": 2774,
+    "Conflicting features": 2106,
+    "Outlier market event": 1856
+  },
+  "pnl_by_cause": [
+    {
+      "root_cause": "Low confidence",
+      "size": 31599,
+      "sum": -1279139.9984375,
+      "mean": -40.48039489975949
+    },
+    {
+      "root_cause": "Data imbalance",
+      "size": 32446,
+      "sum": -1261901.9019531251,
+      "mean": -38.892372001267496
+    },
+    {
+      "root_cause": "Unattributed / residual",
+      "size": 21222,
+      "sum": -856871.145703125,
+      "mean": -40.37655007554071
+    },
+    {
+      "root_cause": "Probability calibration",
+      "size": 14278,
+      "sum": -713900.0,
+      "mean": -50.0
+    },
+    {
+      "root_cause": "Label ambiguity",
+      "size": 4886,
+      "sum": -190757.65078124995,
+      "mean": -39.04168047098853
+    },
+    {
+      "root_cause": "Regime shift",
+      "size": 2774,
+      "sum": -123269.85195312503,
+      "mean": -44.43758181439259
+    },
+    {
+      "root_cause": "Conflicting features",
+      "size": 2106,
+      "sum": -75781.10078124999,
+      "mean": -35.983428671058874
+    },
+    {
+      "root_cause": "Outlier market event",
+      "size": 1856,
+      "sum": -60760.799999999996,
+      "mean": -32.7375
+    }
+  ],
+  "total_errors": 111167
+}

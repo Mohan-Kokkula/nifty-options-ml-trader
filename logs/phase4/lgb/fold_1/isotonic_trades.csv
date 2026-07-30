@@ -1,0 +1,2 @@
+time,year,dir,reason,net_option,gross_option,cost,delta_model,prem_entry,prem_exit,iv,sl_pts,trail,entry_time,hold_min,fold,brain,calibrator
+2024-08-06 12:15:00,2024,CALL,BE_SL,-68.10844200455412,53.411431549720874,121.519873554275,97.5,166.5442785290361,167.36599286057026,0.20582826953875816,90.0,False,2024-08-06 11:45:00,30.0,1,lgb,isotonic

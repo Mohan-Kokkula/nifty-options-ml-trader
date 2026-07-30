@@ -1,0 +1,2 @@
+time,year,dir,reason,net_option,gross_option,cost,delta_model,prem_entry,prem_exit,iv,sl_pts,trail,entry_time,hold_min,fold,brain,calibrator
+2025-09-29 13:30:00,2025,PUT,SL,-1359.4244971586934,-1281.143808911247,78.28068824744638,-1553.4999999999764,57.059874125014176,37.34996937253345,0.11944089006873108,47.8,False,2025-09-29 13:05:00,25.0,5,cat,platt

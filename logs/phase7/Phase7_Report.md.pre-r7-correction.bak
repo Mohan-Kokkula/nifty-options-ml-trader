@@ -1,0 +1,98 @@
+# Phase 7 – Robustness & Stress Testing Report
+
+*Generated 2026-07-12T10:39:59.910589+00:00*
+*Phase 7 version: 1.0*  |  *Protocol version: 2.5*
+
+## 1. Methodology
+
+Phase 7 stresses the Phase-6 approved threshold candidates and the production baseline across walk-forward, jackknife, slippage, transaction-cost and execution-delay dimensions. It is strictly read-only with respect to Phases 0-6 — no model is retrained and no prediction file is regenerated. Trades are re-priced via `backtest_options.simulate_trades` (byte-identical to Phase 5) with either shifted signal vectors (execution-delay stress) or per-trade cost recomputed analytically from `prem_entry`/`prem_exit` using the same `round_trip_cost` decomposition (slippage / tcost stress).
+
+## 2. Experiments
+
+* R1 walk-forward: ±1 fold shift, expanding window, 3-fold rolling window.
+* R2 jackknife leave-one-fold-out.
+* R3 slippage stress: multipliers 1.00 / 1.25 / 1.50 / 1.75 / 2.00 of the bid-ask spread portion of round-trip cost, plus bisection to solve `break_even_slippage_multiplier`.
+* R4 transaction-cost stress: same multipliers applied to the brokerage + STT + txn + SEBI + stamp + GST portion, plus `break_even_cost_multiplier`.
+* R5 block bootstrap: pooled PF and pooled Net CIs, plus a paired-fold bootstrap on ΔPF winner-vs-baseline.
+* R6 stability: per-fold PF variance, CV, 3-fold rolling.
+* R7 statistical: Diebold-Mariano on new comparisons and Hansen SPA + White Reality Check over the union of delay-stressed variants.
+* Regime tag on each frozen fold (bull/bear/sideways).
+* Execution-delay stress: 0/1/2-bar delay via signal shift (trade-generation logic unchanged).
+
+## 3. Statistical results
+
+### Target `mean`
+
+* Winner pooled PF (all folds) : **1.938**  | Net Rs. **+27,483**  | MaxDD Rs. 11,811  | n=61
+* Baseline pooled PF          : **1.640**  | Net Rs. **+7,416**
+* Paired bootstrap 90% CI on ΔPF: [+0.136, +2.003] point +0.298
+* Bootstrap PF 90% CI: [0.770, 7.802]  |  Net 90% CI: [Rs.-8,933, Rs.+69,121]
+* Break-even multipliers: slippage = 10.048019409179688, tcost = 7.8029022216796875
+* SPA over delay variants: p_lower=0.0355
+
+**Regime distribution across the frozen folds**
+
+| Regime | Fold count |
+|---|---:|
+| BULL | 4 |
+| BEAR | 3 |
+| SIDEWAYS | 1 |
+
+**Top-5 tornado (biggest PF drops):**
+
+| Factor | PF | ΔPF vs winner |
+|---|---:|---:|
+| delay_2_bars | 1.020 | -0.918 |
+| drop_fold_7 | 1.204 | -0.734 |
+| delay_1_bars | 1.317 | -0.621 |
+| drop_fold_1 | 1.637 | -0.301 |
+| tcost_x2.00 | 1.737 | -0.201 |
+
+### Target `stacking`
+
+* Winner pooled PF (all folds) : **1.119**  | Net Rs. **+5,889**  | MaxDD Rs. 21,059  | n=93
+* Baseline pooled PF          : **0.756**  | Net Rs. **-17,925**
+* Paired bootstrap 90% CI on ΔPF: [-55.270, +10.517] point +0.363
+* Bootstrap PF 90% CI: [0.638, 2.545]  |  Net 90% CI: [Rs.-24,479, Rs.+44,286]
+* Break-even multipliers: slippage = 2.1796722412109375, tcost = 1.9419403076171875
+* SPA over delay variants: p_lower=0.0013
+
+**Regime distribution across the frozen folds**
+
+| Regime | Fold count |
+|---|---:|
+| BULL | 4 |
+| BEAR | 3 |
+| SIDEWAYS | 1 |
+
+**Top-5 tornado (biggest PF drops):**
+
+| Factor | PF | ΔPF vs winner |
+|---|---:|---:|
+| drop_fold_2 | 0.719 | -0.400 |
+| delay_2_bars | 0.723 | -0.396 |
+| tcost_x2.00 | 0.993 | -0.125 |
+| slippage_x2.00 | 1.017 | -0.102 |
+| tcost_x1.75 | 1.023 | -0.096 |
+
+## 4. Robustness verdicts (H_rob)
+
+Rule (locked): ACCEPT iff ≥ 80 % of scenarios outperform baseline PF **AND** paired-bootstrap 90 % CI lower bound on ΔPF > 0 **AND** no scenario is catastrophic (PF < 0.8 or Net loss > 2× baseline net) **AND** per-fold PF CV ≤ 0.5. REJECT if ≥ 3 criteria fail; otherwise UNDECIDED.
+
+| Target | Verdict | Outperform % | CI LB(ΔPF) | Catastrophic | CV |
+|---|---|---:|---:|---:|---:|
+| `mean` | **REJECT** | 71.1% | +0.136 | 3 | 1.213 |
+| `stacking` | **REJECT** | 89.5% | -55.270 | 6 | 2.048 |
+
+## 5. Limitations
+
+* Phase 7 does not retrain models; fold shifts drop edge folds rather than re-splitting the training window.
+* Slippage and tcost stress reuse the analytical `round_trip_cost` decomposition. A gap or a jump-diffusion overlay would need a real re-simulation with a different fill model.
+* Statistical tests operate on N = 8 folds; power is limited and the paired-bootstrap CI is wide.
+
+## 6. Production recommendation
+
+* `mean`: **REJECT** — see `summary.json` for full criteria.
+* `stacking`: **REJECT** — see `summary.json` for full criteria.
+
+**Overall recommendation: DO NOT deploy without further evidence.**

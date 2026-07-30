@@ -1,0 +1,78 @@
+{
+  "date": "2026-05-07",
+  "regime": "trend_up",
+  "bias": "bullish",
+  "risk_appetite": 0.7,
+  "max_trades_today": 4,
+  "min_confidence_boost": 0,
+  "avoid_otm2_otm3": true,
+  "key_levels": {
+    "support": 24180.95,
+    "resistance": 24480.95
+  },
+  "rationale": "Heuristic: VIX=16.7, US overnight=+1.63%, Asia=+3.54%, FII net=+0cr, news_bias=+0.03, events=['banknifty_weekly_expiry']",
+  "_payload": {
+    "date": "2026-05-07",
+    "global": {
+      "dow": {
+        "last": 49910.59,
+        "change_pct": 1.24
+      },
+      "nasdaq": {
+        "last": 25838.94,
+        "change_pct": 2.02
+      },
+      "sp500": {
+        "last": 7365.12,
+        "change_pct": 1.46
+      },
+      "nikkei": {
+        "last": 62915.87,
+        "change_pct": 5.72
+      },
+      "hangseng": {
+        "last": 26573.66,
+        "change_pct": 1.37
+      },
+      "ftse": {
+        "last": 10438.7,
+        "change_pct": 2.15
+      },
+      "dax": {
+        "last": 24918.69,
+        "change_pct": 2.12
+      },
+      "crude": {
+        "last": 95.68,
+        "change_pct": -6.44
+      },
+      "dxy": {
+        "last": 97.97,
+        "change_pct": -0.52
+      },
+      "us10y": {
+        "last": 4.36,
+        "change_pct": -1.36
+      },
+      "gift_nifty": {
+        "last": 24330.95,
+        "change_pct": 1.24
+      },
+      "india_vix": {
+        "last": 16.68,
+        "change_pct": -6.87
+      }
+    },
+    "fii_dii": {},
+    "news": {
+      "bias_score": 0.026,
+      "confidence": 0.085,
+      "event_count": 7,
+      "dominant_type": "other",
+      "hot_title": "Sensex, Nifty 50 | Stock Market LIVE: Gift Nifty signals flat start for Indian market; Nasdaq, Nikkei hit record high"
+    },
+    "events": [
+      "banknifty_weekly_expiry"
+    ]
+  }
+}

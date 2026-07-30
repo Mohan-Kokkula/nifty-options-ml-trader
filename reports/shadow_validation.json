@@ -1,0 +1,58 @@
+{
+ "test_window": [
+  "2025-07-08 10:10:00",
+  "2026-06-04 15:25:00"
+ ],
+ "test_bars": 15681,
+ "harness": "NEW gate config, unmodified",
+ "models": {
+  "clean_V9_champion": {
+   "n_features": 170,
+   "signals": 2507,
+   "mean_signal_confidence": 0.4454,
+   "dir_acc": 0.5868,
+   "IC": 0.0036,
+   "IC_p": 0.655025,
+   "sim": {
+    "trades": 40,
+    "win_rate": 0.475,
+    "pf": 1.7,
+    "expectancy": 460.0,
+    "max_dd": -3833.0,
+    "net": 18401.0
+   },
+   "sim_friction": {
+    "trades": 39,
+    "win_rate": 0.385,
+    "pf": 0.96,
+    "expectancy": -38.0,
+    "max_dd": -8745.0,
+    "net": -1469.0
+   }
+  },
+  "HTF36_challenger": {
+   "n_features": 28,
+   "signals": 2361,
+   "mean_signal_confidence": 0.4218,
+   "dir_acc": 0.5608,
+   "IC": 0.0085,
+   "IC_p": 0.288585,
+   "sim": {
+    "trades": 33,
+    "win_rate": 0.636,
+    "pf": 2.02,
+    "expectancy": 603.0,
+    "max_dd": -3714.0,
+    "net": 19902.0
+   },
+   "sim_friction": {
+    "trades": 32,
+    "win_rate": 0.562,
+    "pf": 1.14,
+    "expectancy": 105.0,
+    "max_dd": -5466.0,
+    "net": 3368.0
+   }
+  }
+ }
+}

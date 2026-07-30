@@ -1,0 +1,252 @@
+{
+  "years": {
+    "2019": {
+      "train_span": "2015-2018",
+      "n_train": 66912,
+      "n_test": 18298,
+      "champion": {
+        "trades": 1374,
+        "n_signals_fired": 3732,
+        "win_rate": 0.7867540029112081,
+        "pf": 1.8447098976109215,
+        "net_pnl": 12375,
+        "expectancy": 9.006550218340612,
+        "max_drawdown_pts": 1100.0,
+        "avg_holding_bars": 4.021834061135372,
+        "timeout_rate_pct": 63.18327974276527,
+        "sharpe": 5.193184992369041
+      },
+      "atr": {
+        "trades": 1029,
+        "n_signals_fired": 3732,
+        "win_rate": 0.9620991253644315,
+        "pf": 7.8551954876463315,
+        "net_pnl": 22046.72,
+        "expectancy": 21.42538386783285,
+        "max_drawdown_pts": 599.3100000000086,
+        "avg_holding_bars": 4.077745383867833,
+        "timeout_rate_pct": 72.42765273311898,
+        "sharpe": 9.448078452708629
+      }
+    },
+    "2020": {
+      "train_span": "2015-2019",
+      "n_train": 83746,
+      "n_test": 18825,
+      "champion": {
+        "trades": 4675,
+        "n_signals_fired": 8351,
+        "win_rate": 0.7589304812834224,
+        "pf": 1.5740905057675243,
+        "net_pnl": 32350,
+        "expectancy": 6.919786096256685,
+        "max_drawdown_pts": 2475.0,
+        "avg_holding_bars": 3.4023529411764706,
+        "timeout_rate_pct": 44.01868039755718,
+        "sharpe": 8.618378228060248
+      },
+      "atr": {
+        "trades": 2355,
+        "n_signals_fired": 8351,
+        "win_rate": 0.9341825902335457,
+        "pf": 3.9493078231714405,
+        "net_pnl": 67767.75000000003,
+        "expectancy": 28.776114649681542,
+        "max_drawdown_pts": 2985.119999999997,
+        "avg_holding_bars": 4.191932059447983,
+        "timeout_rate_pct": 71.79978445695127,
+        "sharpe": 10.620879557599403
+      }
+    },
+    "2021": {
+      "train_span": "2015-2020",
+      "n_train": 101065,
+      "n_test": 18461,
+      "champion": {
+        "trades": 3371,
+        "n_signals_fired": 4751,
+        "win_rate": 0.7350934440818748,
+        "pf": 1.387458006718925,
+        "net_pnl": 17300,
+        "expectancy": 5.132008306140611,
+        "max_drawdown_pts": 1050.0,
+        "avg_holding_bars": 3.406704242064669,
+        "timeout_rate_pct": 29.046516522837294,
+        "sharpe": 5.19099734495676
+      },
+      "atr": {
+        "trades": 1289,
+        "n_signals_fired": 4751,
+        "win_rate": 0.9596586501163693,
+        "pf": 8.93427934817498,
+        "net_pnl": 50422.9799999999,
+        "expectancy": 39.11790535298673,
+        "max_drawdown_pts": 867.1999999999898,
+        "avg_holding_bars": 4.288595810705973,
+        "timeout_rate_pct": 72.86886971163965,
+        "sharpe": 8.81252334355271
+      }
+    },
+    "2022": {
+      "train_span": "2015-2021",
+      "n_train": 118049,
+      "n_test": 18525,
+      "champion": {
+        "trades": 4404,
+        "n_signals_fired": 6345,
+        "win_rate": 0.7397820163487738,
+        "pf": 1.4214659685863875,
+        "net_pnl": 24150,
+        "expectancy": 5.483651226158038,
+        "max_drawdown_pts": 1525.0,
+        "avg_holding_bars": 3.3907811080835604,
+        "timeout_rate_pct": 30.591016548463358,
+        "sharpe": 6.303152440660162
+      },
+      "atr": {
+        "trades": 1835,
+        "n_signals_fired": 6345,
+        "win_rate": 0.9226158038147139,
+        "pf": 3.515678260079216,
+        "net_pnl": 55079.09000000023,
+        "expectancy": 30.015852861035548,
+        "max_drawdown_pts": 1621.2299999999977,
+        "avg_holding_bars": 4.350953678474115,
+        "timeout_rate_pct": 71.0795902285264,
+        "sharpe": 9.963695068820474
+      }
+    },
+    "2023": {
+      "train_span": "2015-2022",
+      "n_train": 135092,
+      "n_test": 18375,
+      "champion": {
+        "trades": 941,
+        "n_signals_fired": 1533,
+        "win_rate": 0.7502656748140276,
+        "pf": 1.5021276595744681,
+        "net_pnl": 5900,
+        "expectancy": 6.269925611052073,
+        "max_drawdown_pts": 775.0,
+        "avg_holding_bars": 3.5356004250797026,
+        "timeout_rate_pct": 38.617090671885194,
+        "sharpe": 3.587636484422212
+      },
+      "atr": {
+        "trades": 361,
+        "n_signals_fired": 1533,
+        "win_rate": 0.9750692520775623,
+        "pf": 14.628163679546471,
+        "net_pnl": 13025.38999999999,
+        "expectancy": 36.08141274238224,
+        "max_drawdown_pts": 355.6799999999839,
+        "avg_holding_bars": 4.304709141274238,
+        "timeout_rate_pct": 76.45140247879974,
+        "sharpe": 5.6990210540373285
+      }
+    },
+    "2024": {
+      "train_span": "2015-2023",
+      "n_train": 151997,
+      "n_test": 18492,
+      "champion": {
+        "trades": 2872,
+        "n_signals_fired": 3821,
+        "win_rate": 0.7217966573816156,
+        "pf": 1.2972465581977473,
+        "net_pnl": 11875,
+        "expectancy": 4.13474930362117,
+        "max_drawdown_pts": 1425.0,
+        "avg_holding_bars": 2.9307103064066853,
+        "timeout_rate_pct": 24.836430253860247,
+        "sharpe": 3.9676055509956085
+      },
+      "atr": {
+        "trades": 873,
+        "n_signals_fired": 3821,
+        "win_rate": 0.9392898052691867,
+        "pf": 5.5751237405693095,
+        "net_pnl": 42843.059999999874,
+        "expectancy": 49.07567010309264,
+        "max_drawdown_pts": 1499.7000000000007,
+        "avg_holding_bars": 4.246277205040092,
+        "timeout_rate_pct": 77.15257785919917,
+        "sharpe": 6.00549840595684
+      }
+    },
+    "2025": {
+      "train_span": "2015-2024",
+      "n_train": 169010,
+      "n_test": 18612,
+      "champion": {
+        "trades": 1972,
+        "n_signals_fired": 2576,
+        "win_rate": 0.7053752535496958,
+        "pf": 1.1970740103270223,
+        "net_pnl": 5725,
+        "expectancy": 2.9031440162271807,
+        "max_drawdown_pts": 2525.0,
+        "avg_holding_bars": 2.9771805273833674,
+        "timeout_rate_pct": 23.4472049689441,
+        "sharpe": 2.2209455865177046
+      },
+      "atr": {
+        "trades": 582,
+        "n_signals_fired": 2576,
+        "win_rate": 0.9467353951890034,
+        "pf": 6.711258244769636,
+        "net_pnl": 27197.64000000001,
+        "expectancy": 46.731340206185585,
+        "max_drawdown_pts": 662.0099999999984,
+        "avg_holding_bars": 4.304123711340206,
+        "timeout_rate_pct": 77.40683229813664,
+        "sharpe": 6.924808206159644
+      }
+    },
+    "2026": {
+      "train_span": "2015-2025",
+      "n_train": 186133,
+      "n_test": 6680,
+      "champion": {
+        "trades": 1922,
+        "n_signals_fired": 2239,
+        "win_rate": 0.6982310093652445,
+        "pf": 1.1568965517241379,
+        "net_pnl": 4550,
+        "expectancy": 2.36732570239334,
+        "max_drawdown_pts": 1525.0,
+        "avg_holding_bars": 2.8496357960457854,
+        "timeout_rate_pct": 14.158106297454221,
+        "sharpe": 2.935160321720959
+      },
+      "atr": {
+        "trades": 612,
+        "n_signals_fired": 2239,
+        "win_rate": 0.9248366013071896,
+        "pf": 3.5190499737269616,
+        "net_pnl": 25348.192265624988,
+        "expectancy": 41.418614813112725,
+        "max_drawdown_pts": 1786.5700000000197,
+        "avg_holding_bars": 4.248366013071895,
+        "timeout_rate_pct": 72.66636891469406,
+        "sharpe": 10.887816575361661
+      }
+    }
+  },
+  "config": {
+    "ATR_PERIOD": 10,
+    "TP_MULT": 2.0,
+    "SL_RATIO": 3.0,
+    "BASE_BARS": 7,
+    "test_years": [
+      "2019",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ]
+  }
+}

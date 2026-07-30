@@ -1,0 +1,4 @@
+{
+  "kind": "median",
+  "operation": "elementwise_median_then_renormalise"
+}

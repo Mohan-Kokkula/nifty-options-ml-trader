@@ -1,0 +1,84 @@
+{
+ "common_window": [
+  "2026-03-13 10:30:00",
+  "2026-06-04 15:25:00"
+ ],
+ "common_bars": 3140,
+ "D_native_test": {
+  "dir_acc": 0.5255681818181818,
+  "n": 785
+ },
+ "note": "C native frozen-test dir_acc=0.5868 (2025-07\u21922026-06)",
+ "A_live_today_leakedV10_leakedfeat": {
+  "dir_acc": 0.8711,
+  "n_signals": 1297,
+  "sim": {
+   "trades": 9,
+   "wr": 0.667,
+   "pf": 2.63,
+   "dd": -2938.0,
+   "net": 8203.0
+  },
+  "friction_sim": {
+   "trades": 9,
+   "wr": 0.667,
+   "pf": 1.72,
+   "dd": -3758.0,
+   "net": 4513.0
+  }
+ },
+ "B_post_restart_leakedV10_fixedfeat": {
+  "dir_acc": 0.5759,
+  "n_signals": 1282,
+  "sim": {
+   "trades": 10,
+   "wr": 0.5,
+   "pf": 0.73,
+   "dd": -2090.0,
+   "net": -2632.0
+  },
+  "friction_sim": {
+   "trades": 10,
+   "wr": 0.3,
+   "pf": 0.45,
+   "dd": -3417.0,
+   "net": -6732.0
+  }
+ },
+ "C_clean_V9": {
+  "dir_acc": 0.5791,
+  "n_signals": 1470,
+  "sim": {
+   "trades": 8,
+   "wr": 0.375,
+   "pf": 1.19,
+   "dd": -3450.0,
+   "net": 1430.0
+  },
+  "friction_sim": {
+   "trades": 8,
+   "wr": 0.375,
+   "pf": 0.81,
+   "dd": -4680.0,
+   "net": -1850.0
+  }
+ },
+ "D_clean_V10_no_OI": {
+  "dir_acc": 0.5534,
+  "n_signals": 1009,
+  "sim": {
+   "trades": 6,
+   "wr": 0.5,
+   "pf": 1.05,
+   "dd": -4180.0,
+   "net": 335.0
+  },
+  "friction_sim": {
+   "trades": 6,
+   "wr": 0.5,
+   "pf": 0.72,
+   "dd": -5000.0,
+   "net": -2125.0
+  }
+ }
+}

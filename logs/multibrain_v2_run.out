@@ -1,0 +1,98 @@
+Building V9 (leak-fixed) feature + label frame...
+00:22:58 [V9] 5-min : 209,599 bars | 2015-01-09 \u2192 2026-06-04
+00:22:58 [V9] 15-min: 70,079 bars | 2015-01-09 \u2192 2026-06-04
+00:22:58 [V9] 30-min: 36,490 bars | 2015-01-09 \u2192 2026-06-04
+00:22:58 [V9] 60min: 19,665 bars | 2015-01-09 \u2192 2026-06-04
+00:22:58 [V9] Daily: 2,830 bars | 2015-01-01 \u2192 2026-06-04
+00:23:03 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+00:23:03 [V9]   5-min features computed: 98 cols
+00:23:03 [V9]   15-min features: 14 cols
+00:23:04 [V9]   30-min features: 7 cols
+00:23:06 [V9]   60-min features: 13 cols
+00:23:06 [V9]   Daily features: 17 cols
+00:23:07 [V9] VIX : 3,925 days | 2010-07-23 \u2192 2026-06-04
+00:23:07 [V9]   VIX features: 15 cols (with options-pricing additions)
+00:23:07 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+00:23:12 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+00:23:12 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+00:23:13 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+00:23:13 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+00:23:14 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+00:23:14 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+00:23:14 [V9]   VIX>35 forced SKIP: 3,225 bars
+00:23:14 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+00:23:14 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+
+  Fold 1/8: train<2024-06-28 -> test 2024-07-01..2024-10-01
+    XGB+LGB trained.
+    RF trained.
+    NN trained.
+    baseline      89 trades  net Rs.-19,767
+    avg4          66 trades  net Rs.+16,073
+    any_brain     99 trades  net Rs.-8,499
+    vote_2of4     85 trades  net Rs.-12,384
+    vote_3of4     46 trades  net Rs.-9,094
+    vote_4of4     12 trades  net Rs.+21
+
+  Fold 2/8: train<2024-09-28 -> test 2024-10-01..2025-01-01
+    XGB+LGB trained.
+    RF trained.
+    NN trained.
+    baseline     113 trades  net Rs.+20,199
+    avg4         117 trades  net Rs.+22,759
+    any_brain    138 trades  net Rs.+10,712
+    vote_2of4    109 trades  net Rs.-7,003
+    vote_3of4     93 trades  net Rs.+11,838
+    vote_4of4     33 trades  net Rs.-5,469
+
+  Fold 3/8: train<2024-12-29 -> test 2025-01-01..2025-04-01
+    XGB+LGB trained.
+    RF trained.
+    NN trained.
+    baseline      94 trades  net Rs.-24,772
+    avg4         119 trades  net Rs.-12,349
+    any_brain    134 trades  net Rs.-21,693
+    vote_2of4    105 trades  net Rs.-26,356
+    vote_3of4     73 trades  net Rs.-12,956
+    vote_4of4     27 trades  net Rs.-3,795
+
+  Fold 4/8: train<2025-03-29 -> test 2025-04-01..2025-07-01
+    XGB+LGB trained.
+    RF trained.
+    NN trained.
+    baseline      87 trades  net Rs.-3,672
+    avg4          91 trades  net Rs.-13,346
+    any_brain     95 trades  net Rs.+5,978
+    vote_2of4     80 trades  net Rs.+5,734
+    vote_3of4     52 trades  net Rs.+2,523
+    vote_4of4     17 trades  net Rs.-10,247
+
+  Fold 5/8: train<2025-06-28 -> test 2025-07-01..2025-10-01
+    XGB+LGB trained.
+    RF trained.
+    NN trained.
+    baseline      57 trades  net Rs.-1,485
+    avg4          54 trades  net Rs.-22,041
+    any_brain     97 trades  net Rs.-18,719
+    vote_2of4     63 trades  net Rs.-6,511
+    vote_3of4     35 trades  net Rs.-10,871
+    vote_4of4     14 trades  net Rs.-5,871
+
+  Fold 6/8: train<2025-09-28 -> test 2025-10-01..2026-01-01
+    XGB+LGB trained.
+    RF trained.
+    NN trained.
+    baseline      50 trades  net Rs.-9,216
+    avg4          49 trades  net Rs.+4,210
+    any_brain     70 trades  net Rs.+4,232
+    vote_2of4     45 trades  net Rs.+713
+    vote_3of4     40 trades  net Rs.-1,148
+    vote_4of4     15 trades  net Rs.-5,947
+
+  Fold 7/8: train<2025-12-29 -> test 2026-01-01..2026-04-01
+    XGB+LGB trained.

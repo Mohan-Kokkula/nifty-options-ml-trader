@@ -1,0 +1,24 @@
+{
+  "n": 0,
+  "pf": NaN,
+  "wr": NaN,
+  "net": 0.0,
+  "avg": 0.0,
+  "dd": 0.0,
+  "sharpe": NaN,
+  "sortino": NaN,
+  "brain": "lgb",
+  "fold_idx": 6,
+  "calibrator": "isotonic",
+  "calibration": {
+    "top1_ece": 0.05388082545743367,
+    "class_conditional_ece": {
+      "0": 0.03639053388756401,
+      "1": 0.020702401964885542,
+      "2": 0.05388082545743367
+    },
+    "brier": 0.19266321595119204,
+    "log_loss": 0.44971890008787446
+  },
+  "calibrator_fit_elapsed_s": 0.07
+}

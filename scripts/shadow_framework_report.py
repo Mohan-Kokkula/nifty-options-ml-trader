@@ -1,0 +1,254 @@
+"""
+shadow_framework_report.py — generates data/shadow/shadow_framework_report.json,
+the deployment deliverable for the production shadow framework
+(core/shadow_framework.py and friends).
+
+This is a documentation/inventory artifact: architecture summary, record
+schema, current health snapshot, files touched, deployment instructions,
+and rollback instructions. It does not run the shadow model itself.
+
+Usage:
+  python scripts/shadow_framework_report.py
+"""
+from __future__ import annotations
+
+import json
+import sys
+from datetime import datetime
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+from core import shadow_framework as sf  # noqa: E402
+
+
+SAMPLE_RECORD = {
+    "ts": "2026-06-13T10:15:32",
+    "cycle": 1234,
+    "spot": 24512.35,
+    "primary": {
+        "model": "production_champion",
+        "signal": 0,
+        "direction": "CALL",
+        "proba": [0.41, 0.22, 0.37],
+        "confidence": 78.5,
+        "trade_decision": True,
+    },
+    "shadow": {
+        "model": "htf36",
+        "model_dir": "models/htf36",
+        "signal": 0,
+        "direction": "CALL",
+        "proba": [0.39, 0.24, 0.37],
+        "confidence": 74.2,
+        "trade_decision": True,
+    },
+    "compare": {
+        "direction_match": True,
+        "confidence_diff": -4.3,
+        "trade_decision_match": True,
+    },
+}
+
+
+def build_report() -> dict:
+    health = sf.health_snapshot()
+
+    return {
+        "title": "Production Shadow Framework — Deployment Report",
+        "generated_at": datetime.now().isoformat(timespec="seconds"),
+        "status": "deployed",
+
+        "architecture": {
+            "summary": (
+                "Every prediction cycle, after the primary (production) model "
+                "produces signal/proba/confidence, a SECOND model (the HTF36 "
+                "candidate) runs on the exact same feature row. Both outputs "
+                "are compared on direction, confidence, and trade decision, "
+                "and the comparison is appended to a per-day JSONL file under "
+                "data/shadow/predictions/. The primary model's output is "
+                "returned unchanged — the shadow result is never read by the "
+                "caller."
+            ),
+            "primary_model": "production_champion (current live model, unchanged)",
+            "shadow_model": "htf36 (models/htf36 — models.pkl + scaler.pkl + feature_cols.pkl ensemble)",
+            "trigger": (
+                "core/claude_pilot.py, immediately after "
+                "predict_precomputed(df_feat.tail(60)) returns "
+                "(signal, proba, conf, indicators), alongside the existing "
+                "Stage-1 shadow_model observer (untouched)."
+            ),
+            "gate1_thresholds": {
+                "THR_CALL": sf.THR_CALL,
+                "THR_PUT": sf.THR_PUT,
+                "MIN_EDGE": sf.MIN_EDGE,
+                "SKIP_CEIL": sf.SKIP_CEIL,
+                "note": "identical to core/ml_engine.py's direction-signal derivation",
+            },
+            "gate2_base_floors": {
+                "G2_CALL": sf.G2_CALL,
+                "G2_PUT": sf.G2_PUT,
+                "note": (
+                    "trade_decision is a fixed-threshold proxy = Gate-1 + base "
+                    "Gate-2 floor (ml_only_mode defaults). It deliberately "
+                    "excludes the ~15 dynamic, stateful gate adjustments "
+                    "(regime engine, momentum override, VIX expansion, risk "
+                    "caps, whipsaw cooldown, session floors, etc.) applied in "
+                    "claude_pilot.py — those reflect shared bot STATE, not "
+                    "model quality, and replicating them risks drifting out "
+                    "of sync with live gates. trade_decision therefore answers "
+                    "'would this prediction clear Gate-1 + the base Gate-2 "
+                    "floor', a model-only comparison — NOT 'would this model "
+                    "have fired a live order on this cycle'."
+                ),
+            },
+        },
+
+        "storage": {
+            "root": "data/shadow/",
+            "predictions": "data/shadow/predictions/shadow_<YYYY-MM-DD>.jsonl  (one JSON line per cycle, appended)",
+            "reports": "data/shadow/reports/report_<YYYY-MM-DD>.json  (daily aggregate, written at 15:35 IST)",
+            "health": "data/shadow/health.json  (rewritten atomically every cycle)",
+        },
+
+        "sample_prediction_record": SAMPLE_RECORD,
+
+        "daily_report_fields": {
+            "n_cycles": "number of observations for the date",
+            "agreement_rate": "fraction of cycles where primary.direction == shadow.direction",
+            "direction_distribution": "CALL/PUT/SKIP counts, per model",
+            "trade_count": "{primary, shadow, diff = shadow - primary}",
+            "trade_decision_agreement_rate": "fraction of cycles where primary.trade_decision == shadow.trade_decision",
+            "confidence": "{primary_mean, shadow_mean, mean_diff, mean_abs_diff}",
+            "shadow_model_dir": "path to the shadow model artifacts used that day",
+        },
+
+        "requirements_checklist": {
+            "1_zero_effect_on_live_orders": (
+                "observe() is called AFTER signal/proba/conf/indicators are "
+                "finalized; its return value is discarded; the entire call is "
+                "wrapped in try/except in claude_pilot.py AND inside "
+                "observe() itself — any exception is caught and logged at "
+                "debug level, never propagated."
+            ),
+            "2_restart_safe": (
+                "Predictions append to a per-day JSONL file — a restart "
+                "simply resumes appending to today's file (no in-memory "
+                "state to lose). health.json is rewritten via tmp-file + "
+                "atomic replace every cycle, so it always reflects the "
+                "latest state. The daily scheduler re-derives 'sent_today' "
+                "from the wall clock on restart (eod_summary pattern)."
+            ),
+            "3_daily_reports": (
+                "core/shadow_scheduler.py runs run_daily_tasks() once per "
+                "weekday at SHADOW_REPORT_TIME (default 15:35 IST, just "
+                "after the 15:30 EOD summary), writing "
+                "data/shadow/reports/report_<date>.json via "
+                "scripts/shadow_daily_report.py."
+            ),
+            "4_health_monitoring": (
+                "data/shadow/health.json tracks last_update, model_loaded, "
+                "model_dir, n_features, total_observations, "
+                "consecutive_errors, last_error/last_error_ts. "
+                "scripts/shadow_health_check.py is a standalone CLI "
+                "(exit 0/1/2) for cron/monitoring. The daily scheduler also "
+                "sends a Telegram alert if the model failed to load or has "
+                ">=5 consecutive errors."
+            ),
+            "5_auto_cleanup": (
+                "cleanup_old_files() runs as part of the daily scheduler, "
+                "deleting prediction/report files older than "
+                "SHADOW_RETENTION_DAYS (default 90) based on the date "
+                "embedded in each filename."
+            ),
+        },
+
+        "current_health": health or {"note": "no observations recorded yet"},
+
+        "files_modified": [
+            {
+                "path": "core/claude_pilot.py",
+                "change": (
+                    "Added a second passive shadow-observer call "
+                    "(core.shadow_framework.observe) immediately after the "
+                    "existing Stage-1 shadow_model observer, inside the "
+                    "multi-TF prediction method (~line 5119-5141). Wrapped "
+                    "in try/except; existing Stage-1 shadow block left "
+                    "untouched."
+                ),
+            },
+            {
+                "path": "main.py",
+                "change": (
+                    "Registered schedule_shadow_tasks(notifier=notifications) "
+                    "next to the existing EOD summary scheduler registration "
+                    "(~line 219-232), wrapped in try/except with "
+                    "logger.info/warning."
+                ),
+            },
+            {
+                "path": "config/settings.env",
+                "change": (
+                    "Added a new env-var block after SHADOW_MODEL_ENABLED: "
+                    "SHADOW_FRAMEWORK_ENABLED=true, "
+                    "SHADOW_FRAMEWORK_MODEL_DIR=models/htf36, "
+                    "SHADOW_REPORT_TIME=15:35, SHADOW_RETENTION_DAYS=90."
+                ),
+            },
+        ],
+
+        "files_created": [
+            "core/shadow_framework.py — per-cycle observe(), health, cleanup",
+            "core/shadow_scheduler.py — daily report/cleanup/health scheduler thread",
+            "scripts/shadow_daily_report.py — generate_report() + CLI",
+            "scripts/shadow_health_check.py — standalone health-check CLI (exit 0/1/2)",
+            "scripts/test_shadow_framework.py — smoke test (34 checks, all passing)",
+            "scripts/shadow_framework_report.py — this report generator",
+        ],
+
+        "deployment_instructions": [
+            "1. Confirm models/htf36/{models.pkl,scaler.pkl,feature_cols.pkl} exist (already present).",
+            "2. Confirm config/settings.env has the new SHADOW_FRAMEWORK_* vars "
+            "(added; SHADOW_FRAMEWORK_ENABLED=true by default).",
+            "3. Restart the bot process (main.py) so the new observer hook and "
+            "scheduler register. No other services need to change.",
+            "4. Verify: run 'python scripts/shadow_health_check.py' — expect "
+            "'WARN: no health record yet' until the first live cycle runs, "
+            "then 'OK: model=... total_observations=N ...'.",
+            "5. After market hours, check data/shadow/predictions/shadow_<date>.jsonl "
+            "is being appended, and data/shadow/reports/report_<date>.json is "
+            "written at 15:35 IST (or run "
+            "'python scripts/shadow_daily_report.py' manually).",
+            "6. Run 'python scripts/test_shadow_framework.py' any time to "
+            "re-verify the framework in isolation (uses a temp dir, does not "
+            "touch data/shadow/).",
+        ],
+
+        "rollback_instructions": [
+            "Zero-risk rollback (preferred): set SHADOW_FRAMEWORK_ENABLED=false "
+            "in config/settings.env and restart. observe() becomes a no-op "
+            "and schedule_shadow_tasks() does not start the scheduler thread. "
+            "All existing data/shadow/ files are left in place.",
+            "Full revert (if needed): revert the three modified files "
+            "(core/claude_pilot.py, main.py, config/settings.env) to remove "
+            "the observe() hook, scheduler registration, and env vars. "
+            "Optionally delete the created files listed above and the "
+            "data/shadow/ directory tree.",
+            "Note: this framework does not touch core/shadow_model.py, "
+            "data/shadow_model_log.jsonl, or any live-order code path — "
+            "rollback at any granularity cannot affect trading.",
+        ],
+    }
+
+
+def main():
+    report = build_report()
+    sf.SHADOW_DIR.mkdir(parents=True, exist_ok=True)
+    out = sf.SHADOW_DIR / "shadow_framework_report.json"
+    out.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    print(f"Wrote {out.relative_to(ROOT)}")
+
+
+if __name__ == "__main__":
+    main()

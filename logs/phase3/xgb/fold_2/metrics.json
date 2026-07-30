@@ -1,0 +1,22 @@
+{
+  "n": 100,
+  "pf": 1.205623624191525,
+  "wr": 0.34,
+  "net": 10447.299437677866,
+  "avg": 104.47299437677866,
+  "dd": 10524.047305030399,
+  "sharpe": 0.054696917197494754,
+  "sortino": 0.08567478819324637,
+  "brain": "xgb",
+  "fold_idx": 2,
+  "test_start": "2024-10-01",
+  "test_end": "2025-01-01",
+  "train_bars": 179134,
+  "test_bars": 4575,
+  "hpo_enabled": false,
+  "n_trials": 0,
+  "k_inner": 0,
+  "hpo_elapsed_s": 0.0,
+  "train_elapsed_s": 67.8,
+  "seed": 42
+}

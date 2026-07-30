@@ -1,0 +1,96 @@
+[Phase 5 / Fold 6] discover brains ...
+  brains: ['cat', 'lgb', 'mlp', 'xgb']
+  ensembles: ['confidence', 'mean', 'median', 'min_variance', 'performance', 'stacking', 'uncertainty', 'weighted']
+[Phase 5 / Fold 6] build_frame for OOF ...
+Building V9 (leak-fixed) feature + label frame...
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  OOF: cat
+  OOF: lgb
+  OOF: mlp
+  OOF: xgb
+[Phase 5] ensemble=confidence
+  confidence: n_trades=0  fit=0.00s transform=0.00s
+[Phase 5] ensemble=mean
+  mean: n_trades=0  fit=0.01s transform=0.00s
+[Phase 5] ensemble=median
+  median: n_trades=0  fit=0.00s transform=0.00s
+[Phase 5] ensemble=min_variance
+  min_variance: n_trades=0  fit=0.01s transform=0.00s
+[Phase 5] ensemble=performance
+  performance: n_trades=0  fit=0.00s transform=0.00s
+[Phase 5] ensemble=stacking
+  stacking: n_trades=0  fit=0.33s transform=0.00s
+[Phase 5] ensemble=uncertainty
+  uncertainty: n_trades=0  fit=0.00s transform=0.00s
+[Phase 5] ensemble=weighted
+  weighted: n_trades=0  fit=0.00s transform=0.00s
+[Phase 5 / Fold 7] discover brains ...
+  brains: ['cat', 'lgb', 'mlp', 'xgb']
+  ensembles: ['confidence', 'mean', 'median', 'min_variance', 'performance', 'stacking', 'uncertainty', 'weighted']
+[Phase 5 / Fold 7] build_frame for OOF ...
+Building V9 (leak-fixed) feature + label frame...
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  OOF: cat
+  OOF: lgb
+  OOF: mlp
+  OOF: xgb
+[Phase 5] ensemble=confidence
+  confidence: n_trades=7  fit=0.00s transform=0.00s
+[Phase 5] ensemble=mean
+  mean: n_trades=10  fit=0.02s transform=0.00s
+[Phase 5] ensemble=median
+  median: n_trades=16  fit=0.00s transform=0.00s
+[Phase 5] ensemble=min_variance
+  min_variance: n_trades=19  fit=0.01s transform=0.00s
+[Phase 5] ensemble=performance
+  performance: n_trades=16  fit=0.02s transform=0.00s
+[Phase 5] ensemble=stacking
+  stacking: n_trades=33  fit=0.31s transform=0.00s
+[Phase 5] ensemble=uncertainty
+  uncertainty: n_trades=3  fit=0.01s transform=0.00s
+[Phase 5] ensemble=weighted
+  weighted: n_trades=10  fit=0.00s transform=0.00s
+[Phase 5 / Fold 8] discover brains ...
+  brains: ['cat', 'lgb', 'mlp', 'xgb']
+  ensembles: ['confidence', 'mean', 'median', 'min_variance', 'performance', 'stacking', 'uncertainty', 'weighted']
+[Phase 5 / Fold 8] build_frame for OOF ...
+Building V9 (leak-fixed) feature + label frame...
+  Frame: 209,076 bars x 184 features | 2015-01-21 -> 2026-06-04
+  TRAIN LABEL DISTRIBUTION:
+    CALL    8.6%
+    PUT     9.3%
+    SKIP   82.1%
+  OOF: cat
+  OOF: lgb
+  OOF: mlp
+  OOF: xgb
+[Phase 5] ensemble=confidence
+  confidence: n_trades=0  fit=0.00s transform=0.00s
+[Phase 5] ensemble=mean
+  mean: n_trades=1  fit=0.00s transform=0.00s
+[Phase 5] ensemble=median
+  median: n_trades=2  fit=0.00s transform=0.00s
+[Phase 5] ensemble=min_variance
+  min_variance: n_trades=3  fit=0.02s transform=0.00s
+[Phase 5] ensemble=performance
+  performance: n_trades=2  fit=0.00s transform=0.00s
+[Phase 5] ensemble=stacking
+  stacking: n_trades=12  fit=0.48s transform=0.00s
+[Phase 5] ensemble=uncertainty
+  uncertainty: n_trades=0  fit=0.00s transform=0.00s
+[Phase 5] ensemble=weighted
+  weighted: n_trades=1  fit=0.02s transform=0.00s
+[pre-flight] Windows sleep prevention: True
+
+  Run summary:
+    fold 6: ran
+    fold 7: ran
+    fold 8: ran

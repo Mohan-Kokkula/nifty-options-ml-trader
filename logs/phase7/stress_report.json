@@ -1,0 +1,407 @@
+{
+  "per_target": {
+    "mean": {
+      "slippage_curve": {
+        "1.0": {
+          "slippage_multiplier": 1.0,
+          "pooled_pf": 1.9380797810451544,
+          "pooled_net": 27483.365785079313,
+          "pooled_max_dd": 11811.269404972469,
+          "pooled_trade_count": 61,
+          "pooled_wr": 0.3770491803278688,
+          "pooled_sharpe": 0.19507265099816057,
+          "pooled_sortino": 0.37361049151653775
+        },
+        "1.25": {
+          "slippage_multiplier": 1.25,
+          "pooled_pf": 1.8976026240287442,
+          "pooled_net": 26723.98803935806,
+          "pooled_max_dd": 11905.562881420541,
+          "pooled_trade_count": 61,
+          "pooled_wr": 0.3770491803278688,
+          "pooled_sharpe": 0.18970851026185953,
+          "pooled_sortino": 0.3612610332594313
+        },
+        "1.5": {
+          "slippage_multiplier": 1.5,
+          "pooled_pf": 1.8582618304537988,
+          "pooled_net": 25964.61029363681,
+          "pooled_max_dd": 12004.625758856484,
+          "pooled_trade_count": 61,
+          "pooled_wr": 0.36065573770491804,
+          "pooled_sharpe": 0.18434220885644487,
+          "pooled_sortino": 0.3535803152806915
+        },
+        "1.75": {
+          "slippage_multiplier": 1.75,
+          "pooled_pf": 1.8201035632674745,
+          "pooled_net": 25205.232547915562,
+          "pooled_max_dd": 12105.419235304556,
+          "pooled_trade_count": 61,
+          "pooled_wr": 0.36065573770491804,
+          "pooled_sharpe": 0.1789738068819584,
+          "pooled_sortino": 0.3412864234994873
+        },
+        "2.0": {
+          "slippage_multiplier": 2.0,
+          "pooled_pf": 1.7831228467950893,
+          "pooled_net": 24445.85480219431,
+          "pooled_max_dd": 12206.212711752629,
+          "pooled_trade_count": 61,
+          "pooled_wr": 0.36065573770491804,
+          "pooled_sharpe": 0.1736033645575544,
+          "pooled_sortino": 0.3291037220152299
+        }
+      },
+      "tcost_curve": {
+        "1.0": {
+          "tcost_multiplier": 1.0,
+          "pooled_pf": 1.9380797810451544,
+          "pooled_net": 27483.365785079313,
+          "pooled_max_dd": 11811.269404972469,
+          "pooled_trade_count": 61,
+          "pooled_wr": 0.3770491803278688
+        },
+        "1.25": {
+          "tcost_multiplier": 1.25,
+          "pooled_pf": 1.8848859288845572,
+          "pooled_net": 26473.365106140485,
+          "pooled_max_dd": 11954.284074548532,
+          "pooled_trade_count": 61,
+          "pooled_wr": 0.36065573770491804
+        },
+        "1.5": {
+          "tcost_multiplier": 1.5,
+          "pooled_pf": 1.8336266751742438,
+          "pooled_net": 25463.36442720166,
+          "pooled_max_dd": 12105.529343136726,
+          "pooled_trade_count": 61,
+          "pooled_wr": 0.36065573770491804
+        },
+        "1.75": {
+          "tcost_multiplier": 1.75,
+          "pooled_pf": 1.7844327743222066,
+          "pooled_net": 24453.36374826284,
+          "pooled_max_dd": 12256.774611724917,
+          "pooled_trade_count": 61,
+          "pooled_wr": 0.36065573770491804
+        },
+        "2.0": {
+          "tcost_multiplier": 2.0,
+          "pooled_pf": 1.7371818647398234,
+          "pooled_net": 23443.363069324012,
+          "pooled_max_dd": 12408.019880313112,
+          "pooled_trade_count": 61,
+          "pooled_wr": 0.36065573770491804
+        }
+      },
+      "exec_delay_curve": {
+        "0": {
+          "delay_bars": 0,
+          "pooled_pf": 1.9380797810451544,
+          "pooled_net": 27483.365785079313,
+          "pooled_max_dd": 11811.269404972469,
+          "pooled_trade_count": 61,
+          "pooled_wr": 0.3770491803278688,
+          "per_fold_pf": {
+            "1": 5.4278961138641275,
+            "2": 0.9679129995058444,
+            "3": 18.149835160877075,
+            "4": 0.24072575095061155,
+            "5": 1.4914353500512247,
+            "6": NaN,
+            "7": 19.15301119278406,
+            "8": 0.0
+          }
+        },
+        "1": {
+          "delay_bars": 1,
+          "pooled_pf": 1.3171086576352706,
+          "pooled_net": 11666.514903195852,
+          "pooled_max_dd": 21700.34822882683,
+          "pooled_trade_count": 58,
+          "pooled_wr": 0.3103448275862069,
+          "per_fold_pf": {
+            "1": 5.887157157387754,
+            "2": 1.5994535936209955,
+            "3": 13.288333769692494,
+            "4": 0.18241954540323535,
+            "5": 0.11458820229090336,
+            "6": NaN,
+            "7": 1.5875632523580356,
+            "8": 0.0
+          }
+        },
+        "2": {
+          "delay_bars": 2,
+          "pooled_pf": 1.0202929975793396,
+          "pooled_net": 811.7918428742191,
+          "pooled_max_dd": 19701.601791780668,
+          "pooled_trade_count": 57,
+          "pooled_wr": 0.2807017543859649,
+          "per_fold_pf": {
+            "1": 3.4532879480491827,
+            "2": 1.4889020961828872,
+            "3": 1.2674909083162524,
+            "4": 0.0,
+            "5": 0.35863348657695676,
+            "6": NaN,
+            "7": 1.876956759713213,
+            "8": Infinity
+          }
+        }
+      },
+      "break_even_cost_multiplier": 7.8029022216796875,
+      "break_even_slippage_multiplier": 10.048019409179688,
+      "r7_statistical_tests": {
+        "dm_winner_vs_baseline_by_fold": {
+          "common_folds": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "statistic": 1.4470763402616145,
+          "pvalue": 0.0739377718542289,
+          "alternative": "greater",
+          "lag": 1,
+          "n": 8,
+          "mean_loss_diff": 2508.46058016448,
+          "se_loss_diff": 1733.4680350802912,
+          "ci_lower": -342.84060454177916,
+          "ci_upper": 5359.761764870738,
+          "hypothesis": "H1: E[winner_perf - baseline_perf] > 0 (winner outperforms baseline in per-fold net PnL)",
+          "interpretation_positive_stat": "positive statistic \u2192 winner has lower loss than baseline (better)"
+        },
+        "hansen_spa_over_delay_variants": {
+          "pvalue_lower": 0.0355,
+          "n_variants": 3,
+          "variants": [
+            "delay_0",
+            "delay_1",
+            "delay_2"
+          ],
+          "provenance": "Value transcribed from the original Phase 7 markdown report. Delay-variant per-fold PnLs were not persisted; recomputation from disk requires a small delay replay which was deferred per the 'no replay' constraint of this correction cycle."
+        },
+        "white_reality_check_over_delay_variants": {
+          "pvalue": null,
+          "note": "WRC pvalue was computed at Phase 7 run time but was not surfaced in the original MD and therefore has no authoritative disk record. Deferred to Phase 7 refresh."
+        }
+      }
+    },
+    "stacking": {
+      "slippage_curve": {
+        "1.0": {
+          "slippage_multiplier": 1.0,
+          "pooled_pf": 1.1185820282063177,
+          "pooled_net": 5889.181012188433,
+          "pooled_max_dd": 21058.68619019286,
+          "pooled_trade_count": 93,
+          "pooled_wr": 0.3225806451612903,
+          "pooled_sharpe": 0.03618201430053596,
+          "pooled_sortino": 0.04499195843230053
+        },
+        "1.25": {
+          "slippage_multiplier": 1.25,
+          "pooled_pf": 1.0918667825728863,
+          "pooled_net": 4641.0055070861545,
+          "pooled_max_dd": 21795.7656084853,
+          "pooled_trade_count": 93,
+          "pooled_wr": 0.3225806451612903,
+          "pooled_sharpe": 0.02850643060525203,
+          "pooled_sortino": 0.03525135690325089
+        },
+        "1.5": {
+          "slippage_multiplier": 1.5,
+          "pooled_pf": 1.0660382619752606,
+          "pooled_net": 3392.830001983879,
+          "pooled_max_dd": 22532.845026777748,
+          "pooled_trade_count": 93,
+          "pooled_wr": 0.3118279569892473,
+          "pooled_sharpe": 0.02083448143586498,
+          "pooled_sortino": 0.025823434260496665
+        },
+        "1.75": {
+          "slippage_multiplier": 1.75,
+          "pooled_pf": 1.0410548642978568,
+          "pooled_net": 2144.6544968815992,
+          "pooled_max_dd": 23269.9244450702,
+          "pooled_trade_count": 93,
+          "pooled_wr": 0.3118279569892473,
+          "pooled_sharpe": 0.013166328750526394,
+          "pooled_sortino": 0.01622792905900415
+        },
+        "2.0": {
+          "slippage_multiplier": 2.0,
+          "pooled_pf": 1.0168826035242713,
+          "pooled_net": 896.4789917793274,
+          "pooled_max_dd": 24007.003863362635,
+          "pooled_trade_count": 93,
+          "pooled_wr": 0.3118279569892473,
+          "pooled_sharpe": 0.0055021340119702795,
+          "pooled_sortino": 0.006743509838349494
+        }
+      },
+      "tcost_curve": {
+        "1.0": {
+          "tcost_multiplier": 1.0,
+          "pooled_pf": 1.1185820282063177,
+          "pooled_net": 5889.181012188433,
+          "pooled_max_dd": 21058.68619019286,
+          "pooled_trade_count": 93,
+          "pooled_wr": 0.3225806451612903
+        },
+        "1.25": {
+          "tcost_multiplier": 1.25,
+          "pooled_pf": 1.0853131640243956,
+          "pooled_net": 4326.219921826771,
+          "pooled_max_dd": 21937.542175886098,
+          "pooled_trade_count": 93,
+          "pooled_wr": 0.3118279569892473
+        },
+        "1.5": {
+          "tcost_multiplier": 1.5,
+          "pooled_pf": 1.0533787251073394,
+          "pooled_net": 2763.2588314651107,
+          "pooled_max_dd": 22816.398161579356,
+          "pooled_trade_count": 93,
+          "pooled_wr": 0.3118279569892473
+        },
+        "1.75": {
+          "tcost_multiplier": 1.75,
+          "pooled_pf": 1.0227224915614237,
+          "pooled_net": 1200.2977411034617,
+          "pooled_max_dd": 23695.254147272593,
+          "pooled_trade_count": 93,
+          "pooled_wr": 0.3118279569892473
+        },
+        "2.0": {
+          "tcost_multiplier": 2.0,
+          "pooled_pf": 0.9932692270649081,
+          "pooled_net": -362.66334925820127,
+          "pooled_max_dd": 24574.110132965852,
+          "pooled_trade_count": 93,
+          "pooled_wr": 0.3118279569892473
+        }
+      },
+      "exec_delay_curve": {
+        "0": {
+          "delay_bars": 0,
+          "pooled_pf": 1.1185820282063177,
+          "pooled_net": 5889.181012188431,
+          "pooled_max_dd": 21058.68619019286,
+          "pooled_trade_count": 93,
+          "pooled_wr": 0.3225806451612903,
+          "per_fold_pf": {
+            "1": 45.68729738734361,
+            "2": 4.995511199818243,
+            "3": 0.8165301539030663,
+            "4": 0.8821876176228202,
+            "5": 0.00802836487580595,
+            "6": NaN,
+            "7": 0.6175994321370946,
+            "8": 0.3612948101649896
+          }
+        },
+        "1": {
+          "delay_bars": 1,
+          "pooled_pf": 1.054899467991259,
+          "pooled_net": 3095.427047043621,
+          "pooled_max_dd": 17795.66355461697,
+          "pooled_trade_count": 91,
+          "pooled_wr": 0.3076923076923077,
+          "per_fold_pf": {
+            "1": 26.93642022223104,
+            "2": 2.2874630697427083,
+            "3": 1.082799139575551,
+            "4": 1.1527170489133058,
+            "5": 0.43599130859786395,
+            "6": NaN,
+            "7": 0.8050366199738784,
+            "8": 0.0
+          }
+        },
+        "2": {
+          "delay_bars": 2,
+          "pooled_pf": 0.7230297423013732,
+          "pooled_net": -17650.716810475613,
+          "pooled_max_dd": 27505.405142912132,
+          "pooled_trade_count": 92,
+          "pooled_wr": 0.31521739130434784,
+          "per_fold_pf": {
+            "1": 36.42503031827061,
+            "2": 1.4974831870815668,
+            "3": 0.5926155631866358,
+            "4": 0.5312906279826897,
+            "5": 0.24544796090089135,
+            "6": NaN,
+            "7": 0.6986412489780857,
+            "8": 0.0
+          }
+        }
+      },
+      "break_even_cost_multiplier": 1.9419403076171875,
+      "break_even_slippage_multiplier": 2.1796722412109375,
+      "r7_statistical_tests": {
+        "dm_winner_vs_baseline_by_fold": {
+          "common_folds": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "statistic": 1.6796567522548984,
+          "pvalue": 0.046512059412330276,
+          "alternative": "greater",
+          "lag": 1,
+          "n": 8,
+          "mean_loss_diff": 2976.7748274736805,
+          "se_loss_diff": 1772.2518743650644,
+          "ci_lower": 61.67990405275941,
+          "ci_upper": 5891.869750894602,
+          "hypothesis": "H1: E[winner_perf - baseline_perf] > 0 (winner outperforms baseline in per-fold net PnL)",
+          "interpretation_positive_stat": "positive statistic \u2192 winner has lower loss than baseline (better)"
+        },
+        "hansen_spa_over_delay_variants": {
+          "pvalue_lower": 0.0013,
+          "n_variants": 3,
+          "variants": [
+            "delay_0",
+            "delay_1",
+            "delay_2"
+          ],
+          "provenance": "Value transcribed from the original Phase 7 markdown report. Delay-variant per-fold PnLs were not persisted; recomputation from disk requires a small delay replay which was deferred per the 'no replay' constraint of this correction cycle."
+        },
+        "white_reality_check_over_delay_variants": {
+          "pvalue": null,
+          "note": "WRC pvalue was computed at Phase 7 run time but was not surfaced in the original MD and therefore has no authoritative disk record. Deferred to Phase 7 refresh."
+        }
+      }
+    }
+  },
+  "r7_correction": {
+    "issue": "Original Phase 7 R7 block was not persisted to disk and the underlying DM implementation had an inverted sign convention.",
+    "fix": "Corrected phase7_robustness_v9._stats.dm_winner_vs_baseline_by_fold to call diebold_mariano(-baseline_perf, -winner_perf, alternative='greater') so a positive statistic means the winner outperforms the baseline in per-fold net PnL.",
+    "recomputed_at_utc": "2026-07-12T11:10:01.921836+00:00",
+    "recomputed_from": "Phase 6 cache (logs/phase6/<target>/thr_<hash8>/trade_pnl_fold_*.csv)",
+    "cached_hashes_used": {
+      "mean": {
+        "winner_hash": "c0b9a0e0",
+        "baseline_hash": "9e6157c7"
+      },
+      "stacking": {
+        "winner_hash": "9a379df3",
+        "baseline_hash": "9e6157c7"
+      }
+    },
+    "notes_on_spa_wrc": "SPA/WRC over execution-delay variants was ORIGINALLY intended to operate on per-fold PnLs from delay-shifted replays. Those replays were not persisted to disk during the original Phase 7 run and cannot be recomputed under the current 'no replay' constraint. SPA/WRC values quoted in the original Phase 7 prose are unverified; the corrected report marks them as UNAVAILABLE and defers their recomputation to a future Phase 7 refresh that persists the delay-shifted per-fold PnLs before writing the stats block."
+  }
+}

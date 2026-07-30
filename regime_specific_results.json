@@ -1,0 +1,199 @@
+{
+  "fold1": {
+    "GLOBAL_full_test": {
+      "trades": 1424,
+      "win_rate": 0.6980337078651685,
+      "pf": 1.155813953488372,
+      "expectancy": 2.352528089887638,
+      "n_test": 8000,
+      "fit_time_s": 128.8,
+      "n_train": 184998
+    },
+    "GLOBAL_on_Trending_HighVol": {
+      "trades": 861,
+      "win_rate": 0.6829268292682927,
+      "pf": 1.0769230769230769,
+      "expectancy": 1.219512195121954,
+      "n_test": 2567
+    },
+    "GLOBAL_on_Trending_LowVol": {
+      "trades": 416,
+      "win_rate": 0.6923076923076923,
+      "pf": 1.125,
+      "expectancy": 1.9230769230769216,
+      "n_test": 3016
+    },
+    "GLOBAL_on_Sideways_HighVol": {
+      "trades": 0,
+      "win_rate": null,
+      "pf": null,
+      "expectancy": null,
+      "n_test": 708
+    },
+    "GLOBAL_on_Sideways_LowVol": {
+      "trades": 0,
+      "win_rate": null,
+      "pf": null,
+      "expectancy": null,
+      "n_test": 569
+    },
+    "SPECIALIST_Trending_HighVol": {
+      "trades": 466,
+      "win_rate": 0.6845493562231759,
+      "pf": 1.0850340136054422,
+      "expectancy": 1.341201716738194,
+      "n_test": 2567,
+      "fit_time_s": 51.4,
+      "n_train": 69272
+    },
+    "SPECIALIST_Trending_LowVol": {
+      "trades": 603,
+      "win_rate": 0.6799336650082919,
+      "pf": 1.0621761658031088,
+      "expectancy": 0.9950248756218905,
+      "n_test": 3016,
+      "fit_time_s": 61.6,
+      "n_train": 71352
+    },
+    "SPECIALIST_Sideways_HighVol": {
+      "trades": 2,
+      "win_rate": 1.0,
+      "pf": Infinity,
+      "expectancy": 25.0,
+      "n_test": 708,
+      "fit_time_s": 17.3,
+      "n_train": 10434
+    },
+    "SPECIALIST_Sideways_LowVol": {
+      "trades": 2,
+      "win_rate": 0.5,
+      "pf": 0.5,
+      "expectancy": -12.5,
+      "n_test": 569,
+      "fit_time_s": 11.5,
+      "n_train": 9680
+    }
+  },
+  "fold2": {
+    "GLOBAL_full_test": {
+      "trades": 77,
+      "win_rate": 0.8051948051948052,
+      "pf": 2.066666666666667,
+      "expectancy": 10.389610389610393,
+      "n_test": 8000,
+      "fit_time_s": 164.0,
+      "n_train": 192998
+    },
+    "GLOBAL_on_Trending_HighVol": null,
+    "GLOBAL_on_Trending_LowVol": {
+      "trades": 73,
+      "win_rate": 0.8082191780821918,
+      "pf": 2.107142857142857,
+      "expectancy": 10.616438356164386,
+      "n_test": 6112
+    },
+    "GLOBAL_on_Sideways_HighVol": null,
+    "GLOBAL_on_Sideways_LowVol": {
+      "trades": 0,
+      "win_rate": null,
+      "pf": null,
+      "expectancy": null,
+      "n_test": 781
+    },
+    "SPECIALIST_Trending_HighVol": null,
+    "SPECIALIST_Trending_LowVol": {
+      "trades": 123,
+      "win_rate": 0.7886178861788617,
+      "pf": 1.8653846153846154,
+      "expectancy": 9.146341463414632,
+      "n_test": 6112,
+      "fit_time_s": 51.2,
+      "n_train": 74366
+    },
+    "SPECIALIST_Sideways_HighVol": null,
+    "SPECIALIST_Sideways_LowVol": {
+      "trades": 1,
+      "win_rate": 0.0,
+      "pf": 0.0,
+      "expectancy": -50.0,
+      "n_test": 781,
+      "fit_time_s": 12.0,
+      "n_train": 10188
+    }
+  },
+  "fold3": {
+    "GLOBAL_full_test": {
+      "trades": 2087,
+      "win_rate": 0.706756109247724,
+      "pf": 1.2050653594771241,
+      "expectancy": 3.0067081935793016,
+      "n_test": 8000,
+      "fit_time_s": 171.3,
+      "n_train": 200998
+    },
+    "GLOBAL_on_Trending_HighVol": {
+      "trades": 1671,
+      "win_rate": 0.703770197486535,
+      "pf": 1.187878787878788,
+      "expectancy": 2.782764811490125,
+      "n_test": 4196
+    },
+    "GLOBAL_on_Trending_LowVol": {
+      "trades": 285,
+      "win_rate": 0.7052631578947368,
+      "pf": 1.1964285714285714,
+      "expectancy": 2.894736842105262,
+      "n_test": 2379
+    },
+    "GLOBAL_on_Sideways_HighVol": {
+      "trades": 0,
+      "win_rate": null,
+      "pf": null,
+      "expectancy": null,
+      "n_test": 344
+    },
+    "GLOBAL_on_Sideways_LowVol": {
+      "trades": 0,
+      "win_rate": null,
+      "pf": null,
+      "expectancy": null,
+      "n_test": 252
+    },
+    "SPECIALIST_Trending_HighVol": {
+      "trades": 996,
+      "win_rate": 0.6917670682730924,
+      "pf": 1.1221498371335505,
+      "expectancy": 1.882530120481933,
+      "n_test": 4196,
+      "fit_time_s": 63.7,
+      "n_train": 74982
+    },
+    "SPECIALIST_Trending_LowVol": {
+      "trades": 348,
+      "win_rate": 0.6954022988505747,
+      "pf": 1.1415094339622642,
+      "expectancy": 2.155172413793103,
+      "n_test": 2379,
+      "fit_time_s": 65.7,
+      "n_train": 77370
+    },
+    "SPECIALIST_Sideways_HighVol": {
+      "trades": 3,
+      "win_rate": 1.0,
+      "pf": Infinity,
+      "expectancy": 25.0,
+      "n_test": 344,
+      "fit_time_s": 16.3,
+      "n_train": 11635
+    },
+    "SPECIALIST_Sideways_LowVol": {
+      "trades": 0,
+      "win_rate": null,
+      "pf": null,
+      "expectancy": null,
+      "n_test": 252,
+      "fit_time_s": 11.7,
+      "n_train": 10534
+    }
+  }
+}

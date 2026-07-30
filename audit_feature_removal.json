@@ -1,0 +1,97 @@
+{
+  "baseline_all_features": {
+    "trades": 650,
+    "pf": 2.942336661585177,
+    "net_pnl": 23732.488906249986,
+    "win_rate": 0.9123076923076923,
+    "raw_accuracy": 0.676
+  },
+  "remove_rsi14": {
+    "trades": 621,
+    "pf": 2.7001905223829814,
+    "net_pnl": 21752.059687499954,
+    "win_rate": 0.9049919484702094,
+    "raw_accuracy": 0.675125,
+    "pf_change_pct": -8.229722395932077
+  },
+  "remove_tf15_adx": {
+    "trades": 608,
+    "pf": 3.0354787728288675,
+    "net_pnl": 22613.786718749965,
+    "win_rate": 0.9144736842105263,
+    "raw_accuracy": 0.685625,
+    "pf_change_pct": 3.1655830707527004
+  },
+  "remove_tf15_sideways": {
+    "trades": 657,
+    "pf": 2.5928109724530564,
+    "net_pnl": 22352.851406249945,
+    "win_rate": 0.9041095890410958,
+    "raw_accuracy": 0.678125,
+    "pf_change_pct": -11.87918750751705
+  },
+  "remove_is_midday": {
+    "trades": 624,
+    "pf": 2.365291414494925,
+    "net_pnl": 19702.47539062496,
+    "win_rate": 0.8926282051282052,
+    "raw_accuracy": 0.67275,
+    "pf_change_pct": -19.611802232697944
+  },
+  "remove_expiry_dow": {
+    "trades": 632,
+    "pf": 2.52725387915161,
+    "net_pnl": 21145.937812499986,
+    "win_rate": 0.8987341772151899,
+    "raw_accuracy": 0.678125,
+    "pf_change_pct": -14.107249787315022
+  },
+  "remove_day_atr_pct": {
+    "trades": 623,
+    "pf": 2.9601037841991653,
+    "net_pnl": 23144.207656249964,
+    "win_rate": 0.9149277688603531,
+    "raw_accuracy": 0.6835,
+    "pf_change_pct": 0.6038439735994178
+  },
+  "remove_intraday_range_pct": {
+    "trades": 646,
+    "pf": 2.65326553363867,
+    "net_pnl": 22038.76281249996,
+    "win_rate": 0.9055727554179567,
+    "raw_accuracy": 0.674875,
+    "pf_change_pct": -9.824542912460963
+  },
+  "remove_dist_week_high": {
+    "trades": 638,
+    "pf": 2.518147415343297,
+    "net_pnl": 21143.687499999985,
+    "win_rate": 0.9012539184952978,
+    "raw_accuracy": 0.678125,
+    "pf_change_pct": -14.416747470812838
+  },
+  "remove_tf15_trending": {
+    "trades": 641,
+    "pf": 2.6500771439538275,
+    "net_pnl": 22137.050546874954,
+    "win_rate": 0.9048361934477379,
+    "raw_accuracy": 0.679625,
+    "pf_change_pct": -9.932905416537048
+  },
+  "remove_gkv": {
+    "trades": 633,
+    "pf": 3.070870447521819,
+    "net_pnl": 23930.054765624962,
+    "win_rate": 0.9146919431279621,
+    "raw_accuracy": 0.67725,
+    "pf_change_pct": 4.368425531135337
+  },
+  "remove_all_top10": {
+    "trades": 525,
+    "pf": 2.908440934005437,
+    "net_pnl": 19110.790703124992,
+    "win_rate": 0.9104761904761904,
+    "raw_accuracy": 0.70625,
+    "pf_change_pct": -1.152000313977618
+  }
+}

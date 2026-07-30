@@ -1,0 +1,53 @@
+23:25:14 [V9] 5-min : 209,599 bars | 2015-01-09 → 2026-06-04
+23:25:15 [V9] 15-min: 70,079 bars | 2015-01-09 → 2026-06-04
+23:25:15 [V9] 30-min: 36,490 bars | 2015-01-09 → 2026-06-04
+23:25:15 [V9] 60min: 19,665 bars | 2015-01-09 → 2026-06-04
+23:25:15 [V9] Daily: 2,830 bars | 2015-01-01 → 2026-06-04
+23:25:15 [V9]   15-min features: 14 cols
+23:25:15 [V9]   30-min features: 7 cols
+23:25:16 [V9]   60-min features: 13 cols
+23:25:16 [V9]   Daily features: 17 cols
+23:25:16 [V9] VIX : 3,925 days | 2010-07-23 → 2026-06-04
+23:25:16 [V9]   VIX features: 15 cols (with options-pricing additions)
+23:25:18 [V9]   DTE+expiry_dow computed from 119 real historical expiries
+23:25:18 [V9]   5-min features computed: 98 cols
+23:25:20 [V9]   Intraday VWAP: using SPOT PROXY (no futures data) — marked _proxy
+23:25:23 [V9] V10 Bhavcopy features: 819,096 rows, 495 days
+23:25:24 [V9] Daily option context: 495 days, 21 features
+23:25:24 [V9]   ATM IV range: 5.10% – 48.17%
+23:25:24 [V9]   PCR range: 0.38 – 1.67
+23:25:25 [V9] Option context merged: 36,112/209,599 bars have option data (17%)
+23:25:27 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+23:25:27 [V9]   Causal threshold [AM] final = 0.00169 (vs global 0.00126)
+23:25:27 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+23:25:27 [V9]   Causal threshold [MID] final = 0.00093 (vs global 0.00093)
+23:25:28 [V9]   Thresholds: AM=0.00126 MID=0.00093 PM=0.00145
+23:25:28 [V9]   Causal threshold [PM] final = 0.00119 (vs global 0.00145)
+23:25:28 [V9]   VIX>35 forced SKIP: 3,225 bars
+23:25:28 [V9]   RSI+ADX zones: normal=34,160 | oversold->PUT=2,131 oversold->CALL=431 | overbought->CALL=2,096 overbought->PUT=371
+23:25:28 [V9]   Labels: CALL=18,127 PUT=19,492 SKIP=171,980
+23:25:28 [V9]   Purged 3-way split (gap=78=purge3+embargo75): TRAIN=24,121 | VAL=2,057 | TEST=2,136 (dropped 156 gap bars)
+23:25:28 [V9] Training XGBoost...
+23:25:29 [V9]   XGBoost [OK]
+23:25:29 [V9] Training LightGBM...
+23:25:29 [V9]   LightGBM [OK]
+23:25:29 [V9]   Purged 3-way split (gap=78=purge3+embargo75): TRAIN=23,165 | VAL=1,973 | TEST=2,051 (dropped 156 gap bars)
+23:25:29 [V9] Training XGBoost...
+23:25:30 [V9]   XGBoost [OK]
+23:25:30 [V9] Training LightGBM...
+23:25:30 [V9]   LightGBM [OK]
+23:25:30 [V9]   Purged 3-way split (gap=78=purge3+embargo75): TRAIN=24,121 | VAL=2,057 | TEST=2,136 (dropped 156 gap bars)
+23:25:30 [V9] Training XGBoost...
+23:25:30 [V9]   XGBoost [OK]
+23:25:30 [V9] Training LightGBM...
+23:25:30 [V9]   LightGBM [OK]
+23:25:30 [V9]   Purged 3-way split (gap=78=purge3+embargo75): TRAIN=23,165 | VAL=1,973 | TEST=2,051 (dropped 156 gap bars)
+23:25:30 [V9] Training XGBoost...
+23:25:30 [V9]   XGBoost [OK]
+23:25:30 [V9] Training LightGBM...
+23:25:30 [V9]   LightGBM [OK]
+23:25:30 [V9]   Purged 3-way split (gap=78=purge3+embargo75): TRAIN=23,165 | VAL=1,973 | TEST=2,051 (dropped 156 gap bars)
+23:25:30 [V9] Training XGBoost...
+23:25:31 [V9]   XGBoost [OK]
+23:25:31 [V9] Training LightGBM...
+23:25:32 [V9]   LightGBM [OK]

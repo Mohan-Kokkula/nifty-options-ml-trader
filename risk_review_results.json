@@ -1,0 +1,35 @@
+{
+  "assumptions": {
+    "lot_size": 65,
+    "delta_central": 0.5,
+    "delta_range": [
+      0.4,
+      0.6
+    ],
+    "capital": 500000,
+    "risk_pct_per_trade": 0.02
+  },
+  "real_path": {
+    "final_capital": 1.9251230190522449e+25,
+    "max_dd_pct": 0.18982058653860978,
+    "ruined": false
+  },
+  "monte_carlo": {
+    "n_sim": 5000,
+    "max_dd_mean_pct": 0.17874304238849853,
+    "max_dd_p95_pct": 0.18986564121198038,
+    "max_dd_p99_pct": 0.1898656412119806,
+    "p_ruin_pct": 0.0,
+    "p_dd30_pct": 0.0,
+    "p_failure_pct": 0.0
+  },
+  "var": {
+    "daily_95": -0.0,
+    "daily_99": 10514.659999999447,
+    "weekly_95": -0.0,
+    "monthly_95": -2546.0500000000166,
+    "monthly_99": -0.0
+  },
+  "max_consec_losses_real": 8,
+  "worst_historical_dd_pts": 2985.1199999999953
+}

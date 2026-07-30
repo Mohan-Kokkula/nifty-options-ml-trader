@@ -1,0 +1,34 @@
+# Secrets — NEVER commit these
+config/settings.env
+*.env
+!config/settings.example.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Logs
+*.log
+
+# Raw research source data — regenerable/downloaded, individual files exceed
+# GitHub's 100MB per-file push limit (git push is hard-rejected otherwise).
+data/kaggle/
+data/v10_training_features.csv
+
+# Docker
+.docker/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

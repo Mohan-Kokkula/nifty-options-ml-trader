@@ -1,0 +1,171 @@
+{
+ "FULL_minus_price_action": {
+  "n_features": 105,
+  "test_dir_acc": 0.5485,
+  "IC": -0.0006,
+  "IC_p": 0.943535,
+  "sim": {
+   "trades": 29,
+   "pf": 1.64,
+   "dd": -6795.0,
+   "net": 13713.0,
+   "exp": 473.0
+  }
+ },
+ "FULL_minus_htf": {
+  "n_features": 134,
+  "test_dir_acc": 0.5548,
+  "IC": 0.0049,
+  "IC_p": 0.542685,
+  "sim": {
+   "trades": 29,
+   "pf": 1.42,
+   "dd": -4180.0,
+   "net": 9589.0,
+   "exp": 331.0
+  }
+ },
+ "FULL_minus_market_structure": {
+  "n_features": 148,
+  "test_dir_acc": 0.5663,
+  "IC": 0.0056,
+  "IC_p": 0.483036,
+  "sim": {
+   "trades": 49,
+   "pf": 1.98,
+   "dd": -4451.0,
+   "net": 28384.0,
+   "exp": 579.0
+  }
+ },
+ "FULL_minus_volatility_proxy": {
+  "n_features": 159,
+  "test_dir_acc": 0.5885,
+  "IC": -0.0006,
+  "IC_p": 0.939477,
+  "sim": {
+   "trades": 39,
+   "pf": 1.26,
+   "dd": -6809.0,
+   "net": 7394.0,
+   "exp": 190.0
+  }
+ },
+ "FULL_minus_vwap": {
+  "n_features": 163,
+  "test_dir_acc": 0.5863,
+  "IC": 0.0013,
+  "IC_p": 0.873568,
+  "sim": {
+   "trades": 40,
+   "pf": 1.81,
+   "dd": -3501.0,
+   "net": 19646.0,
+   "exp": 491.0
+  }
+ },
+ "FULL_minus_regime": {
+  "n_features": 141,
+  "test_dir_acc": 0.5931,
+  "IC": 0.01,
+  "IC_p": 0.208263,
+  "sim": {
+   "trades": 39,
+   "pf": 0.98,
+   "dd": -6533.0,
+   "net": -500.0,
+   "exp": -13.0
+  }
+ },
+ "FULL_baseline": {
+  "n_features": 170,
+  "test_dir_acc": 0.589,
+  "IC": 0.0028,
+  "IC_p": 0.726951,
+  "sim": {
+   "trades": 39,
+   "pf": 1.91,
+   "dd": -3554.0,
+   "net": 22366.0,
+   "exp": 573.0
+  }
+ },
+ "INC_htf": {
+  "n_features": 36,
+  "test_dir_acc": 0.6082,
+  "IC": 0.0177,
+  "IC_p": 0.027088,
+  "sim": {
+   "trades": 19,
+   "pf": 1.36,
+   "dd": -5245.0,
+   "net": 4911.0,
+   "exp": 258.0
+  }
+ },
+ "INC_htf+price": {
+  "n_features": 101,
+  "test_dir_acc": 0.5906,
+  "IC": 0.0083,
+  "IC_p": 0.299685,
+  "sim": {
+   "trades": 41,
+   "pf": 1.38,
+   "dd": -5468.0,
+   "net": 10684.0,
+   "exp": 261.0
+  }
+ },
+ "INC_htf+price+marke": {
+  "n_features": 123,
+  "test_dir_acc": 0.5784,
+  "IC": 0.0112,
+  "IC_p": 0.161057,
+  "sim": {
+   "trades": 34,
+   "pf": 0.9,
+   "dd": -6941.0,
+   "net": -2712.0,
+   "exp": -80.0
+  }
+ },
+ "INC_htf+price+marke+volat": {
+  "n_features": 134,
+  "test_dir_acc": 0.5959,
+  "IC": 0.0101,
+  "IC_p": 0.207369,
+  "sim": {
+   "trades": 38,
+   "pf": 0.84,
+   "dd": -7439.0,
+   "net": -5321.0,
+   "exp": -140.0
+  }
+ },
+ "INC_htf+price+marke+volat+vwap": {
+  "n_features": 141,
+  "test_dir_acc": 0.595,
+  "IC": 0.0105,
+  "IC_p": 0.186762,
+  "sim": {
+   "trades": 34,
+   "pf": 0.99,
+   "dd": -4838.0,
+   "net": -137.0,
+   "exp": -4.0
+  }
+ },
+ "INC_htf+price+marke+volat+vwap+regim": {
+  "n_features": 170,
+  "test_dir_acc": 0.5896,
+  "IC": 0.0051,
+  "IC_p": 0.526062,
+  "sim": {
+   "trades": 40,
+   "pf": 1.79,
+   "dd": -4480.0,
+   "net": 20077.0,
+   "exp": 502.0
+  }
+ }
+}

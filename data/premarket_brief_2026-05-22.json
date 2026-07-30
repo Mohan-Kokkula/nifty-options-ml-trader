@@ -1,0 +1,76 @@
+{
+  "date": "2026-05-22",
+  "regime": "event_day",
+  "bias": "neutral",
+  "risk_appetite": 0.5,
+  "max_trades_today": 3,
+  "min_confidence_boost": 3,
+  "avoid_otm2_otm3": true,
+  "key_levels": {
+    "support": 23604.6,
+    "resistance": 23904.6
+  },
+  "rationale": "Heuristic: VIX=18.5, US overnight=+0.32%, Asia=+2.00%, FII net=+0cr, news_bias=+0.00, events=[]",
+  "_payload": {
+    "date": "2026-05-22",
+    "global": {
+      "dow": {
+        "last": 50285.66,
+        "change_pct": 0.55
+      },
+      "nasdaq": {
+        "last": 26293.1,
+        "change_pct": 0.09
+      },
+      "sp500": {
+        "last": 7445.72,
+        "change_pct": 0.17
+      },
+      "nikkei": {
+        "last": 63402.56,
+        "change_pct": 2.79
+      },
+      "hangseng": {
+        "last": 25696.91,
+        "change_pct": 1.22
+      },
+      "ftse": {
+        "last": 10443.5,
+        "change_pct": 0.11
+      },
+      "dax": {
+        "last": 24606.77,
+        "change_pct": -0.53
+      },
+      "crude": {
+        "last": 97.76,
+        "change_pct": 1.46
+      },
+      "dxy": {
+        "last": 99.24,
+        "change_pct": 0.05
+      },
+      "us10y": {
+        "last": 4.59,
+        "change_pct": 0.31
+      },
+      "gift_nifty": {
+        "last": 23754.6,
+        "change_pct": 0.42
+      },
+      "india_vix": {
+        "last": 18.48,
+        "change_pct": 3.69
+      }
+    },
+    "fii_dii": {},
+    "news": {
+      "bias_score": 0.0,
+      "confidence": 0.0,
+      "event_count": 0,
+      "dominant_type": "",
+      "hot_title": ""
+    },
+    "events": []
+  }
+}

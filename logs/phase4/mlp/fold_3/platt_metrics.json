@@ -1,0 +1,24 @@
+{
+  "n": 0,
+  "pf": NaN,
+  "wr": NaN,
+  "net": 0.0,
+  "avg": 0.0,
+  "dd": 0.0,
+  "sharpe": NaN,
+  "sortino": NaN,
+  "brain": "mlp",
+  "fold_idx": 3,
+  "calibrator": "platt",
+  "calibration": {
+    "top1_ece": 0.021173195766222126,
+    "class_conditional_ece": {
+      "0": 0.016615577319282863,
+      "1": 0.0070964662022920295,
+      "2": 0.021173195766222126
+    },
+    "brier": 0.34745295795201026,
+    "log_loss": 0.6471112431318673
+  },
+  "calibrator_fit_elapsed_s": 0.096
+}

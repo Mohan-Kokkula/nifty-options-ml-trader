@@ -1,0 +1,5 @@
+{
+ "models/nifty_v9_models.pkl": "132d777509cf60bc",
+ "models/nifty_v9_scaler.pkl": "3f33c0264ab56909",
+ "models/feature_cols_v9.pkl": "38078ef0cdf9d922"
+}

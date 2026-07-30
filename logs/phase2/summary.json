@@ -1,0 +1,99 @@
+{
+  "n_folds_completed": 1,
+  "pooled": {
+    "baseline_n": 97,
+    "tuned_n": 42,
+    "baseline_pf": 0.7038662424070232,
+    "tuned_pf": 0.6705781529863727,
+    "delta_pf": -0.033288089420650535,
+    "baseline_net": -19080.54904947379,
+    "tuned_net": -11996.59548127876,
+    "delta_net": 7083.953568195029
+  },
+  "paired_block_bootstrap_ci_90": {
+    "stat_name": "delta_pf",
+    "point_estimate": -0.033288089420650535,
+    "lower": -0.033288089420650535,
+    "upper": -0.033288089420650535,
+    "ci_level": 0.9,
+    "n_resamples": 10000,
+    "n_valid_resamples": 10000,
+    "n_blocks": 1,
+    "block_unit": "fold",
+    "method": "percentile",
+    "seed": 42,
+    "paired": true,
+    "bootstrap_distribution": null
+  },
+  "diebold_mariano": {
+    "statistic": 1.1980049861514992,
+    "pvalue": 0.11545753792906799,
+    "alternative": "greater",
+    "lag": 5,
+    "n": 12,
+    "mean_loss_diff": 40.032554965237274,
+    "se_loss_diff": 33.416016984903244,
+    "ci_lower": -14.931901770652829,
+    "ci_upper": 94.99701170112738,
+    "ci_level": 0.9,
+    "variance_estimator": "newey_west"
+  },
+  "per_fold": [
+    {
+      "fold": 1,
+      "test_start": "2024-07-01",
+      "test_end": "2024-10-01",
+      "baseline": {
+        "n": 97,
+        "pf": 0.7038662424070232,
+        "net": -19080.54904947379
+      },
+      "tuned": {
+        "n": 42,
+        "pf": 0.6705781529863727,
+        "net": -11996.595481278764
+      },
+      "delta_pf": -0.033288089420650535,
+      "delta_net": 7083.953568195026,
+      "best_params": {
+        "max_depth": 6,
+        "learning_rate": 0.04170553216181044,
+        "min_child_weight": 1,
+        "gamma": 0.9699098521619943,
+        "subsample": 0.9162213204002109,
+        "colsample_bytree": 0.4274034664069657,
+        "reg_alpha": 0.9091248360355031,
+        "reg_lambda": 0.8661333735273129
+      },
+      "hpo_elapsed_s": 57.7
+    },
+    {
+      "fold": 2,
+      "status": "MISSING"
+    },
+    {
+      "fold": 3,
+      "status": "MISSING"
+    },
+    {
+      "fold": 4,
+      "status": "MISSING"
+    },
+    {
+      "fold": 5,
+      "status": "MISSING"
+    },
+    {
+      "fold": 6,
+      "status": "MISSING"
+    },
+    {
+      "fold": 7,
+      "status": "MISSING"
+    },
+    {
+      "fold": 8,
+      "status": "MISSING"
+    }
+  ]
+}
