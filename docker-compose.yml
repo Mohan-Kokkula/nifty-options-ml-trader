@@ -17,6 +17,17 @@ services:
       - "8080:8080"
     env_file:
       - config/settings.env
+    # read_only: true above makes the whole image filesystem read-only
+    # except /tmp. The app writes state here at runtime (risk state,
+    # trade journal, heartbeat, OI/futures archive, daily logs, retrained
+    # models) — without these bind mounts every write fails/crashes on a
+    # read-only root, and any state that did land somewhere would vanish
+    # on the next `docker compose up` since nothing would be persisted
+    # outside the container.
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./models:/app/models
     # Restrict network: only OpenAlgo (localhost) + Twilio + Gmail SMTP
     # In production, use a custom network with firewall rules
     network_mode: host
