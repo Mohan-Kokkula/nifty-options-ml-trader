@@ -7,6 +7,30 @@ __pycache__
 .gitignore
 .vscode
 .idea
+.claude/
+.pytest_cache/
 docs/
 *.md
 !README.md
+
+# Runtime state — bind-mounted by docker-compose.yml (see volumes:), so
+# baking a copy into the image is pure waste: it's overlaid at container
+# start regardless, and it's the single biggest driver of image bloat.
+data/
+models/
+logs/
+
+# Research/audit history from the ML research phase — not imported by
+# main.py or anything under core/, security/, notifications/ (verified).
+# Kept in git per your choice; excluded from the image since the running
+# bot never touches it and it's tens of MB per file in places.
+*.pkl
+*.npz
+brains/
+calibrators/
+catboost_info/
+ensembles/
+phase7_robustness_v9/
+pre_registration/
+threshold_opt/
+tmp_rl/
