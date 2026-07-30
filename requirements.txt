@@ -11,6 +11,10 @@ tradingview-datafeed>=2.0.0    # TradingView data (pip install tradingview-dataf
 # to host git credentials). Vendored instead — see vendor/neo_api_client/
 # and the corresponding COPY step in the Dockerfile. Do NOT add a
 # `neo_api_client @ git+...` line back here; pip install will fail.
+# Vendoring skips pip's own dependency resolution for neo_api_client, so its
+# transitive deps must be declared here explicitly (see also the import scan
+# noted in the deployment notes — re-check if neo_api_client is ever updated).
+PyJWT>=2.0.0                   # neo_api_client/neo_utility.py: `import jwt`
 pyotp>=2.9.0                   # TOTP auto-generation for automated login
 python-dotenv>=1.0.0           # loads config/settings.env on startup
 feedparser>=6.0.10             # 24/7 news agent — RSS: MoneyControl, ET, LiveMint, BS
