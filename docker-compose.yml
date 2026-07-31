@@ -31,12 +31,16 @@ services:
     # Restrict network: only OpenAlgo (localhost) + Twilio + Gmail SMTP
     # In production, use a custom network with firewall rules
     network_mode: host
-    # Resource limits
+    # Resource limits. 2G (not 512M) because `docker compose run` reuses
+    # this same limit for the nightly retrain job (scripts/retrain_weekly.py
+    # via cron) — pandas over an 800k+ row bhavcopy needs real headroom,
+    # 512M OOM-killed the feature-build step (exit -9). The live bot itself
+    # only needs a fraction of this; the ceiling doesn't reserve anything.
     deploy:
       resources:
         limits:
           cpus: "1.0"
-          memory: 512M
+          memory: 2G
     logging:
       driver: json-file
       options:

@@ -28,10 +28,11 @@ Cron setup on Hostinger (as trader user), Docker deployment:
   # — Bot loads the fresh model automatically on that startup
   # `docker compose run` reuses the live image's own Python env — no
   # separate venv to keep in sync with what's actually scoring live.
-  # -m overrides docker-compose.yml's 512M service limit (sized for the
-  # lightweight live bot, not for pandas over an 800k+ row bhavcopy —
-  # without this, the feature-build step gets OOM-killed, exit -9).
-  30 2 * * 2-6  cd /home/trader/openclaw-v9-docker && docker compose run --rm -T -m 4g --name nifty-trader-retrain --entrypoint python nifty-trader scripts/retrain_weekly.py >> logs/retrain.log 2>&1
+  # It also inherits docker-compose.yml's memory limit (2G — raised from
+  # the live bot's original 512M, which OOM-killed the feature-build step,
+  # exit -9, since `docker compose run` has no per-invocation -m/--memory
+  # flag of its own; the limit has to be set in the compose file itself).
+  30 2 * * 2-6  cd /home/trader/openclaw-v9-docker && docker compose run --rm -T --name nifty-trader-retrain --entrypoint python nifty-trader scripts/retrain_weekly.py >> logs/retrain.log 2>&1
   # Note: 2-6 = Tue–Sat (trains Mon–Fri session data the next morning)
 
 Usage:
