@@ -217,7 +217,7 @@ def compute_daily_option_context(bhav_df: pd.DataFrame) -> pd.DataFrame:
     ctx = ctx.set_index("date").sort_index()
 
     # ── IV rank + z-score (rolling 30-day) ──────────────────────────────
-    iv = ctx["atm_iv"].fillna(method="ffill")
+    iv = ctx["atm_iv"].ffill()
     ctx["atm_iv_rank30"]  = iv.rolling(30, min_periods=5).rank(pct=True)
     ctx["atm_iv_zscore"]  = (iv - iv.rolling(20).mean()) / (iv.rolling(20).std() + 1e-9)
     ctx["atm_iv_rising"]  = (iv > iv.shift(1)).astype(int)
