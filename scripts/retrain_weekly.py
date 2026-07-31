@@ -32,7 +32,12 @@ Cron setup on Hostinger (as trader user), Docker deployment:
   # the live bot's original 512M, which OOM-killed the feature-build step,
   # exit -9, since `docker compose run` has no per-invocation -m/--memory
   # flag of its own; the limit has to be set in the compose file itself).
-  30 2 * * 2-6  cd /home/trader/openclaw-v9-docker && docker compose run --rm -T --name nifty-trader-retrain --entrypoint python nifty-trader scripts/retrain_weekly.py >> logs/retrain.log 2>&1
+  # --build: `docker compose run` reuses whatever image was last built —
+  # it does NOT rebuild after a `git pull`. Without --build, a code fix
+  # can be pulled onto the host and this job will still silently run the
+  # stale baked-in copy every night (confirmed: this bit us in practice).
+  # Docker's build cache makes a no-op rebuild here add only a few seconds.
+  30 2 * * 2-6  cd /home/trader/openclaw-v9-docker && docker compose run --rm -T --build --name nifty-trader-retrain --entrypoint python nifty-trader scripts/retrain_weekly.py >> logs/retrain.log 2>&1
   # Note: 2-6 = Tue–Sat (trains Mon–Fri session data the next morning)
 
 Usage:
