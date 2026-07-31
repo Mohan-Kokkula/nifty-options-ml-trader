@@ -225,29 +225,48 @@ def bootstrap():
     # 2026-04-29: Verify outbound IP matches registered Kotak IP
     # (IPv6 routing caused 100008 unauthorized — surfaced at order time).
     try:
+        import ipaddress as _ipaddress
         import requests as _requests
         ipv4 = _requests.get("https://api.ipify.org", timeout=5).text.strip()
-        expected = os.getenv("KOTAK_REGISTERED_IP", "").strip()
-        logger.info(f"🌐 Outbound IPv4: {ipv4}")
-        if expected and ipv4 != expected:
-            logger.error(
-                f"⚠️ IP MISMATCH: outbound={ipv4} but registered={expected}. "
-                f"Trade APIs will FAIL with 100008 unauthorized."
+        try:
+            _ipaddress.IPv4Address(ipv4)
+            ip_is_valid = True
+        except ValueError:
+            ip_is_valid = False
+
+        if not ip_is_valid:
+            # ipify.org returns plain-text errors (e.g. "error code: 1200",
+            # usually rate-limiting) instead of an IP on failure. Without
+            # this check that error text gets treated as if it WERE the
+            # outbound IP, producing a false "MISMATCH" alarm every boot.
+            logger.warning(
+                f"IP verification skipped — ipify.org returned a non-IP "
+                f"response ({ipv4!r}), likely rate-limited or transiently "
+                f"down. Outbound IP genuinely unverified this boot; check "
+                f"manually with `curl -s https://api.ipify.org` if unsure."
             )
-            try:
-                if telegram_notifier.enabled:
-                    telegram_notifier.send_message(
-                        f"🚨 IP MISMATCH at startup\n\n"
-                        f"Outbound IP: <code>{ipv4}</code>\n"
-                        f"Registered:  <code>{expected}</code>\n\n"
-                        f"Update IP at Kotak portal OR fix VPS routing before 09:15."
-                    )
-            except Exception:
-                pass
         else:
-            logger.info(
-                f"✅ Outbound IP {'matches Kotak registration' if expected else '(verify against Kotak portal)'}"
-            )
+            expected = os.getenv("KOTAK_REGISTERED_IP", "").strip()
+            logger.info(f"🌐 Outbound IPv4: {ipv4}")
+            if expected and ipv4 != expected:
+                logger.error(
+                    f"⚠️ IP MISMATCH: outbound={ipv4} but registered={expected}. "
+                    f"Trade APIs will FAIL with 100008 unauthorized."
+                )
+                try:
+                    if telegram_notifier.enabled:
+                        telegram_notifier.send_message(
+                            f"🚨 IP MISMATCH at startup\n\n"
+                            f"Outbound IP: <code>{ipv4}</code>\n"
+                            f"Registered:  <code>{expected}</code>\n\n"
+                            f"Update IP at Kotak portal OR fix VPS routing before 09:15."
+                        )
+                except Exception:
+                    pass
+            else:
+                logger.info(
+                    f"✅ Outbound IP {'matches Kotak registration' if expected else '(verify against Kotak portal)'}"
+                )
     except Exception as _e:
         logger.warning(f"IP verification failed: {_e}")
 
