@@ -13,8 +13,15 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 # code needs it at import time (joblib.load() on a Booster triggers this),
 # but python:3.12-slim doesn't ship it and pip install won't catch the gap
 # since the wheel install itself doesn't need it.
-RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 \
+# tzdata: python:3.12-slim has no timezone database by default, so every
+# unqualified datetime/logging timestamp (log-line prefixes in main.py AND
+# retrain_weekly.py, both plain logging.Formatter with no explicit tz) was
+# rendering in UTC container time, not IST — confusing to read against
+# real IST wall-clock time when debugging. TZ below fixes this globally,
+# for every process in every container built from this image.
+RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 tzdata \
     && rm -rf /var/lib/apt/lists/*
+ENV TZ=Asia/Kolkata
 
 # Create non-root user
 RUN groupadd -r trader && useradd -r -g trader -d /app -s /sbin/nologin trader
