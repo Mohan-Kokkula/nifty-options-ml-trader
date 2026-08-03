@@ -79,17 +79,65 @@ def _force_ipv4_if_enabled():
         print(f"⚠️ IPv4 enforcement failed: {e}")
 
 
+class _DailyFileHandler(logging.Handler):
+    """
+    Writes to logs/YYYY-MM-DD.log, rolling over to a fresh file at midnight
+    IST — checked on every emit(), not just once at process start.
+
+    A plain logging.FileHandler opens its file ONCE when constructed and
+    keeps writing to that same file for as long as the process lives, even
+    across a date rollover — confirmed happening in production: the bot ran
+    continuously past midnight (stop/start cron cycle didn't fire as
+    expected) and kept appending everything to yesterday's dated file,
+    silently, with no new file ever created for the new day.
+    """
+
+    def __init__(self, log_dir: Path, encoding: str = "utf-8"):
+        super().__init__()
+        self._log_dir = log_dir
+        self._encoding = encoding
+        self._current_date = None
+        self._inner = None
+        self._open_for_today()
+
+    def _open_for_today(self):
+        from datetime import datetime as _dt
+        today = _dt.now().strftime("%Y-%m-%d")
+        if today == self._current_date:
+            return
+        if self._inner is not None:
+            self._inner.close()
+        self._inner = logging.FileHandler(
+            self._log_dir / f"{today}.log", encoding=self._encoding
+        )
+        if self.formatter is not None:
+            self._inner.setFormatter(self.formatter)
+        self._current_date = today
+
+    def setFormatter(self, fmt):
+        super().setFormatter(fmt)
+        if self._inner is not None:
+            self._inner.setFormatter(fmt)
+
+    def emit(self, record):
+        self._open_for_today()
+        self._inner.emit(record)
+
+    def close(self):
+        if self._inner is not None:
+            self._inner.close()
+        super().close()
+
+
 def bootstrap():
     """Initialize all components from config."""
     _force_ipv4_if_enabled()
     config = load_config()
 
     # Logging
-    # ── Logging — terminal + daily file ──────────────────────────
-    from datetime import datetime
+    # ── Logging — terminal + daily file (auto-rolls at midnight IST) ──
     log_dir = Path("logs")
     log_dir.mkdir(exist_ok=True)
-    log_file = log_dir / f"{datetime.now().strftime('%Y-%m-%d')}.log"
 
     log_format  = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
     log_datefmt = "%H:%M:%S"
@@ -103,8 +151,8 @@ def bootstrap():
     console_handler.setFormatter(logging.Formatter(log_format, log_datefmt))
     root_logger.addHandler(console_handler)
 
-    # File handler — new file every day
-    file_handler = logging.FileHandler(log_file, encoding="utf-8")
+    # File handler — new file every day, even without a process restart
+    file_handler = _DailyFileHandler(log_dir, encoding="utf-8")
     file_handler.setFormatter(logging.Formatter(log_format, log_datefmt))
     root_logger.addHandler(file_handler)
 
