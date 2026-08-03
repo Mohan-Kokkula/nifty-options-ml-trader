@@ -307,6 +307,11 @@ def download_all(start_date: date, end_date: date):
         time.sleep(SLEEP_SEC)
 
     # ── merge ALL raw files (not just this run's date range) ─────────────────
+    # Also folds in the EXISTING merged CSV (if present) so a local raw/
+    # cache with gaps (e.g. only ever backfilled partially on this machine)
+    # can never regress the merged file backward — previously-merged rows
+    # for dates missing from raw/ are preserved; fresh raw rows win on
+    # overlap (keep="last" after existing-then-raw concat order).
     log.info("\nMerging ALL cached raw files...")
     all_raw_rows = []
     raw_files = sorted(RAW_DIR.glob("bhavcopy_*.csv"))
@@ -318,13 +323,25 @@ def download_all(start_date: date, end_date: date):
         except Exception as e:
             log.warning(f"  Could not read {rf.name}: {e}")
 
-    if all_raw_rows:
-        merged = pd.concat(all_raw_rows, ignore_index=True)
+    merged_path = OUT_DIR / "nifty_options_merged.csv"
+    existing_rows = []
+    if merged_path.exists():
+        try:
+            existing = pd.read_csv(merged_path)
+            if not existing.empty:
+                existing_rows.append(existing)
+                log.info(f"  Folding in existing merged file: {len(existing):,} rows")
+        except Exception as e:
+            log.warning(f"  Could not read existing {merged_path.name}: {e}")
+
+    if all_raw_rows or existing_rows:
+        merged = pd.concat(existing_rows + all_raw_rows, ignore_index=True)
         merged["date"] = pd.to_datetime(merged["date"])
         merged = merged.sort_values(["date", "expiry", "strike", "opt_type"])
-        merged = merged.drop_duplicates(subset=["date", "expiry", "strike", "opt_type"])
+        merged = merged.drop_duplicates(
+            subset=["date", "expiry", "strike", "opt_type"], keep="last"
+        )
 
-        merged_path = OUT_DIR / "nifty_options_merged.csv"
         merged.to_csv(merged_path, index=False)
         log.info(f"Merged: {len(merged):,} rows, {merged['date'].dt.date.nunique()} days → {merged_path}")
 
