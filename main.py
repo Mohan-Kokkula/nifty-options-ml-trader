@@ -440,6 +440,14 @@ def bootstrap():
         max_risk_pct=config.trading.risk_pct_per_trade,
         lot_size=config.trading.default_qty,
         strategy_name=config.trading.strategy_name,
+        # Futures execution port (new, opt-in). "options" preserves today's
+        # behavior exactly. Set EXECUTION_MODE=futures in settings.env to
+        # test the futures paper-trading path -- affects PAPER-mode signal
+        # display, SL/TP delta handling, and position sizing only; live
+        # order placement/symbol routing for futures is not wired yet, so
+        # this must stay paired with DRY_RUN=true.
+        execution_mode=os.getenv("EXECUTION_MODE", "options").strip().lower(),
+        futures_margin_pct_estimate=float(os.getenv("FUTURES_MARGIN_PCT_ESTIMATE", "0.15")),
         # HH/HL structure feature (parallel output only -- logged every cycle,
         # never read by any gate/threshold). Defaults to enabled since it has
         # no effect on trade decisions; set false to disable the computation

@@ -101,6 +101,18 @@ class PilotConfig:
     min_lots: int = 1                   # Floor: always trade at least 1 lot
     max_lots: int = 5                   # Ceiling: never exceed 5 lots
     lot_size: int = 65                  # Nifty lot size
+    # Futures execution port (new, opt-in — see core/futures_selector.py).
+    # "options" preserves today's behavior exactly; nothing below is read
+    # unless this is explicitly set to "futures".
+    execution_mode: str = "options"
+    # Conservative ESTIMATE of NIFTY futures SPAN+exposure margin as a % of
+    # notional (spot * lot_size). Real margin varies day-to-day with NSE's
+    # published margin files; this is deliberately on the high/safe side
+    # for offline sizing. The authoritative check is the live available-funds
+    # query (KotakNeoClient.get_funds()) done right before order placement —
+    # this estimate only pre-shapes the Kelly sizing, it never overrides
+    # the real broker-reported capital check.
+    futures_margin_pct_estimate: float = 0.15
     strategy_name: str = "OpenClawNifty"  # written into journal records for per-strategy analytics
     # HH/HL structure feature (parallel output only — logged every cycle via
     # the Feature Engineering Directive, NOT read by any gate or threshold).
@@ -4057,34 +4069,44 @@ class ClaudePilot:
             tp_price = spot - tp_pts
 
         # --- Delta-adjusted premium SL/TP ---
-        # Determine delta — prefer live BS delta from IV snapshot over hardcoded map.
-        # Live delta accounts for DTE and current volatility level (ATM delta at
-        # VIX=25 is ~0.48, not 0.50; OTM1 at DTE=1 is ~0.32, not 0.40).
-        _delta_map_fallback = {
-            "ATM": 0.50, "OTM1": 0.40, "OTM2": 0.30, "OTM3": 0.22,
-            "ITM1": 0.60, "ITM2": 0.70,
-        }
-        strike_key = strike_mode.upper().replace("_", "")
-        iv_delta_key = f"{'CE' if direction == 'CALL' else 'PE'}_{strike_key}"
-        if (self._iv_snap and self._iv_snap.available
-                and iv_delta_key in self._iv_snap.live_delta):
-            delta = self._iv_snap.live_delta[iv_delta_key]
-            logger.info(
-                f"Cycle #{cycle}: Live delta for {iv_delta_key} = {delta:.3f} "
-                f"(ATM_IV={self._iv_snap.atm_iv:.1f}% DTE={self._iv_snap.dte:.0f})"
-            )
+        if self.config.execution_mode == "futures":
+            # Futures move 1:1 with spot -- no option Greeks discount, no
+            # gamma/theta concept. delta=1.0 collapses the premium_sl/tp
+            # formulas below to exactly sl_pts/tp_pts, which is correct:
+            # futures P&L IS the spot-point move, nothing to convert.
+            delta = 1.0
+            gamma_adj = 0.0
+            theta_haircut = 0.0
+            strike_key = "FUT"
         else:
-            delta = _delta_map_fallback.get(strike_key, 0.50)
-            logger.debug(f"Cycle #{cycle}: Using fallback delta {delta} for {strike_key}")
+            # Determine delta — prefer live BS delta from IV snapshot over hardcoded map.
+            # Live delta accounts for DTE and current volatility level (ATM delta at
+            # VIX=25 is ~0.48, not 0.50; OTM1 at DTE=1 is ~0.32, not 0.40).
+            _delta_map_fallback = {
+                "ATM": 0.50, "OTM1": 0.40, "OTM2": 0.30, "OTM3": 0.22,
+                "ITM1": 0.60, "ITM2": 0.70,
+            }
+            strike_key = strike_mode.upper().replace("_", "")
+            iv_delta_key = f"{'CE' if direction == 'CALL' else 'PE'}_{strike_key}"
+            if (self._iv_snap and self._iv_snap.available
+                    and iv_delta_key in self._iv_snap.live_delta):
+                delta = self._iv_snap.live_delta[iv_delta_key]
+                logger.info(
+                    f"Cycle #{cycle}: Live delta for {iv_delta_key} = {delta:.3f} "
+                    f"(ATM_IV={self._iv_snap.atm_iv:.1f}% DTE={self._iv_snap.dte:.0f})"
+                )
+            else:
+                delta = _delta_map_fallback.get(strike_key, 0.50)
+                logger.debug(f"Cycle #{cycle}: Using fallback delta {delta} for {strike_key}")
 
-        # Gamma adjustment: ATM has highest gamma (premium moves faster than delta implies)
-        # On sharp moves, actual premium change > delta × spot_change
-        gamma_adj = 0.10 if strike_key == "ATM" else 0.05
+            # Gamma adjustment: ATM has highest gamma (premium moves faster than delta implies)
+            # On sharp moves, actual premium change > delta × spot_change
+            gamma_adj = 0.10 if strike_key == "ATM" else 0.05
 
-        # Theta haircut: TP takes longer to hit, theta erodes premium
-        # Intraday: ~5% haircut on TP target
-        now_hour = datetime.now().hour
-        theta_haircut = 0.08 if now_hour >= 14 else 0.05  # worse near close
+            # Theta haircut: TP takes longer to hit, theta erodes premium
+            # Intraday: ~5% haircut on TP target
+            now_hour = datetime.now().hour
+            theta_haircut = 0.08 if now_hour >= 14 else 0.05  # worse near close
 
         # Premium SL = how much the option premium drops when spot hits SL
         # Premium TP = how much the option premium rises when spot hits TP
@@ -4149,7 +4171,10 @@ class ClaudePilot:
         ml_indicators["gamma_squeeze"] = gamma_squeeze
         ml_indicators["kelly_conf_input"] = round(kelly_conf, 3)
 
-        num_lots = self._compute_position_size(sl_pts, kelly_conf, delta)
+        if self.config.execution_mode == "futures":
+            num_lots = self._compute_futures_position_size(sl_pts, kelly_conf, spot)
+        else:
+            num_lots = self._compute_position_size(sl_pts, kelly_conf, delta)
 
         # 2026-06-11: SL-TIGHTEN FALLBACK before skipping. Jun 11 #21: the
         # day's best signal (90% conf CALL) was skipped because 1 lot lost
@@ -4174,7 +4199,10 @@ class ClaudePilot:
                     premium_sl = sl_pts * delta * (1 + gamma_adj)
                     ml_indicators["premium_sl_pts"] = round(premium_sl, 1)
                     ml_indicators["spot_sl_pts"] = round(sl_pts, 1)
-                    num_lots = self._compute_position_size(sl_pts, kelly_conf, delta)
+                    if self.config.execution_mode == "futures":
+                        num_lots = self._compute_futures_position_size(sl_pts, kelly_conf, spot)
+                    else:
+                        num_lots = self._compute_position_size(sl_pts, kelly_conf, delta)
             except Exception as _e:
                 logger.debug(f"SL-tighten fallback failed (skip stands): {_e}")
 
@@ -4242,28 +4270,30 @@ class ClaudePilot:
         import os
         dry_run = os.getenv("DRY_RUN", "false").strip().lower() in ("true", "1", "yes")
         if dry_run:
+            is_futures_mode = self.config.execution_mode == "futures"
+            display_label = f"NIFTY FUT ({direction})" if is_futures_mode else f"NIFTY {option_type}"
             logger.info(
-                f"Cycle #{cycle}: [DRY RUN] WOULD EXECUTE {action} {option_type} "
-                f"({strike_mode}) conf={confidence}% SL={sl_pts:.0f} TP={tp_pts:.0f} "
-                f"lots={num_lots} spot={spot:.0f}"
+                f"Cycle #{cycle}: [DRY RUN] WOULD EXECUTE {action} {display_label} "
+                f"({'futures' if is_futures_mode else strike_mode}) conf={confidence}% "
+                f"SL={sl_pts:.0f} TP={tp_pts:.0f} lots={num_lots} spot={spot:.0f}"
             )
             self.notifier.notify_trade(
                 action="DRY_RUN",
-                symbol=f"NIFTY {option_type}",
+                symbol=display_label,
                 side=action,
                 qty=trade_qty,
                 price=spot,
                 order_id="PAPER",
                 status="simulated",
                 details=(
-                    f"[PAPER] {action} {option_type} ({strike_mode}) "
+                    f"[PAPER] {action} {display_label} "
                     f"conf={confidence}% SL={sl_pts:.0f} TP={tp_pts:.0f} "
                     f"R:R=1:{tp_pts/sl_pts:.1f}"
                 ),
             )
             self.trader.audit.log(
                 action="DRY_RUN_SIGNAL",
-                symbol=f"NIFTY {option_type}",
+                symbol=display_label,
                 side=action,
                 details=(
                     f"conf={confidence}% SL={sl_pts:.0f} TP={tp_pts:.0f} "
@@ -4329,6 +4359,38 @@ class ClaudePilot:
                         f"→ Telegram alert fires on PAPER_EXIT_SL/TP"
                     )
             self._save_session_state()
+            return
+
+        # ── FUTURES LIVE-ORDER SAFETY GUARD ─────────────────────────────
+        # Live order placement/symbol routing for execution_mode="futures"
+        # is not implemented yet -- only the PAPER path above (DRY_RUN=true)
+        # is wired. Everything below this point (strike resolution, real
+        # place_order calls) is options-specific and would do something
+        # undefined if reached in futures mode. Refuse outright rather than
+        # silently fall through into options logic with a futures config.
+        if self.config.execution_mode == "futures":
+            logger.error(
+                f"Cycle #{cycle}: 🛑 EXECUTION_MODE=futures but DRY_RUN is not "
+                f"true — live futures order placement is NOT implemented. "
+                f"Refusing to trade. Set DRY_RUN=true to test futures in "
+                f"paper mode, or EXECUTION_MODE=options for live trading."
+            )
+            try:
+                self.notifier.notify_trade(
+                    action="BLOCKED",
+                    symbol="NIFTY FUT",
+                    side=action,
+                    qty=0,
+                    price=spot,
+                    order_id="N/A",
+                    status="blocked",
+                    details=(
+                        "EXECUTION_MODE=futures requires DRY_RUN=true — "
+                        "live futures order placement is not implemented yet."
+                    ),
+                )
+            except Exception:
+                pass
             return
 
         try:
@@ -5508,6 +5570,114 @@ class ClaudePilot:
             f"loss/lot={loss_per_lot:.1f} raw={raw_lots:.1f} "
             f"kelly_edge={kelly_edge:.2f} kelly_lots={kelly_lots:.1f} → {final_lots} lots "
             f"({final_lots * cfg.lot_size} qty){halved_note}"
+        )
+        return int(final_lots)
+
+    def _compute_futures_position_size(
+        self, sl_pts: float, ml_confidence: float, spot: float,
+    ) -> int:
+        """
+        Futures counterpart to _compute_position_size(). Only used when
+        cfg.execution_mode == "futures" (default "options" — this method
+        is unreachable in today's live behavior).
+
+        Same risk-based Kelly core as the options sizer, with two real
+        differences:
+          - delta is fixed at 1.0 (a futures point move is a 1:1 P&L point
+            move — no option Greeks discount), so loss_per_lot only needs
+            sl_pts * lot_size, not sl_pts * delta * lot_size.
+          - an ADDITIONAL margin-capital constraint options never needed:
+            options only cost the premium (small, already implicitly
+            bounded by the risk sizing above); futures require SPAN+
+            exposure MARGIN per lot, which for NIFTY is roughly 10-15% of
+            full notional (spot * lot_size) — order-of-magnitude more
+            capital per lot than an option's premium. Uses a conservative
+            offline ESTIMATE (cfg.futures_margin_pct_estimate) since this
+            repo has no confirmed live margin-calculator integration yet
+            (see get_funds() below — its response format isn't parsed
+            anywhere in this codebase, so it's logged for confirmation
+            rather than trusted as a hard gate until verified against a
+            real account).
+        """
+        cfg = self.config
+        equity = cfg.account_equity
+        risk_amount = equity * cfg.max_risk_pct
+
+        loss_per_lot = sl_pts * cfg.lot_size  # delta=1.0 for futures
+        if loss_per_lot <= 0:
+            logger.warning("Futures position sizing: loss_per_lot <= 0, defaulting to 1 lot")
+            return cfg.min_lots
+
+        raw_lots = risk_amount / loss_per_lot
+        kelly_edge = max(0.0, min(1.0, (ml_confidence - 0.50) * 2))
+        try:
+            actual_kelly = self._compute_actual_kelly()
+            if actual_kelly is not None:
+                kelly_edge = max(0.0, min(1.0, 0.7 * actual_kelly + 0.3 * kelly_edge))
+        except Exception as _e:
+            logger.debug(f"Futures sizing: True Kelly calc failed (fallback): {_e}")
+
+        kelly_lots = raw_lots * cfg.kelly_fraction * (1 + kelly_edge)
+        final_lots = max(cfg.min_lots, min(cfg.max_lots, round(kelly_lots)))
+
+        # MAX_LOSS_PER_TRADE hard enforcement — same rule as options sizing.
+        try:
+            _max_loss = float(getattr(self.trader.risk, "max_loss_per_trade", 2000.0))
+            if _max_loss > 0 and loss_per_lot > 0:
+                _max_lots_safe = int(_max_loss / loss_per_lot)
+                if _max_lots_safe < cfg.min_lots:
+                    logger.warning(
+                        f"Futures position sizing: MAX_LOSS_PER_TRADE=₹{_max_loss:.0f} "
+                        f"BLOCK — 1 lot would lose ₹{loss_per_lot:.0f} "
+                        f"(sl={sl_pts:.0f}pts × lot_size={cfg.lot_size}) > limit. "
+                        f"Returning 0 → trade will be SKIPPED."
+                    )
+                    return 0
+                elif _max_lots_safe < final_lots:
+                    final_lots = _max_lots_safe
+        except Exception as _e:
+            logger.debug(f"Futures sizing: MAX_LOSS_PER_TRADE check failed (fail-open): {_e}")
+
+        # ── Margin-capital constraint (offline estimate) ────────────────
+        # No live per-order margin calculator confirmed available — this
+        # is a deliberately conservative % of notional, not a broker quote.
+        notional_per_lot = spot * cfg.lot_size
+        margin_per_lot_estimate = notional_per_lot * cfg.futures_margin_pct_estimate
+        if margin_per_lot_estimate > 0:
+            max_lots_by_margin = int(equity / margin_per_lot_estimate)
+            if max_lots_by_margin < cfg.min_lots:
+                logger.warning(
+                    f"Futures position sizing: MARGIN BLOCK — 1 lot needs an "
+                    f"estimated ₹{margin_per_lot_estimate:.0f} margin "
+                    f"({cfg.futures_margin_pct_estimate:.0%} of ₹{notional_per_lot:.0f} "
+                    f"notional) > equity ₹{equity:.0f}. Returning 0 → trade SKIPPED."
+                )
+                return 0
+            elif max_lots_by_margin < final_lots:
+                logger.warning(
+                    f"Futures position sizing: MARGIN — reducing {final_lots} lots → "
+                    f"{max_lots_by_margin} lots (est. margin/lot=₹{margin_per_lot_estimate:.0f})"
+                )
+                final_lots = max_lots_by_margin
+
+        # Best-effort live funds check — logged only, NOT enforced yet.
+        # Confirm the real field names against a live account before this
+        # can safely become a hard gate; wrong field name silently
+        # reading 0/None would be worse than not checking at all.
+        try:
+            funds = self.trader.get_funds_available()
+            logger.info(f"Futures position sizing: live get_funds() response (unparsed): {funds}")
+        except Exception as _e:
+            logger.debug(f"Futures sizing: live funds check unavailable: {_e}")
+
+        if getattr(self, "_size_halved_remaining", 0) > 0:
+            final_lots = max(cfg.min_lots, final_lots // 2)
+            self._size_halved_remaining -= 1
+
+        logger.info(
+            f"Futures position sizing: equity={equity:.0f} risk={risk_amount:.0f} "
+            f"loss/lot={loss_per_lot:.1f} margin_est/lot={margin_per_lot_estimate:.0f} "
+            f"→ {final_lots} lots ({final_lots * cfg.lot_size} qty)"
         )
         return int(final_lots)
 
