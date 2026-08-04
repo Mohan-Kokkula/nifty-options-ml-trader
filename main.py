@@ -448,6 +448,11 @@ def bootstrap():
         # this must stay paired with DRY_RUN=true.
         execution_mode=os.getenv("EXECUTION_MODE", "options").strip().lower(),
         futures_margin_pct_estimate=float(os.getenv("FUTURES_MARGIN_PCT_ESTIMATE", "0.15")),
+        # 0 = disabled (no extra filtering beyond the existing confidence
+        # gate). Only set this once you have real `confidence` values from
+        # actual futures paper-mode runs to calibrate against -- see the
+        # comment at PilotConfig.futures_min_confidence_pct.
+        futures_min_confidence_pct=float(os.getenv("FUTURES_MIN_CONFIDENCE_PCT", "0")),
         # HH/HL structure feature (parallel output only -- logged every cycle,
         # never read by any gate/threshold). Defaults to enabled since it has
         # no effect on trade decisions; set false to disable the computation

@@ -113,6 +113,12 @@ class PilotConfig:
     # this estimate only pre-shapes the Kelly sizing, it never overrides
     # the real broker-reported capital check.
     futures_margin_pct_estimate: float = 0.15
+    # Optional extra selectivity floor for futures mode (0 = disabled, no
+    # behavior change). See the futures selectivity floor comment at the
+    # confidence-gate check for why this needs live calibration before use
+    # -- it's on the same 0-100 scale as `confidence`/effective_min_conf,
+    # NOT the raw backtest quantile that motivated adding this knob.
+    futures_min_confidence_pct: float = 0.0
     strategy_name: str = "OpenClawNifty"  # written into journal records for per-strategy analytics
     # HH/HL structure feature (parallel output only — logged every cycle via
     # the Feature Engineering Directive, NOT read by any gate or threshold).
@@ -3718,6 +3724,22 @@ class ClaudePilot:
                 effective_min_conf = max(effective_min_conf, 65)
         except Exception:
             pass
+
+        # ── FUTURES SELECTIVITY FLOOR (opt-in, disabled by default) ─────────
+        # Backtest finding (8-fold walk-forward, futures friction): filtering
+        # to only the model's top ~30%-confidence signals improved mean PF
+        # from 0.982 to 1.021 (6/8 folds better, not just one lucky window).
+        # That backtest measured confidence on the raw model proba.max()
+        # scale, NOT the `confidence` variable checked below (which goes
+        # through the call/(call+put) blend + 90% cap applied earlier in
+        # this function) -- those are different scales, so the backtest's
+        # ~47.6% (70th percentile) number does NOT plug in here directly.
+        # Defaults to 0 (disabled, no behavior change) until calibrated
+        # against real confidence values from actual futures paper-mode
+        # runs -- set FUTURES_MIN_CONFIDENCE_PCT once you have that data.
+        if (self.config.execution_mode == "futures"
+                and self.config.futures_min_confidence_pct > 0):
+            effective_min_conf = max(effective_min_conf, self.config.futures_min_confidence_pct)
 
         if confidence < effective_min_conf:
             logger.info(
