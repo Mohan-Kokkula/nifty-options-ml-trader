@@ -428,6 +428,20 @@ def bootstrap():
     except Exception as _e:
         logger.warning(f"futures archiver not started (non-fatal): {_e}")
 
+    # PSAR session brain (new, opt-in, paper-mode only): independent
+    # trend-following signal validated by an 8-fold walk-forward backtest
+    # (PSAR flip + opening-gap agreement + opening-range breakout with a
+    # 2-bar hold confirmation + VIX regime band). Runs as a fully separate
+    # daemon loop from ClaudePilot's ML-driven position management -- own
+    # position state, own journal, own Telegram alerts, never places a
+    # real broker order. Disabled by default; enable with
+    # PSAR_BRAIN_ENABLED=true in settings.env.
+    try:
+        from core.psar_session_brain import start_in_app as _psar_start
+        _psar_start()
+    except Exception as _e:
+        logger.warning(f"PSAR session brain not started (non-fatal): {_e}")
+
     # Dual-Brain Pilot (ML + Claude)
     pilot_config = PilotConfig(
         ml_only_mode=os.getenv("ML_ONLY_MODE", "false").lower() == "true",
