@@ -312,11 +312,39 @@ class PSARSessionBrain:
             return
         now = df.index[-1].to_pydatetime()
         spot = float(df["close"].iloc[-1])
+        self._log_heartbeat(df, spot)
 
         if self.position is not None:
             self._manage_open_position(df, now, spot)
         else:
             self._look_for_entry(df, now, spot)
+
+    def _log_heartbeat(self, df: pd.DataFrame, spot: float):
+        """One visible line per cycle, mirroring the main pilot's per-cycle
+        logging style -- confirms the brain is actively evaluating, not
+        just silently idle between rare signals."""
+        try:
+            if self.position is not None:
+                pos = self.position
+                sign = 1 if pos.direction == "CALL" else -1
+                unrealized = sign * (spot - pos.entry_price)
+                logger.info(f"PSAR brain: heartbeat | managing OPEN {pos.direction} position "
+                            f"spot={spot:.1f} entry={pos.entry_price:.1f} SL={pos.sl_price:.1f} "
+                            f"TP={pos.tp_price:.1f} unrealized={unrealized:+.1f}pts")
+            else:
+                trend = compute_psar(df["high"].values, df["low"].values, df["close"].values,
+                                      self.cfg.af_start, self.cfg.af_incr, self.cfg.af_max)[1]
+                trend_dir = "CALL" if trend[-1] == 1 else "PUT"
+                if self._pending_flip:
+                    pf = self._pending_flip
+                    logger.info(f"PSAR brain: heartbeat | trend={trend_dir} spot={spot:.1f} "
+                                f"awaiting confirmation for {pf['direction']} "
+                                f"(bars_since={pf['bars_since']}/{self.cfg.confirm_bars})")
+                else:
+                    logger.info(f"PSAR brain: heartbeat | trend={trend_dir} spot={spot:.1f} "
+                                f"no open position, no pending signal")
+        except Exception as e:
+            logger.debug(f"PSAR brain: heartbeat log failed (non-fatal): {e}")
 
     # ── Entry side ──────────────────────────────────────────────────
     def _look_for_entry(self, df: pd.DataFrame, now: datetime, spot: float):
