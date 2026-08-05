@@ -157,7 +157,7 @@ def bootstrap():
     root_logger.addHandler(file_handler)
 
     logger = logging.getLogger("main")
-    logger.info(f"📝 Logging to {log_file}")
+    logger.info(f"📝 Logging to {log_dir}/ (rolls to a new dated file automatically at midnight IST)")
     logger.info("🚀 Starting OpenClaw Nifty Options Trader")
 
     # Loud, impossible-to-miss confirmation of trading mode — resolves the
