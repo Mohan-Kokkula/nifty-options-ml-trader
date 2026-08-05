@@ -361,25 +361,28 @@ class PSARSessionBrain:
             if not flipped_now:
                 return
             direction = "CALL" if trend[-1] == 1 else "PUT"
+            logger.info(f"PSAR brain: flip detected -> {direction} @ spot={spot:.1f}, checking filters...")
             gap_pts, gap_sign = compute_gap(df)
             sig = 1 if direction == "CALL" else -1
             if gap_sign == 0 or sig != gap_sign:
-                logger.debug("PSAR brain: flip detected but gap direction disagrees -- skipped")
+                logger.info(f"PSAR brain: flip REJECTED (gap disagrees) -- gap_pts={gap_pts:+.1f} "
+                            f"gap_sign={gap_sign:+.0f} vs flip_sign={sig:+.0f}")
                 return
             orb_hi, orb_lo = compute_orb(df, cfg.orb_bars)
             if not np.isfinite(orb_hi) or not np.isfinite(orb_lo):
-                logger.debug("PSAR brain: flip detected but opening range not yet established -- skipped")
+                logger.info("PSAR brain: flip REJECTED (opening range not yet established today)")
                 return
             broke_orb = (spot > orb_hi) if sig == 1 else (spot < orb_lo)
             if not broke_orb:
-                logger.debug("PSAR brain: flip detected but no opening-range breakout yet -- skipped")
+                logger.info(f"PSAR brain: flip REJECTED (no opening-range breakout yet) -- "
+                            f"spot={spot:.1f} orb_hi={orb_hi:.1f} orb_lo={orb_lo:.1f}")
                 return
             if not in_trending_window(now, cfg):
-                logger.debug("PSAR brain: flip detected but inside first-15min/lunch window -- skipped")
+                logger.info(f"PSAR brain: flip REJECTED (inside first-15min/lunch window, t={now.strftime('%H:%M')})")
                 return
             vix = self._fetch_vix()
             if vix is None or not (cfg.vix_lo <= vix <= cfg.vix_hi):
-                logger.debug(f"PSAR brain: flip detected but VIX={vix} outside [{cfg.vix_lo},{cfg.vix_hi}] -- skipped")
+                logger.info(f"PSAR brain: flip REJECTED (VIX={vix} outside [{cfg.vix_lo},{cfg.vix_hi}])")
                 return
             # All gates passed -> start the 2-bar hold-confirmation window.
             self._pending_flip = {
