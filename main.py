@@ -442,6 +442,21 @@ def bootstrap():
     except Exception as _e:
         logger.warning(f"PSAR session brain not started (non-fatal): {_e}")
 
+    # Trend-day brain (new, opt-in, paper-mode only, FUTURES ONLY): joins an
+    # established session trend (VWAP-proxy deficit + 3 sequential closes +
+    # below/above day open) once per day, structural stop at the day extreme
+    # capped at 60pts, 2R target. Params selected on walk-forward VAL folds
+    # 1-5 and confirmed once on TEST folds 6-8 (mean PF 1.113, 3/3 folds
+    # > 1.0, n=924). Refuses to arm unless EXECUTION_MODE=futures -- the same
+    # trades score PF 0.666 under options friction. Own state/journal/Telegram,
+    # never touches LivePosition, never places a real broker order. Disabled by
+    # default; enable with TREND_DAY_BRAIN_ENABLED=true in settings.env.
+    try:
+        from core.trend_day_brain import start_in_app as _td_start
+        _td_start()
+    except Exception as _e:
+        logger.warning(f"Trend-day brain not started (non-fatal): {_e}")
+
     # Dual-Brain Pilot (ML + Claude)
     pilot_config = PilotConfig(
         ml_only_mode=os.getenv("ML_ONLY_MODE", "false").lower() == "true",
