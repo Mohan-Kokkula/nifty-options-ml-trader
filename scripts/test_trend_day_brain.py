@@ -67,9 +67,15 @@ check("too few bars -> 0", consecutive_closes([10, 11], 3) == 0)
 check("only the LAST n bars count", consecutive_closes([50, 10, 11, 12, 13], 3) == 3)
 
 print("\n-- in_entry_window --")
-check("10:30 is the inclusive open", in_entry_window(datetime(2026, 8, 5, 10, 30), CFG))
+check("11:30 is the inclusive open", in_entry_window(datetime(2026, 8, 5, 11, 30), CFG))
 check("14:00 is the inclusive close", in_entry_window(datetime(2026, 8, 5, 14, 0), CFG))
 check("09:45 rejected (open noise)", not in_entry_window(datetime(2026, 8, 5, 9, 45), CFG))
+# 10:30 is now REJECTED: the trend-continuation edge is negative before
+# 11:30 (morning mean-reverts), so a continuation rule must not fire there.
+check("10:30 rejected (mean-reverting half)",
+      not in_entry_window(datetime(2026, 8, 5, 10, 30), CFG))
+check("11:25 rejected (just before the flip)",
+      not in_entry_window(datetime(2026, 8, 5, 11, 25), CFG))
 check("14:05 rejected (late chop)", not in_entry_window(datetime(2026, 8, 5, 14, 5), CFG))
 
 print("\n-- compute_stop_target --")

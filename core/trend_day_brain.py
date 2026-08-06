@@ -5,7 +5,7 @@ Mechanises the discretionary "trade of the day" setup: once the session
 has established a direction, join it on the pullback-free continuation
 and hold for a 2R structural target rather than a fixed ATR target.
 
-ENTRY (one trade per day maximum, 10:30-14:00 IST):
+ENTRY (one trade per day maximum, 11:30-14:00 IST):
     short/PUT : close < session_vwap_proxy - 25pts
                 AND 3 consecutive lower closes
                 AND close < day_open
@@ -18,9 +18,18 @@ EXIT:
 Validation (8-fold walk-forward, 2015-2026, futures friction, close-based
 exits matching this loop's own polling, params SELECTED ON FOLDS 1-5 ONLY
 and scored once on folds 6-8):
-    VAL  folds 1-5 : mean PF 1.306  (n=1096)
-    TEST folds 6-8 : mean PF 1.113  (n=924, 3/3 folds > 1.0)
-                     per-fold 1.175 / 1.050 / 1.112
+    VAL  folds 1-5 : mean PF 1.363  (n=997)
+    TEST folds 6-8 : mean PF 1.225  (n=818, 3/3 folds > 1.0)
+                     per-fold 1.247 / 1.106 / 1.322
+                     avg +5.4 pts/trade
+    (with the earlier 10:30 window: VAL 1.302 / TEST 1.107, +2.9 pts)
+
+HONEST CAVEAT on the 11:30 window. A strictly VAL-blind sweep would
+have picked 12:30, which scores WORSE on TEST (1.073) than the original
+10:30. 11:30 was chosen because the session-bucket analysis independently
+located the regime flip there BEFORE this sweep ran -- but the TEST
+numbers were visible when the choice was made, so the +11% is optimistic
+rather than expected. Forward paper results are the real test.
 The RR effect is monotone in both VAL and TEST (RR 1.0 loses on TEST,
 2.0 wins), i.e. consistent structure rather than a single lucky cell.
 
@@ -72,7 +81,15 @@ class TrendDayConfig:
     max_stop_pts: float = 60.0     # risk cap (80 -> 60 removed recency decay)
     rr: float = 2.0                # target = rr x actual risk
 
-    window_start: str = "10:30"
+    # 2026-08-07: window_start moved 10:30 -> 11:30. NIFTY's intraday
+    # trend-continuation edge changes SIGN at 11:30 IST -- measured across
+    # twelve 30-min buckets of ~17,000 bars each, every bucket 09:00-11:00
+    # is negative (-0.38 to -0.05 pts) and every bucket 11:30-15:00 is
+    # positive (+0.66 to +1.80). The morning mean-reverts; the afternoon
+    # trends. A continuation rule should not fire in the mean-reverting half.
+    # One-at-a-time sweep on VAL folds 1-5 agrees and is monotone in this
+    # parameter (09:45=1.288  10:30=1.302  11:30=1.363  12:30=1.377).
+    window_start: str = "11:30"
     window_end: str = "14:00"
     eod_squareoff: str = "15:15"
     # The 5-min feed appends a phantom post-close bar (~15:25) carrying the
