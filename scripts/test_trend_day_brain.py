@@ -21,6 +21,7 @@ from core.trend_day_brain import (  # noqa: E402
     TrendDayConfig,
     compute_stop_target,
     consecutive_closes,
+    drop_auction_print,
     evaluate_entry,
     in_entry_window,
     session_vwap_proxy,
@@ -128,6 +129,22 @@ check("single spike is not a sequence", evaluate_entry(spike, CFG) is None)
 
 check("empty frame -> None", evaluate_entry(bars([]), CFG) is None)
 check("too few bars -> None", evaluate_entry(bars([24600, 24500]), CFG) is None)
+
+print("\n-- drop_auction_print --")
+# Real shape observed 2026-08-04: a phantom 15:25 bar 151pts above the
+# 15:15 close. The backtest excluded post-15:15 bars; the live loop must too.
+idx = pd.to_datetime(["2026-08-04 15:05", "2026-08-04 15:10",
+                      "2026-08-04 15:15", "2026-08-04 15:25"])
+day = bars([24452.30, 24462.95, 24463.45, 24614.90]).set_index(idx)
+kept = drop_auction_print(day, CFG)
+check("phantom 15:25 auction bar dropped", len(kept) == 3)
+check("15:15 bar retained", kept.index[-1].strftime("%H:%M") == "15:15")
+check("EOD fill uses the real close, not +151pts",
+      abs(float(kept["close"].iloc[-1]) - 24463.45) < 1e-9)
+check("empty frame survives", drop_auction_print(bars([]), CFG).empty)
+intraday = bars([24500, 24490, 24480]).set_index(
+    pd.to_datetime(["2026-08-04 11:00", "2026-08-04 11:05", "2026-08-04 11:10"]))
+check("intraday bars untouched", len(drop_auction_print(intraday, CFG)) == 3)
 
 print("\n-- config guards (the validated params) --")
 check("rr is 2.0 (VAL-selected)", CFG.rr == 2.0)

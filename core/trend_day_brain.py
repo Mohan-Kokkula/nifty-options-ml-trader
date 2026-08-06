@@ -75,6 +75,13 @@ class TrendDayConfig:
     window_start: str = "10:30"
     window_end: str = "14:00"
     eod_squareoff: str = "15:15"
+    # The 5-min feed appends a phantom post-close bar (~15:25) carrying the
+    # closing-auction/settlement print, which sits well away from the last
+    # traded price -- observed +151 / +54 / +8 pts above the 15:15 close on
+    # 2026-08-04/05/06. It is not tradeable. The backtest excluded it
+    # (bars <= EOD only); this bound keeps the live loop consistent, so a
+    # missed 15:15 poll can never fill the EOD exit at the auction price.
+    last_tradeable_time: str = "15:20"
 
     lookback_bars: int = 300
     cycle_interval_sec: int = 60
@@ -96,6 +103,14 @@ def session_vwap_proxy(df_today: pd.DataFrame) -> float:
         return float("nan")
     tp = (df_today["high"] + df_today["low"] + df_today["close"]) / 3.0
     return float(tp.mean())
+
+
+def drop_auction_print(df_today: pd.DataFrame, cfg: TrendDayConfig) -> pd.DataFrame:
+    """Strip non-tradeable post-close bars (see cfg.last_tradeable_time)."""
+    if df_today.empty:
+        return df_today
+    keep = [t.strftime("%H:%M") < cfg.last_tradeable_time for t in df_today.index]
+    return df_today[keep]
 
 
 def consecutive_closes(closes, n: int) -> int:
@@ -246,11 +261,11 @@ class TrendDayBrain:
         df = self._fetch_bars()
         if df is None:
             return
-        now = df.index[-1].to_pydatetime()
-        today = now.date()
-        df_today = df[df.index.date == today]
+        today = df.index[-1].date()
+        df_today = drop_auction_print(df[df.index.date == today], self.cfg)
         if df_today.empty:
             return
+        now = df_today.index[-1].to_pydatetime()
         spot = float(df_today["close"].iloc[-1])
 
         if self.position is not None:
