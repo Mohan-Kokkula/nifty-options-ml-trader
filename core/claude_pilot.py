@@ -119,6 +119,19 @@ class PilotConfig:
     # -- it's on the same 0-100 scale as `confidence`/effective_min_conf,
     # NOT the raw backtest quantile that motivated adding this knob.
     futures_min_confidence_pct: float = 0.0
+    # PCR-alignment confidence boost (new, opt-in). Backtested on the PSAR
+    # signal + 2+ years of daily PCR data (2024-05 to 2026-07, the only
+    # history available -- no proper VAL/TEST split possible with this
+    # short a window): PCR-aligned trades scored PF 1.81 vs 1.29 baseline,
+    # consistent across two separate chronological chunks (PF 1.795 and
+    # 1.824) -- promising, not proven the way other filters in this
+    # project are. Mirrors the existing OI-buildup penalty (oi_penalty)
+    # in shape, but as a small, capped REDUCTION to effective_min_conf
+    # for trades PCR agrees with, not a requirement. Disabled by default;
+    # enable with PCR_ALIGNMENT_BOOST_ENABLED=true once you want to start
+    # validating it against live paper-trading data.
+    pcr_alignment_boost_enabled: bool = False
+    pcr_alignment_boost_pct: float = 3.0
     strategy_name: str = "OpenClawNifty"  # written into journal records for per-strategy analytics
     # HH/HL structure feature (parallel output only — logged every cycle via
     # the Feature Engineering Directive, NOT read by any gate or threshold).
@@ -285,6 +298,18 @@ def _max_hold_exceeded(entry_time_monotonic: float, max_hold_minutes: int, now_m
         return False
     now = now_monotonic if now_monotonic is not None else time.monotonic()
     return (now - entry_time_monotonic) / 60.0 >= max_hold_minutes
+
+
+def _pcr_mood(pcr: float) -> Optional[str]:
+    """PCR-implied direction using core/market_intel.py's own pcr_score formula
+    ((pcr-0.5)/0.8*100), matching what the PCR-alignment backtest used.
+    Returns "CALL" (bullish-leaning), "PUT" (bearish-leaning), or None (neutral)."""
+    pcr_score = max(0.0, min(100.0, (pcr - 0.5) / 0.8 * 100.0))
+    if pcr_score >= 60:
+        return "CALL"
+    if pcr_score <= 35:
+        return "PUT"
+    return None
 
 
 def _gap_protection_widen(sl_pts: float, tp_pts: float, minutes_since_open: float,
@@ -3142,6 +3167,18 @@ class ClaudePilot:
                 ml_indicators["oi_warning"] = align_reason
                 logger.info(f"Cycle #{cycle}: ⚠️ OI soft warning: {align_reason}")
 
+            # 2026-08-06: PCR-alignment confidence boost (opt-in, see
+            # PilotConfig.pcr_alignment_boost_enabled for backtest evidence
+            # and its "promising, not proven" caveat).
+            if self.config.pcr_alignment_boost_enabled and intel.pcr_available:
+                pcr_mood = _pcr_mood(intel.pcr)
+                if pcr_mood is not None and pcr_mood == ml_direction:
+                    ml_indicators["pcr_boost"] = -int(self.config.pcr_alignment_boost_pct)
+                    logger.info(
+                        f"Cycle #{cycle}: PCR ALIGNED (pcr={intel.pcr:.2f} mood={pcr_mood}) "
+                        f"→ -{self.config.pcr_alignment_boost_pct:.0f}pp conf boost"
+                    )
+
             # Add market intel + OI features to ml_indicators
             ml_indicators["market_intel"] = intel.context_str
             ml_indicators["sentiment_score"] = intel.sentiment_score
@@ -3444,11 +3481,17 @@ class ClaudePilot:
         struct_pen = int(ml_indicators.get("structure_penalty", 0) or 0)
         # 2026-06-11: OI-buildup contradiction penalty (was a hard block)
         struct_pen += int(ml_indicators.get("oi_penalty", 0) or 0)
+        # 2026-08-06: PCR-alignment boost (negative -- reduces the bar).
+        # Opt-in, see PilotConfig.pcr_alignment_boost_enabled.
+        struct_pen += int(ml_indicators.get("pcr_boost", 0) or 0)
         if struct_pen:
             old = effective_min_conf
-            effective_min_conf = min(85, effective_min_conf + struct_pen)
+            # Floor at 50 (matches the floor used elsewhere in this function,
+            # e.g. the regime-alignment branch) so a PCR boost can never push
+            # the bar below the same safety floor every other lowering path respects.
+            effective_min_conf = min(85, max(50, effective_min_conf + struct_pen))
             logger.info(
-                f"Cycle #{cycle}: STRUCTURE PENALTY +{struct_pen}% → "
+                f"Cycle #{cycle}: STRUCTURE PENALTY {struct_pen:+d}% → "
                 f"min_conf {old}%→{effective_min_conf}%"
             )
 

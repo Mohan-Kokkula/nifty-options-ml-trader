@@ -2,7 +2,7 @@
 """
 Unit tests for the new advanced-stop pure helper functions in
 core/claude_pilot.py: _atr_trail_sl_candidate, _premium_trail_stop_hit,
-_max_hold_exceeded, _gap_protection_widen.
+_max_hold_exceeded, _gap_protection_widen, _pcr_mood.
 
 Standalone script (repo convention), run with:
     python scripts/test_stop_management.py
@@ -22,6 +22,7 @@ from core.claude_pilot import (
     _premium_trail_stop_hit,
     _max_hold_exceeded,
     _gap_protection_widen,
+    _pcr_mood,
 )
 
 
@@ -87,6 +88,23 @@ def main():
         f"before market open (negative minutes) leaves SL/TP unchanged (got sl={sl_pts}, tp={tp_pts})",
         sl_pts == 40.0 and tp_pts == 100.0,
     )
+
+    # ── _pcr_mood ─────────────────────────────────────────────────────
+    # pcr_score = (pcr-0.5)/0.8*100; >=60 -> CALL, <=35 -> PUT, else neutral
+    mood = _pcr_mood(pcr=1.2)  # score = (1.2-0.5)/0.8*100 = 87.5 -> bullish
+    all_ok &= check(f"high PCR (1.2) -> bullish mood=CALL (got {mood})", mood == "CALL")
+
+    mood = _pcr_mood(pcr=0.5)  # score = 0.0 -> bearish
+    all_ok &= check(f"low PCR (0.5) -> bearish mood=PUT (got {mood})", mood == "PUT")
+
+    mood = _pcr_mood(pcr=0.9)  # score = 50.0 -> neutral (35 < 50 < 60)
+    all_ok &= check(f"mid PCR (0.9) -> neutral mood=None (got {mood})", mood is None)
+
+    mood = _pcr_mood(pcr=10.0)  # extreme value must clip, not error
+    all_ok &= check(f"extreme high PCR clips to bullish, no crash (got {mood})", mood == "CALL")
+
+    mood = _pcr_mood(pcr=0.0)  # extreme value must clip, not error
+    all_ok &= check(f"extreme low PCR clips to bearish, no crash (got {mood})", mood == "PUT")
 
     print("\nALL PASS" if all_ok else "\nSOME FAILED")
     return 0 if all_ok else 1

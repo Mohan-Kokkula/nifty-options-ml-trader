@@ -467,6 +467,12 @@ def bootstrap():
         # actual futures paper-mode runs to calibrate against -- see the
         # comment at PilotConfig.futures_min_confidence_pct.
         futures_min_confidence_pct=float(os.getenv("FUTURES_MIN_CONFIDENCE_PCT", "0")),
+        # PCR-alignment confidence boost (new, opt-in) -- see the comment at
+        # PilotConfig.pcr_alignment_boost_enabled for the backtest evidence
+        # and its caveats. Disabled by default; set
+        # PCR_ALIGNMENT_BOOST_ENABLED=true to turn on.
+        pcr_alignment_boost_enabled=os.getenv("PCR_ALIGNMENT_BOOST_ENABLED", "false").lower() == "true",
+        pcr_alignment_boost_pct=float(os.getenv("PCR_ALIGNMENT_BOOST_PCT", "3")),
         # HH/HL structure feature (parallel output only -- logged every cycle,
         # never read by any gate/threshold). Defaults to enabled since it has
         # no effect on trade decisions; set false to disable the computation
