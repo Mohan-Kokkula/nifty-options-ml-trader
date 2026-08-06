@@ -14,6 +14,7 @@ CALL/PUT/SKIP signals from 5-min OHLC bars enriched with
 """
 
 import logging
+import os
 import sys
 import warnings
 import numpy as np
@@ -147,6 +148,29 @@ def load_model(model_dir: str = "") -> bool:
          base / "models/nifty_v9_scaler.pkl",
          base / "models/feature_cols_v9.pkl"),
     ]
+
+    # 2026-08-06: optional pin. Default "" keeps the V10→V9 preference
+    # above exactly as-is (no behavior change).
+    #
+    # Why this exists: a head-to-head on identical, fully out-of-sample
+    # bars (2026-05-18→2026-07-31), both scored with this module's own
+    # live decision rule, found V9 strictly better than V10 —
+    #   V9 : recall 54.5% of real directional bars, dir_acc 60.3% (n=146)
+    #   V10: recall  7.1% of real directional bars, dir_acc 73.7% (n=19)
+    # V10's edge in dir_acc is on 19 signals (high variance) while its
+    # recall is 7.7x worse, because requiring option/IV context on every
+    # row cuts training data from ~212k bars to ~29k (13.8%). Set
+    # ML_MODEL_VERSION=v9 to pin V9 and skip V10 entirely.
+    _pin = os.getenv("ML_MODEL_VERSION", "").strip().lower()
+    if _pin in ("v9", "v10"):
+        _want = _pin.upper()
+        candidates = [c for c in candidates if c[0] == _want]
+        log.info(f"ML_MODEL_VERSION={_pin} — pinned to {_want}, other versions skipped")
+    elif _pin:
+        log.warning(
+            f"ML_MODEL_VERSION={_pin!r} not recognised (expected 'v9' or 'v10') "
+            f"— ignoring, using default V10→V9 preference"
+        )
 
     for version, mpath, spath, fpath in candidates:
         if mpath.exists() and spath.exists() and fpath.exists():
