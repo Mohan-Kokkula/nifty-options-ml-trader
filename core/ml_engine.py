@@ -135,10 +135,20 @@ def load_model(model_dir: str = "") -> bool:
 
     base = Path(model_dir) if model_dir else Path(".")
 
-    # V10 preferred (188 features: V9 base + option chain).
-    # V9 fallback if V10 not yet trained/promoted.
+    # V11 preferred (26 features: the co-movement-pruned trader set).
+    # V10 next (188 features: V9 base + option chain).
+    # V9 fallback if neither is trained/promoted.
     # V8 and V7 removed — no longer trained or maintained.
+    #
+    # Listing V11 first is inert until something writes its live paths.
+    # Only model_registry.promote_if_passes_gate() does that, and it
+    # refuses to compare across metric_version, so V11 (metric_version 2)
+    # can only displace a champion scored the same way.
     candidates = [
+        ("V11",
+         base / "models/nifty_v11_models.pkl",
+         base / "models/nifty_v11_scaler.pkl",
+         base / "models/feature_cols_v11.pkl"),
         ("V10",
          base / "models/nifty_v10_models.pkl",
          base / "models/nifty_v10_scaler.pkl",
@@ -161,15 +171,23 @@ def load_model(model_dir: str = "") -> bool:
     # recall is 7.7x worse, because requiring option/IV context on every
     # row cuts training data from ~212k bars to ~29k (13.8%). Set
     # ML_MODEL_VERSION=v9 to pin V9 and skip V10 entirely.
+    # 2026-08-07: V11 added to the pin set. A controlled ablation holding
+    # the whole pipeline constant found the 163-feature set generalizes
+    # worse than a 26-feature one — every subset at <=50 features had
+    # POSITIVE VAL->TEST drift, every subset at >=99 had NEGATIVE drift:
+    #   V9  (163 feat): TEST dir_acc 60.0%, recall 63.7%, drift -0.015
+    #   V11 ( 26 feat): TEST dir_acc 64.9%, recall 48.9%, drift +0.007
+    # V11 fires ~24% fewer signals at ~5pp higher accuracy, which is the
+    # right trade under friction. See scripts/train_model_v11.py.
     _pin = os.getenv("ML_MODEL_VERSION", "").strip().lower()
-    if _pin in ("v9", "v10"):
+    if _pin in ("v9", "v10", "v11"):
         _want = _pin.upper()
         candidates = [c for c in candidates if c[0] == _want]
         log.info(f"ML_MODEL_VERSION={_pin} — pinned to {_want}, other versions skipped")
     elif _pin:
         log.warning(
-            f"ML_MODEL_VERSION={_pin!r} not recognised (expected 'v9' or 'v10') "
-            f"— ignoring, using default V10→V9 preference"
+            f"ML_MODEL_VERSION={_pin!r} not recognised (expected 'v9', 'v10' or "
+            f"'v11') — ignoring, using default V11→V10→V9 preference"
         )
 
     for version, mpath, spath, fpath in candidates:
