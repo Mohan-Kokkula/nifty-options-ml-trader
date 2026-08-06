@@ -1212,6 +1212,85 @@ def create_labels(df, df15=None):
 
 
 # ==================================================================
+# 2026-08-06 — LIVE-RULE EVALUATION (metric_version 2)
+# ==================================================================
+# Training used to score candidates with argmax(proba). Production
+# (core/ml_engine.py) does NOT use argmax -- it applies per-class
+# thresholds. Because SKIP dominates the argmax on nearly every bar,
+# argmax scoring reported "0 signals / 0.0% direction accuracy" for
+# models that in fact fire 170-220 signals under the live rule. That
+# made the promotion gate reject perfectly usable candidates (e.g.
+# v10_20260803_191639_a7c5d6, logged test_dir_acc=0.0/test_signals=0)
+# and, more generally, scored models on a metric unrelated to how they
+# are actually used.
+#
+# Thresholds are imported from core.ml_engine rather than duplicated so
+# the two can never drift apart -- if the live gate is retuned, training
+# metrics follow automatically.
+
+METRIC_VERSION = 2   # 1 = legacy argmax scoring, 2 = live-rule scoring
+
+try:
+    from core.ml_engine import (
+        CONFIDENCE_CALL as _LIVE_CONF_CALL,
+        CONFIDENCE_PUT as _LIVE_CONF_PUT,
+        MIN_EDGE as _LIVE_MIN_EDGE,
+        SKIP_CEIL as _LIVE_SKIP_CEIL,
+    )
+except Exception as _e:      # pragma: no cover - defensive only
+    # Never silently diverge: if the import fails, say so loudly rather
+    # than quietly scoring against stale hardcoded numbers.
+    log.warning(
+        f"Could not import live thresholds from core.ml_engine ({_e}) — "
+        f"falling back to defaults; training metrics may not match live."
+    )
+    _LIVE_CONF_CALL, _LIVE_CONF_PUT, _LIVE_MIN_EDGE, _LIVE_SKIP_CEIL = 0.32, 0.25, 0.05, 0.65
+
+
+def live_rule_signals(proba):
+    """Signals exactly as core/ml_engine.py would emit them for these
+    probabilities. Returns an int array: 0=CALL, 1=PUT, 2=SKIP."""
+    p = np.asarray(proba)
+    s = np.full(len(p), 2, dtype=int)
+    s[(p[:, 0] >= _LIVE_CONF_CALL)
+      & (p[:, 0] - p[:, 1] >= _LIVE_MIN_EDGE)
+      & (p[:, 2] < _LIVE_SKIP_CEIL)] = 0
+    s[(p[:, 1] >= _LIVE_CONF_PUT)
+      & (p[:, 1] - p[:, 0] >= _LIVE_MIN_EDGE)
+      & (p[:, 2] < _LIVE_SKIP_CEIL)] = 1
+    return s
+
+
+def live_rule_metrics(proba, y_true):
+    """Evaluate a candidate the way production actually uses it.
+
+    Returns dict with:
+      dir_acc       — accuracy over fired signals whose bar had a real
+                      CALL/PUT label (the headline quality number)
+      n_signals     — how many signals fired at all
+      fired_on_skip — signals fired on bars labelled SKIP (no meaningful
+                      move). Under real friction these are the losing
+                      trades, so a high share here is a precision alarm
+                      even when dir_acc looks good.
+      recall        — share of real directional bars the model caught
+    """
+    s = live_rule_signals(proba)
+    y = np.asarray(y_true)
+    fired = s != 2
+    dirm = fired & (y != 2)
+    n_dir_bars = int((y != 2).sum())
+    return {
+        "dir_acc": float((y[dirm] == s[dirm]).mean()) if dirm.any() else 0.0,
+        "n_signals": int(fired.sum()),
+        "n_call": int((s == 0).sum()),
+        "n_put": int((s == 1).sum()),
+        "fired_on_skip": int((fired & (y == 2)).sum()),
+        "fired_on_dir": int(dirm.sum()),
+        "recall": float(dirm.sum() / n_dir_bars) if n_dir_bars else 0.0,
+    }
+
+
+# ==================================================================
 # FIX 4 — SHAP-BASED FEATURE PRUNING
 # ==================================================================
 
@@ -1640,18 +1719,23 @@ def train(csv5, csv15=None, csv30=None, csv60=None, csv_day=None,
     # early-stopping set.
     CONF = 0.22
 
+    # 2026-08-06 (metric_version 2): scored with the LIVE decision rule
+    # (core/ml_engine.py thresholds) instead of argmax — see the comment
+    # block above live_rule_signals() for why argmax scoring was wrong.
     def _eval(X_eval, y_eval):
         p = np.mean([m.predict_proba(X_eval) for m in models.values()], axis=0)
-        s = np.where(p.max(axis=1) >= CONF, p.argmax(axis=1), 2)
+        s = live_rule_signals(p)
         t = s != 2
         if not t.any():
             return None
         a  = (y_eval[t] == s[t]).mean()
-        dm = t & (y_eval != 2)
-        da = (y_eval[dm] == s[dm]).mean() if dm.any() else 0.0
-        return {"acc": a, "dir_acc": da,
-                "nc": int((s == 0).sum()), "np": int((s == 1).sum()),
-                "ns": int((s == 2).sum())}
+        lm = live_rule_metrics(p, y_eval)
+        return {"acc": a, "dir_acc": lm["dir_acc"],
+                "nc": lm["n_call"], "np": lm["n_put"],
+                "ns": int((s == 2).sum()),
+                "fired_on_skip": lm["fired_on_skip"],
+                "fired_on_dir": lm["fired_on_dir"],
+                "recall": lm["recall"]}
 
     val_m  = _eval(Xvl, yvl)
     test_m = _eval(Xte, yte)
@@ -1727,8 +1811,14 @@ def train(csv5, csv15=None, csv30=None, csv60=None, csv_day=None,
             "val_bars":    int(len(val_idx)),
             "test_bars":   int(len(test_idx)),
             # Model quality (from frozen TEST set)
+            # 2026-08-06 (metric_version 2): live-rule metrics, not argmax.
+            # promote_if_passes_gate() refuses to compare across versions.
+            "metric_version": METRIC_VERSION,
             "val_dir_acc":  round(float(val_m["dir_acc"]),  4) if val_m  else None,
             "test_dir_acc": round(float(test_m["dir_acc"]), 4) if test_m else 0.0,
+            "test_fired_on_skip": int(test_m["fired_on_skip"]) if test_m else 0,
+            "test_fired_on_dir":  int(test_m["fired_on_dir"])  if test_m else 0,
+            "test_recall":        round(float(test_m["recall"]), 4) if test_m else 0.0,
             "test_signals": int(test_m["nc"] + test_m["np"]) if test_m else 0,
             "val_test_gap": round(
                 float(val_m["dir_acc"]) - float(test_m["dir_acc"]), 4

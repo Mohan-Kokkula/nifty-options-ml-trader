@@ -416,6 +416,30 @@ def promote_if_passes_gate(
             acc_gap    = chal_acc - champ_acc   # positive = challenger is better
             champ_cid  = champ_meta.get("candidate_id", "unknown")
 
+            # 2026-08-06: test_dir_acc changed meaning in metric_version 2
+            # (argmax scoring -> live-rule scoring, see the comment block
+            # above live_rule_signals() in scripts/train_model_v9.py).
+            # Comparing a v2 challenger against a v1 champion compares two
+            # different quantities, so skip C/C entirely rather than make a
+            # bogus accept/reject call. The absolute floors (Gates 1-4) still
+            # applied above. Once the champion has been retrained under v2
+            # this resolves itself and normal C/C resumes.
+            champ_mv = int(champ_meta.get("metric_version", 1))
+            chal_mv  = int(meta.get("metric_version", 1))
+            metrics_comparable = (champ_mv == chal_mv)
+            if not metrics_comparable:
+                logger.warning(
+                    f"Registry: C/C SKIPPED — champion {champ_cid} uses "
+                    f"metric_version={champ_mv} but challenger {candidate_id} "
+                    f"uses metric_version={chal_mv}; test_dir_acc is not "
+                    f"comparable across versions. Absolute quality gates "
+                    f"passed, so promoting on those alone."
+                )
+        else:
+            metrics_comparable = False
+
+        if champ_meta is not None and metrics_comparable:
+
             # Stage 3: degraded-champion exception
             live_wr = get_live_win_rate(version)
             degraded = (live_wr is not None and live_wr < CC_DEGRADE_THRESH)
@@ -442,7 +466,7 @@ def promote_if_passes_gate(
                     f"vs champion {champ_cid} ({champ_acc:.3f}), "
                     f"gap={acc_gap:+.3f} within tolerance {CC_TOLERANCE:.2f}"
                 )
-        else:
+        elif champ_meta is None:
             logger.info(
                 f"Registry: no champion found — first-run promotion, "
                 f"skipping C/C comparison"

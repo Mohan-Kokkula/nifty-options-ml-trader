@@ -60,6 +60,7 @@ from scripts.train_model_v9 import (
     merge_futures_onto_5min, add_intraday_context,
     create_labels, shap_prune_features, _fit_ensemble,
     resample_from_5min, purged_train_val_test_split,
+    live_rule_metrics, METRIC_VERSION,
     CSV_5M, CSV_15M, CSV_30M, CSV_60M, CSV_DAY, CSV_VIX, CSV_FUT,
     # 2026-06-10 FIX: these 4 constants are referenced in the registry
     # metadata dict below (~line 543) but were never imported, causing a
@@ -456,17 +457,39 @@ def train_v10(
     log.info(f"  Features: {len(FCOLS)} total ({len(new_v10):+d} new V10 vs V9)")
     log.info(f"{'='*65}")
 
-    def _dir_acc(X_eval, y_eval):
+    # 2026-08-06: headline metrics now use the LIVE decision rule
+    # (core/ml_engine.py thresholds) instead of argmax. See the comment
+    # block above live_rule_signals() in train_model_v9.py for why —
+    # argmax scoring reported 0 signals / 0.0% accuracy for models that
+    # actually fire normally in production.
+    _va_lm = live_rule_metrics(
+        np.mean([m.predict_proba(Xvl) for m in models.values()], axis=0), yvl)
+    _te_lm = live_rule_metrics(
+        np.mean([m.predict_proba(Xte) for m in models.values()], axis=0), yte)
+    _va_da, _te_da = _va_lm["dir_acc"], _te_lm["dir_acc"]
+
+    # Legacy argmax numbers, kept for comparison against pre-v2 candidates
+    def _dir_acc_argmax(X_eval, y_eval):
         p = np.mean([m.predict_proba(X_eval) for m in models.values()], axis=0)
         s = np.where(p.max(axis=1) >= CONF, p.argmax(axis=1), 2)
         dm = (s != 2) & (y_eval != 2)
         return (y_eval[dm] == s[dm]).mean() if dm.any() else 0.0
-    _va_da = _dir_acc(Xvl, yvl)
-    _te_da = _dir_acc(Xte, yte)
-    log.info(f"  [VAL ] direction accuracy: {_va_da:.1%}")
-    log.info(f"  [TEST] direction accuracy: {_te_da:.1%}")
+    _va_da_argmax = _dir_acc_argmax(Xvl, yvl)
+    _te_da_argmax = _dir_acc_argmax(Xte, yte)
+
+    log.info(f"  [VAL ] direction accuracy (live rule): {_va_da:.1%} "
+             f"on {_va_lm['fired_on_dir']} of {_va_lm['n_signals']} fired signals")
+    log.info(f"  [TEST] direction accuracy (live rule): {_te_da:.1%} "
+             f"on {_te_lm['fired_on_dir']} of {_te_lm['n_signals']} fired signals")
     log.info(f"  VAL->TEST gap: {_va_da - _te_da:+.1%} "
              f"({'OVERFIT RISK' if (_va_da - _te_da) > 0.05 else 'ok'})")
+    log.info(f"  [TEST] signals: CALL={_te_lm['n_call']} PUT={_te_lm['n_put']} "
+             f"| recall={_te_lm['recall']:.1%} of real directional bars")
+    _skip_share = (_te_lm["fired_on_skip"] / _te_lm["n_signals"]) if _te_lm["n_signals"] else 0.0
+    log.info(f"  [TEST] fired on no-move (SKIP) bars: {_te_lm['fired_on_skip']} "
+             f"({_skip_share:.0%} of signals)"
+             f"{'  <-- PRECISION ALARM' if _skip_share > 0.75 else ''}")
+    log.info(f"  [legacy argmax, for reference] VAL={_va_da_argmax:.1%} TEST={_te_da_argmax:.1%}")
 
     # ── Detailed report on the FROZEN TEST set ────────────────────────────
     preds = np.mean([m.predict_proba(Xte) for m in models.values()], axis=0)
@@ -551,11 +574,28 @@ def train_v10(
             "train_bars":  int(len(tr_idx)),
             "val_bars":    int(len(va_idx)),
             "test_bars":   int(len(te_idx)),
-            # Quality from frozen TEST set
+            # Quality from frozen TEST set.
+            # 2026-08-06 (metric_version 2): these are now LIVE-RULE
+            # metrics (core/ml_engine.py thresholds), not argmax. Old
+            # candidates carry argmax numbers under the same key names,
+            # so promote_if_passes_gate() refuses to compare across
+            # metric versions -- see core/model_registry.py.
+            "metric_version": METRIC_VERSION,
             "val_dir_acc":  round(_va_da, 4),
             "test_dir_acc": round(_te_da, 4),
-            "test_signals": int((sigs != 2).sum()) if traded.any() else 0,
+            "test_signals": _te_lm["n_signals"],
             "val_test_gap": round(_va_da - _te_da, 4),
+            # Precision/recall detail — a model can post a healthy
+            # dir_acc while firing almost entirely on no-move bars,
+            # which loses money once friction is applied.
+            "test_fired_on_skip":  _te_lm["fired_on_skip"],
+            "test_fired_on_dir":   _te_lm["fired_on_dir"],
+            "test_recall":         round(_te_lm["recall"], 4),
+            "test_call_signals":   _te_lm["n_call"],
+            "test_put_signals":    _te_lm["n_put"],
+            # Legacy argmax scores, for reference against v1 candidates
+            "val_dir_acc_argmax":  round(_va_da_argmax, 4),
+            "test_dir_acc_argmax": round(_te_da_argmax, 4),
             # Architecture
             "n_features":       len(FCOLS),
             "new_v10_features": len(new_v10),
