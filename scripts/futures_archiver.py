@@ -131,15 +131,77 @@ def resolve_active_future(client) -> str:
     return sym
 
 
+# Kotak quote payloads vary by endpoint/version: the price appears as
+# "ltp", "last_price", "lp", "lastPrice" or "ltP", and the body is
+# sometimes {"data": {...}} and sometimes {"data": [{...}]}. Mirrors the
+# tolerance normalize_depth() already has.
+_LTP_KEYS = ("ltp", "last_price", "lp", "lastPrice", "ltP", "last_traded_price")
+_VOL_KEYS = ("volume", "v", "vol", "tradedQty", "volume_traded", "vtt", "vTrdQty")
+_shape_logged = False
+
+
+def _unwrap(payload):
+    """Coerce a broker payload to a single dict of fields."""
+    d = payload
+    if isinstance(d, dict) and "data" in d:
+        d = d["data"]
+    if isinstance(d, list):
+        d = d[0] if d else {}
+    return d if isinstance(d, dict) else {}
+
+
+def _first_num(d: dict, keys) -> float:
+    for k in keys:
+        if k in d:
+            try:
+                v = float(d[k] or 0)
+                if v:
+                    return v
+            except (TypeError, ValueError):
+                continue
+    return 0.0
+
+
+def _extract_ltp_volume(q) -> tuple:
+    """(ltp, volume) from a broker quote payload, tolerant of shape/keys."""
+    d = _unwrap(q)
+    return _first_num(d, _LTP_KEYS), _first_num(d, _VOL_KEYS)
+
+
+def _log_quote_shape(q) -> None:
+    """Log the observed payload keys ONCE so an unknown schema is
+    diagnosable without shipping another build to find out."""
+    global _shape_logged
+    if _shape_logged:
+        return
+    _shape_logged = True
+    try:
+        d = _unwrap(q)
+        log.warning(
+            f"futures archiver: quote had no usable LTP. "
+            f"outer_type={type(q).__name__} "
+            f"inner_keys={sorted(d.keys())[:25] if d else 'EMPTY'} "
+            f"sample={ {k: d[k] for k in list(d)[:6]} if d else q}")
+    except Exception as e:
+        log.warning(f"futures archiver: quote shape log failed: {e}")
+
+
 def snapshot(client) -> dict | None:
     sym = resolve_active_future(client)
     if not sym:
         return None
     q = client.get_quote(sym, "NFO")
-    data = q.get("data", {}) if isinstance(q, dict) else {}
-    ltp = float(data.get("ltp", 0) or 0)
-    vol = float(data.get("volume", data.get("v", 0)) or 0)
+    ltp, vol = _extract_ltp_volume(q)
     if ltp <= 0:
+        # 2026-08-07: this guard silently discarded EVERY tick in production
+        # ("no snapshot for N consecutive ticks") even though the symbol
+        # resolved fine. The old code read only data["ltp"] on a dict, while
+        # normalize_depth() right below already handled list-shaped payloads
+        # and alternate key spellings -- the quote path never got the same
+        # treatment. _extract_ltp_volume() now mirrors it. If it STILL fails,
+        # log the payload shape (rate-limited) so the next failure is
+        # diagnosable instead of silent.
+        _log_quote_shape(q)
         return None
     depth = normalize_depth(client.get_market_depth(sym, "NFO"))
     feats = compute_depth_features(depth)
