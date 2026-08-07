@@ -105,7 +105,7 @@ def compute_depth_features(depth: dict) -> dict:
 
 
 # ──────────────────────────────────────────────────────── live collection ──
-_contract = {"date": None, "symbol": ""}
+_contract = {"date": None, "symbol": "", "token": ""}
 
 
 def resolve_active_future(client) -> str:
@@ -113,7 +113,7 @@ def resolve_active_future(client) -> str:
     today = datetime.now().date()
     if _contract["date"] == today and _contract["symbol"]:
         return _contract["symbol"]
-    sym = ""
+    sym, tok = "", ""
     try:
         res = client._call_with_retry(
             client._neo.search_scrip, exchange_segment="nse_fo", symbol="nifty")
@@ -123,11 +123,19 @@ def resolve_active_future(client) -> str:
         if futs:
             futs.sort(key=lambda r: str(r.get("pExpiryDate", r.get("expiry", ""))))
             sym = str(futs[0].get("pTrdSymbol", futs[0].get("symbol", "")))
+            # Keep the TOKEN too. client.get_quote() re-runs search_scrip with
+            # whatever symbol it is handed -- so passing it "NIFTY26AUGFUT"
+            # makes it search the scrip master for a full contract name, which
+            # does not match (that search expects a base symbol like "nifty").
+            # It then falls through to {"ltp": 0, "status": "error"} and logs
+            # only at DEBUG, so the archiver saw a silent zero on every tick.
+            # We already have the token from THIS search; quote by token.
+            tok = str(futs[0].get("pSymbol", "") or "")
     except Exception as e:
         log.debug(f"future symbol resolve failed: {e}")
     if sym:
-        _contract.update(date=today, symbol=sym)
-        log.info(f"Active future: {sym}")
+        _contract.update(date=today, symbol=sym, token=tok)
+        log.info(f"Active future: {sym} (token={tok or 'NONE'})")
     return sym
 
 
@@ -168,6 +176,34 @@ def _extract_ltp_volume(q) -> tuple:
     return _first_num(d, _LTP_KEYS), _first_num(d, _VOL_KEYS)
 
 
+def _quote_by_token(client, token: str):
+    """Quote the future by INSTRUMENT TOKEN instead of trading symbol.
+
+    Returns (raw_payload, ltp, volume); (None, 0.0, 0.0) when unavailable.
+
+    Tries quote types in decreasing richness because we need VOLUME, and
+    quote_type="ltp" returns price only. The first type that yields a
+    positive LTP wins. Broker exceptions are swallowed per-type -- this is
+    an archiver, it must never take down the tick loop.
+    """
+    if not token:
+        return None, 0.0, 0.0
+    for qt in ("", "market_depth", "ohlc", "ltp"):
+        try:
+            resp = client._call_with_retry(
+                client._neo.quotes,
+                instrument_tokens=[{"instrument_token": token,
+                                    "exchange_segment": "nse_fo"}],
+                quote_type=qt,
+            )
+            ltp, vol = _extract_ltp_volume(resp)
+            if ltp > 0:
+                return resp, ltp, vol
+        except Exception as e:
+            log.debug(f"token quote (quote_type={qt!r}) failed: {e}")
+    return None, 0.0, 0.0
+
+
 def _log_quote_shape(q) -> None:
     """Log the observed payload keys ONCE so an unknown schema is
     diagnosable without shipping another build to find out."""
@@ -190,8 +226,12 @@ def snapshot(client) -> dict | None:
     sym = resolve_active_future(client)
     if not sym:
         return None
-    q = client.get_quote(sym, "NFO")
-    ltp, vol = _extract_ltp_volume(q)
+    # Prefer the TOKEN path -- see resolve_active_future() for why
+    # client.get_quote(sym, "NFO") returns a silent {"ltp": 0} for futures.
+    q, ltp, vol = _quote_by_token(client, _contract.get("token", ""))
+    if ltp <= 0:
+        q = client.get_quote(sym, "NFO")          # legacy fallback
+        ltp, vol = _extract_ltp_volume(q)
     if ltp <= 0:
         # 2026-08-07: this guard silently discarded EVERY tick in production
         # ("no snapshot for N consecutive ticks") even though the symbol
