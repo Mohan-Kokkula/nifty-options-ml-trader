@@ -146,6 +146,13 @@ def resolve_active_future(client) -> str:
 _LTP_KEYS = ("ltp", "last_price", "lp", "lastPrice", "ltP", "last_traded_price")
 _VOL_KEYS = ("volume", "v", "vol", "tradedQty", "volume_traded", "vtt", "vTrdQty")
 _shape_logged = False
+# Kotak's accepted quote_type strings are not documented in this repo and
+# could not be observed from the dev box. Ordered most-informative first:
+# whichever actually carries volume wins. _probe_done makes the first tick
+# log what EVERY type returned, so an unknown contract is diagnosed in one
+# deploy instead of one guess per deploy.
+_QUOTE_TYPES = ("market_depth", "depth", "full", "quote", "ohlc", "", "ltp")
+_probe_done = False
 
 
 def _unwrap(payload):
@@ -188,7 +195,9 @@ def _quote_by_token(client, token: str):
     """
     if not token:
         return None, 0.0, 0.0
-    for qt in ("", "market_depth", "ohlc", "ltp"):
+    global _probe_done
+    best = (None, 0.0, 0.0)
+    for qt in _QUOTE_TYPES:
         try:
             resp = client._call_with_retry(
                 client._neo.quotes,
@@ -197,11 +206,33 @@ def _quote_by_token(client, token: str):
                 quote_type=qt,
             )
             ltp, vol = _extract_ltp_volume(resp)
-            if ltp > 0:
+            if not _probe_done:
+                d = _unwrap(resp)
+                log.info(f"futures archiver PROBE quote_type={qt!r}: "
+                         f"ltp={ltp} vol={vol} keys={sorted(d.keys())[:30]}")
+            # Ideal: a type that carries BOTH price and volume. An earlier
+            # build returned on the first positive LTP, which took an
+            # ltp-only response and recorded fut_volume=0.0 all day --
+            # i.e. duplicating the 5-min feed and capturing nothing new.
+            if ltp > 0 and vol > 0:
+                if not _probe_done:
+                    _probe_done = True
+                    log.info(f"futures archiver: using quote_type={qt!r} "
+                             f"(carries volume)")
                 return resp, ltp, vol
+            if ltp > 0 and best[1] <= 0:
+                best = (resp, ltp, vol)          # keep as ltp-only fallback
         except Exception as e:
+            if not _probe_done:
+                log.info(f"futures archiver PROBE quote_type={qt!r}: "
+                         f"{type(e).__name__}: {e}")
             log.debug(f"token quote (quote_type={qt!r}) failed: {e}")
-    return None, 0.0, 0.0
+    if not _probe_done:
+        _probe_done = True
+        log.warning("futures archiver: NO quote_type returned volume — "
+                    "recording price only. See PROBE lines above for the "
+                    "key sets each type actually returned.")
+    return best
 
 
 def _log_quote_shape(q) -> None:
@@ -243,7 +274,13 @@ def snapshot(client) -> dict | None:
         # diagnosable instead of silent.
         _log_quote_shape(q)
         return None
-    depth = normalize_depth(client.get_market_depth(sym, "NFO"))
+    # Depth: prefer the token response (a market_depth quote already carries
+    # it) before falling back to client.get_market_depth(sym, ...), which
+    # resolves by trading symbol and so hits the same dead search_scrip path
+    # that made get_quote() return a silent zero.
+    depth = normalize_depth(q)
+    if not depth["bids"] and not depth["asks"]:
+        depth = normalize_depth(client.get_market_depth(sym, "NFO"))
     feats = compute_depth_features(depth)
     try:
         spot = float(client._get_spot_price() or 0)
