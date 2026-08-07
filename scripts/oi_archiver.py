@@ -128,7 +128,19 @@ def _claim_lock() -> bool:
         if _LOCKFILE.exists():
             try:
                 pid = int(_LOCKFILE.read_text().strip() or "0")
-                if pid > 0:
+                if pid == os.getpid():
+                    # OUR OWN pid. Under Docker the app is always PID 1, and
+                    # atexit (hence _release_lock) does NOT run on SIGKILL --
+                    # so any unclean restart leaves "1" behind. The next
+                    # container start then reads pid 1, confirms it is alive
+                    # (it is: it is US), and refuses forever. Observed in
+                    # production 2026-08: OI archive stopped writing Aug 5.
+                    # Reclaim instead of deadlocking.
+                    log.info(
+                        f"OI archiver: lockfile holds our own pid ({pid}) "
+                        f"— stale from a previous incarnation, reclaiming "
+                        f"{_LOCKFILE.name}")
+                elif pid > 0:
                     try:
                         os.kill(pid, 0)             # ProcessLookupError if dead
                     except PermissionError:
