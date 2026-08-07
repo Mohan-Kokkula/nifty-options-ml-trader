@@ -14,7 +14,26 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from scripts.futures_archiver import _extract_ltp_volume, _unwrap  # noqa: E402
+from scripts.futures_archiver import (  # noqa: E402
+    COLS, _depth_from_quote, _extract_ltp_volume, _unwrap,
+)
+
+# The EXACT key set returned by Kotak's full quote (quote_type="") for
+# NIFTY26AUGFUT, captured from a live PROBE on 2026-08-07. Locked in as a
+# fixture so a future refactor cannot silently go back to fut_volume=0.0.
+# NOTE: the outer keys are observed; the inner shape of "depth" is
+# inferred -- futures_archiver logs a warning if it fails to parse.
+LIVE_FULL_QUOTE = {"data": [{
+    "avg_cost": "24600", "change": "12.5", "display_symbol": "NIFTY26AUGFUT",
+    "exchange": "nse_fo", "exchange_token": "58072",
+    "high_price_range": "25000", "last_traded_quantity": "75",
+    "last_volume": "55410", "low_price_range": "24000",
+    "lstup_time": "10:19:39", "ltp": "24645.0", "open_int": "14389975",
+    "per_change": "0.05", "total_buy": "120450", "total_sell": "98300",
+    "year_high": "26000", "year_low": "21000",
+    "depth": {"buy": [{"price": 24644.5, "quantity": 75}],
+              "sell": [{"price": 24645.5, "quantity": 50}]},
+}]}
 
 _passed = _failed = 0
 
@@ -28,6 +47,19 @@ def check(name, cond):
         _failed += 1
         print(f"  FAIL  {name}")
 
+
+print("\n-- THE LIVE PAYLOAD (regression for the 2026-08-07 outage) --")
+_ltp, _vol = _extract_ltp_volume(LIVE_FULL_QUOTE)
+check("price read from live full quote", _ltp == 24645.0)
+check("VOLUME read from 'last_volume' (was 0.0 in production)", _vol == 55410.0)
+_dep = _depth_from_quote(LIVE_FULL_QUOTE)
+check("depth parsed out of nested 'depth' key", bool(_dep["bids"] and _dep["asks"]))
+check("bid level 1 correct", _dep["bids"][0] == (24644.5, 75.0))
+check("ask level 1 correct", _dep["asks"][0] == (24645.5, 50.0))
+check("ltp-only response yields no depth",
+      _depth_from_quote({"data": [{"ltp": 1.0}]}) == {"bids": [], "asks": []})
+for col in ("open_int", "total_buy", "total_sell", "last_traded_qty"):
+    check(f"'{col}' is archived", col in COLS)
 
 print("\n-- payload shapes --")
 check("dict under 'data'",

@@ -50,7 +50,14 @@ COLS = (["timestamp", "fut_symbol", "fut_ltp", "fut_volume"]
         + [f"bid_qty_{i}" for i in range(1, _LVL + 1)]
         + [f"ask_px_{i}" for i in range(1, _LVL + 1)]
         + [f"ask_qty_{i}" for i in range(1, _LVL + 1)]
-        + ["obi", "best_bid", "best_ask", "microprice", "basis_live"])
+        + ["obi", "best_bid", "best_ask", "microprice", "basis_live"]
+        # 2026-08-07: the full quote (quote_type="") also carries these, and
+        # they are free once the row is being written. open_int is Open
+        # Interest; total_buy/total_sell are aggregate book quantities --
+        # i.e. the Liquidity/Order-Flow and Sentiment inputs that have no
+        # historical source at all. Forward-only archive: not capturing them
+        # now means never having them for this period.
+        + ["open_int", "total_buy", "total_sell", "last_traded_qty"])
 
 
 # ──────────────────────────────────────────── pure, unit-testable helpers ──
@@ -144,14 +151,26 @@ def resolve_active_future(client) -> str:
 # sometimes {"data": {...}} and sometimes {"data": [{...}]}. Mirrors the
 # tolerance normalize_depth() already has.
 _LTP_KEYS = ("ltp", "last_price", "lp", "lastPrice", "ltP", "last_traded_price")
-_VOL_KEYS = ("volume", "v", "vol", "tradedQty", "volume_traded", "vtt", "vTrdQty")
+# "last_volume" first: confirmed 2026-08-07 from a live PROBE of the Kotak
+# full quote, whose key set is
+#   avg_cost change depth display_symbol exchange exchange_token
+#   high_price_range last_traded_quantity last_volume low_price_range
+#   lstup_time ltp ohlc open_int per_change total_buy total_sell
+#   year_high year_low
+# The generic spellings below are kept as fallbacks for other endpoints.
+_VOL_KEYS = ("last_volume", "volume", "volume_traded", "vol", "v",
+             "tradedQty", "vtt", "vTrdQty")
 _shape_logged = False
 # Kotak's accepted quote_type strings are not documented in this repo and
 # could not be observed from the dev box. Ordered most-informative first:
 # whichever actually carries volume wins. _probe_done makes the first tick
 # log what EVERY type returned, so an unknown contract is diagnosed in one
 # deploy instead of one guess per deploy.
-_QUOTE_TYPES = ("market_depth", "depth", "full", "quote", "ohlc", "", "ltp")
+# Confirmed by live PROBE 2026-08-07: only "" carries ltp + last_volume +
+# depth + open_int + total_buy/total_sell. "depth" gives depth only, "ohlc"
+# ohlc only, "ltp" price only, and market_depth/full/quote return
+# keys=['fault']. "" is therefore first and the rest are fallbacks.
+_QUOTE_TYPES = ("", "depth", "ohlc", "ltp")
 _probe_done = False
 
 
@@ -235,6 +254,38 @@ def _quote_by_token(client, token: str):
     return best
 
 
+_depth_shape_logged = False
+
+
+def _depth_from_quote(resp) -> dict:
+    """Level-5 depth out of the FULL quote response.
+
+    The live PROBE showed depth nested under a "depth" key inside the
+    quote body -- normalize_depth() looks for bids/asks (or flat bp1/bq1)
+    at the top level, so handing it the whole response finds nothing and
+    every depth column landed as 0.0. Descend first, and translate the
+    buy/sell spelling if that is what the broker uses.
+    """
+    global _depth_shape_logged
+    d = _unwrap(resp)
+    dep = d.get("depth") if isinstance(d, dict) else None
+    if not dep:
+        return {"bids": [], "asks": []}
+    if isinstance(dep, dict) and ("buy" in dep or "sell" in dep):
+        dep = {"bids": dep.get("buy") or [], "asks": dep.get("sell") or []}
+    out = normalize_depth(dep)
+    if not out["bids"] and not out["asks"] and not _depth_shape_logged:
+        _depth_shape_logged = True
+        try:
+            inner = (sorted(dep.keys())[:15] if isinstance(dep, dict)
+                     else f"{type(dep).__name__}[{len(dep)}]")
+            log.warning(f"futures archiver: depth present but unparsed. "
+                        f"shape={inner} sample={str(dep)[:300]}")
+        except Exception:
+            pass
+    return out
+
+
 def _log_quote_shape(q) -> None:
     """Log the observed payload keys ONCE so an unknown schema is
     diagnosable without shipping another build to find out."""
@@ -278,10 +329,11 @@ def snapshot(client) -> dict | None:
     # it) before falling back to client.get_market_depth(sym, ...), which
     # resolves by trading symbol and so hits the same dead search_scrip path
     # that made get_quote() return a silent zero.
-    depth = normalize_depth(q)
+    depth = _depth_from_quote(q)
     if not depth["bids"] and not depth["asks"]:
         depth = normalize_depth(client.get_market_depth(sym, "NFO"))
     feats = compute_depth_features(depth)
+    qd = _unwrap(q)
     try:
         spot = float(client._get_spot_price() or 0)
     except Exception:
@@ -290,7 +342,11 @@ def snapshot(client) -> dict | None:
            "fut_symbol": sym, "fut_ltp": round(ltp, 2), "fut_volume": vol,
            "obi": feats["obi"], "best_bid": feats["best_bid"],
            "best_ask": feats["best_ask"], "microprice": feats["microprice"],
-           "basis_live": round(ltp - spot, 2) if spot > 0 else 0.0}
+           "basis_live": round(ltp - spot, 2) if spot > 0 else 0.0,
+           "open_int": _first_num(qd, ("open_int", "openInterest", "oi")),
+           "total_buy": _first_num(qd, ("total_buy", "totalBuyQty", "tbq")),
+           "total_sell": _first_num(qd, ("total_sell", "totalSellQty", "tsq")),
+           "last_traded_qty": _first_num(qd, ("last_traded_quantity", "ltq"))}
     for i in range(_LVL):
         b = depth["bids"][i] if i < len(depth["bids"]) else (0.0, 0.0)
         a = depth["asks"][i] if i < len(depth["asks"]) else (0.0, 0.0)
