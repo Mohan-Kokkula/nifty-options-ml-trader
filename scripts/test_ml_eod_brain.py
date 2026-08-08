@@ -89,7 +89,9 @@ check("stop = 3.0 x ATR", abs(CFG.stop_R * CFG.atr_mult - 3.0) < 1e-9)
 check("window starts 11:30", CFG.entry_window_start == "11:30")
 check("cutoff 14:00", CFG.entry_cutoff == "14:00")
 check("max 2 trades/day", CFG.max_trades_per_day == 2)
-check("confidence floor 0.45", abs(CFG.min_confidence - 0.45) < 1e-9)
+# Floor deliberately DISABLED: VAL and TEST curves pointed opposite ways
+# (VAL peak 0.425 falling to 0.807 by 0.60; TEST rising to 1.795 by 0.60).
+check("confidence floor disabled", abs(CFG.min_confidence) < 1e-9)
 # There is deliberately NO take-profit: the whole point is holding to EOD.
 check("no take-profit field exists", not hasattr(CFG, "target_R"))
 

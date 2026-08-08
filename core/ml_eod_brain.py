@@ -86,7 +86,19 @@ class MLEodConfig:
 
     entry_window_start: str = "11:30"   # the 11:30 regime flip
     entry_cutoff: str = "14:00"
-    min_confidence: float = 0.45        # extra floor above the live rule
+    # DISABLED after a fine sweep. The coarse OAT put this at 0.45, but a
+    # 13-point grid showed VAL and TEST moving in OPPOSITE directions:
+    #        minconf   VAL_pf   TEST_pf
+    #          0.000    1.037    1.269
+    #          0.425    1.198    1.298   <- VAL peak
+    #          0.450    1.094    1.384
+    #          0.600    0.807    1.795   <- TEST peak
+    # VAL declines above 0.425 and goes sub-1.0 from 0.475; TEST rises the
+    # whole way. A real threshold points the same way in both periods.
+    # Also exposed an interaction: 0.45 scored 1.168 on VAL against the OLD
+    # stop/window/cap and only 1.094 against the new ones -- the OAT sweep
+    # never re-validated the stack jointly. Set >0 only with fresh evidence.
+    min_confidence: float = 0.0
     eod_squareoff: str = "15:10"
     last_tradeable_time: str = "15:20"   # strip the post-close auction print
     max_trades_per_day: int = 2
