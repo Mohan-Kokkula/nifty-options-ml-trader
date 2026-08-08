@@ -72,20 +72,34 @@ _started = False
 
 @dataclass
 class MLEodConfig:
-    # ── 2026-08-07 OAT tune, selected on VAL, confirmed once on TEST ──
-    # stop 4.0 -> 3.0 ATR, window start 09:15 -> 11:30, cutoff 15:00 ->
-    # 14:00, cap 3 -> 2/day, and a 0.45 confidence floor.
-    #   INCUMBENT  VAL 1.030 (n=258)  TEST 1.053 (n=238)  +2.3pts  DD 1461
-    #   TUNED      VAL 1.094 (n=149)  TEST 1.384 (n=162) +12.8pts  DD  908
-    # TEST improved MORE than VAL (+31% vs +6%), which is the opposite of
-    # an overfit -- an overfit collapses out of sample. Drawdown fell too.
-    # Confidence per parameter differs; see the module docstring.
+    # ── 2026-08-07: ONE change from the original, after re-validation ──
+    # An OAT sweep initially altered five parameters at once. Re-checking
+    # each FROM ITS OWN context showed the stack was worse than its best
+    # single component, and that every original value was still optimal
+    # once the window moved:
+    #   candidate            VALpf   TESTpf   TESTdd
+    #   ORIGINAL             1.030    1.053    1461
+    #   + window only        1.196    1.255     838   <- adopted
+    #   + window + cutoff    1.152    1.225     868
+    #   + window + stop      1.042    1.258     635
+    #   + all five           1.037    1.269     627
+    # Re-swept from the adopted context: stop 4.0 is the VAL peak
+    # (2.0=1.087 3.0=1.062 4.0=1.196 5.0=0.994), cutoff 15:00 is the peak
+    # (monotone 13:00=1.082 -> 15:00=1.196), maxday 3 ties the peak.
+    # The OAT had picked 3.0/14:00/2 only because it scored them against
+    # the OLD 09:15 window -- classic one-at-a-time interaction blindness.
+    # So: keep the window, revert everything else.
     atr_period: int = 14
     atr_mult: float = 2.0
-    stop_R: float = 1.5             # stop = stop_R x atr_mult x ATR = 3.0 ATR
+    stop_R: float = 2.0             # stop = stop_R x atr_mult x ATR = 4.0 ATR
 
-    entry_window_start: str = "11:30"   # the 11:30 regime flip
-    entry_cutoff: str = "14:00"
+    # The ONLY change from the original config. Independently supported:
+    # the session-bucket analysis put the trend-continuation sign flip at
+    # 11:30 across twelve 30-min buckets of ~17,000 bars each, and the VAL
+    # curve is elevated either side of it (11:00=1.102, 12:00=1.060) vs
+    # 09:15=1.030 and 10:30=0.962.
+    entry_window_start: str = "11:30"
+    entry_cutoff: str = "15:00"     # matches claude_pilot.entry_cutoff_hour
     # DISABLED after a fine sweep. The coarse OAT put this at 0.45, but a
     # 13-point grid showed VAL and TEST moving in OPPOSITE directions:
     #        minconf   VAL_pf   TEST_pf
@@ -101,7 +115,7 @@ class MLEodConfig:
     min_confidence: float = 0.0
     eod_squareoff: str = "15:10"
     last_tradeable_time: str = "15:20"   # strip the post-close auction print
-    max_trades_per_day: int = 2
+    max_trades_per_day: int = 3
 
     lookback_bars: int = 300
     cycle_interval_sec: int = 60
