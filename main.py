@@ -457,6 +457,24 @@ def bootstrap():
     except Exception as _e:
         logger.warning(f"Trend-day brain not started (non-fatal): {_e}")
 
+    # ML-EOD brain (new, opt-in, paper-mode only, FUTURES ONLY): the SAME
+    # ml_engine signal the pilot uses, but held to the close instead of
+    # exited on ATR targets. Rationale: the model predicts destination
+    # (65% dir_acc) far better than route (0.52 triple-barrier AUC), so a
+    # short-hold exit bets on the half it cannot forecast. Replayed on
+    # frozen TEST under live constraints (one position, max 3/day, no
+    # entry after 15:00): pilot's short-hold structure PF 0.943, this
+    # 2R-stop + EOD structure PF 1.053. Marginal -- the trend-day brain
+    # is still better at 1.225 -- so this exists to generate forward
+    # evidence, not to replace anything. Own state/journal/Telegram,
+    # never touches LivePosition, never places a real order. Disabled by
+    # default; enable with ML_EOD_BRAIN_ENABLED=true.
+    try:
+        from core.ml_eod_brain import start_in_app as _mle_start
+        _mle_start()
+    except Exception as _e:
+        logger.warning(f"ML-EOD brain not started (non-fatal): {_e}")
+
     # Dual-Brain Pilot (ML + Claude)
     pilot_config = PilotConfig(
         ml_only_mode=os.getenv("ML_ONLY_MODE", "false").lower() == "true",
