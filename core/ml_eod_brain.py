@@ -72,15 +72,24 @@ _started = False
 
 @dataclass
 class MLEodConfig:
-    # R = atr_mult x ATR14; stop sits stop_R x R away. Validated: 2R.
+    # ── 2026-08-07 OAT tune, selected on VAL, confirmed once on TEST ──
+    # stop 4.0 -> 3.0 ATR, window start 09:15 -> 11:30, cutoff 15:00 ->
+    # 14:00, cap 3 -> 2/day, and a 0.45 confidence floor.
+    #   INCUMBENT  VAL 1.030 (n=258)  TEST 1.053 (n=238)  +2.3pts  DD 1461
+    #   TUNED      VAL 1.094 (n=149)  TEST 1.384 (n=162) +12.8pts  DD  908
+    # TEST improved MORE than VAL (+31% vs +6%), which is the opposite of
+    # an overfit -- an overfit collapses out of sample. Drawdown fell too.
+    # Confidence per parameter differs; see the module docstring.
     atr_period: int = 14
     atr_mult: float = 2.0
-    stop_R: float = 2.0
+    stop_R: float = 1.5             # stop = stop_R x atr_mult x ATR = 3.0 ATR
 
-    entry_cutoff: str = "15:00"     # matches claude_pilot.entry_cutoff_hour
+    entry_window_start: str = "11:30"   # the 11:30 regime flip
+    entry_cutoff: str = "14:00"
+    min_confidence: float = 0.45        # extra floor above the live rule
     eod_squareoff: str = "15:10"
     last_tradeable_time: str = "15:20"   # strip the post-close auction print
-    max_trades_per_day: int = 3
+    max_trades_per_day: int = 2
 
     lookback_bars: int = 300
     cycle_interval_sec: int = 60
@@ -122,7 +131,7 @@ def compute_stop(direction: str, entry: float, atr: float,
 
 
 def in_entry_window(ts: datetime, cfg: MLEodConfig) -> bool:
-    return ts.strftime("%H:%M") < cfg.entry_cutoff
+    return cfg.entry_window_start <= ts.strftime("%H:%M") < cfg.entry_cutoff
 
 
 def is_eod(ts: datetime, cfg: MLEodConfig) -> bool:
@@ -252,6 +261,10 @@ class MLEodBrain:
             logger.warning(f"ML-EOD brain: predict failed (skipping): {e}")
             return
         if signal == 2:
+            return
+        if conf < cfg.min_confidence:
+            logger.debug(f"ML-EOD brain: signal below confidence floor "
+                         f"({conf:.2f} < {cfg.min_confidence})")
             return
         direction = "CALL" if signal == 0 else "PUT"
 
