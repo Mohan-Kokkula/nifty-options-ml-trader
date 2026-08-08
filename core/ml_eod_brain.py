@@ -41,9 +41,27 @@ HONEST CAVEATS -- read before enabling
    single trade goes -166 -> -522 pts. A stop earns its place by
    REACTING to adverse moves, not by predicting them.
 
+*** WHICH MODEL FEEDS THIS MATTERS -- READ BEFORE ENABLING ***
+This brain calls ml_engine.predict(), so it runs whatever model is LIVE.
+The numbers above were measured on V11's 26 features. Re-run on V9's 163
+under an identical split and exit structure:
+
+    model            set    dir_acc  recall     PF    avg   maxDD
+    V9  (163 feat)   TEST     0.598   0.643   1.081   +3.0   1183
+    V11 (26 feat)    TEST     0.644   0.509   1.255   +8.9    838
+
+With ML_MODEL_VERSION=v9 this brain runs at PF ~1.08, not ~1.25 -- barely
+above breakeven and not worth the drawdown. V9 fires MORE (recall 0.643
+vs 0.509) at LOWER accuracy; with one position at a time and an EOD hold,
+each trade occupies the whole session, so extra signals cost money by
+consuming the slot rather than adding coverage.
+
+=> Enable this only once V11 is the live model. Otherwise the forward
+   journal cannot be compared against the backtest that justified it.
+
 *** FUTURES ONLY. *** The same replay at options friction (29 pts) is
-negative in all ten cells, best 0.622. start_in_app refuses to arm
-unless EXECUTION_MODE=futures.
+negative in all ten cells (best 0.622); on V9 signals it is 0.599.
+start_in_app refuses to arm unless EXECUTION_MODE=futures.
 
 Runs as a FULLY SEPARATE loop -- own position state, own journal, own
 Telegram. Never touches LivePosition, never places a real broker order.
