@@ -49,6 +49,11 @@ REGISTRY_DIR = MODELS_DIR / "registry"
 
 # Live model filename stems per version (must match ml_engine.py candidates list)
 _LIVE_STEMS: dict[str, tuple[str, str, str]] = {
+    # v11 added 2026-08-07. It was missing, so save_candidate("v11", ...)
+    # succeeded (registry dir is version-agnostic) while
+    # promote_if_passes_gate("v11") raised ValueError -- V11 could be
+    # trained and stored but never promoted.
+    "v11": ("nifty_v11_models.pkl",    "nifty_v11_scaler.pkl",    "feature_cols_v11.pkl"),
     "v10": ("nifty_v10_models.pkl",    "nifty_v10_scaler.pkl",    "feature_cols_v10.pkl"),
     "v9":  ("nifty_v9_models.pkl",     "nifty_v9_scaler.pkl",     "feature_cols_v9.pkl"),
     "v8":  ("nifty_v8_models.pkl",     "nifty_v8_scaler.pkl",     "feature_cols_v8.pkl"),

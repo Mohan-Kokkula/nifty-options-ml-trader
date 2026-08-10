@@ -31,6 +31,22 @@ _scaler = None
 _fcols  = None
 _loaded = False
 
+# ── Secondary models (2026-08-07) ─────────────────────────────────────────
+# The PRIMARY slot above is untouched: load_model() and predict() behave
+# exactly as before, so the live pilot is unaffected. Additional versions
+# load here and are reachable only by naming them explicitly.
+#
+# Why anyone would want two: measured on an identical split, exits and
+# friction, V9 and V11 are not interchangeable --
+#     V11 (26 feat)  dir_acc 0.644  recall 0.509  ML-EOD PF 1.255
+#     V9 (163 feat)  dir_acc 0.598  recall 0.643  ML-EOD PF 1.081
+# V9 fires more at lower precision, V11 the reverse. Which is better
+# depends on the consumer: a short-hold pilot can use the coverage, a
+# one-position-at-a-time EOD hold wants the precision.
+#
+# Enable with ML_EXTRA_VERSIONS=v11 (comma-separated). Default off.
+_extra: dict = {}          # version -> {"models","scaler","fcols"}
+
 # ── Model paths (auto-selected: V10 > V9 > V8 > V7) ──────────────
 MODEL_PATH        = "models/nifty_v10_models.pkl"
 SCALER_PATH       = "models/nifty_v10_scaler.pkl"
@@ -228,6 +244,133 @@ def load_model(model_dir: str = "") -> bool:
 
     log.warning("🤖 No ML model found — ML signals disabled")
     return False
+
+
+def load_model_and_extras(model_dir: str = "") -> bool:
+    """load_model() plus any ML_EXTRA_VERSIONS. Safe drop-in: if the env
+    var is unset this is exactly load_model()."""
+    ok = load_model(model_dir)
+    if ok:
+        try:
+            load_extra_versions(model_dir)
+        except Exception as e:
+            log.warning(f"extra model load failed (non-fatal): {e}")
+    return ok
+
+
+def _paths_for(version: str, base: Path) -> tuple:
+    v = version.lower()
+    return (base / f"models/nifty_{v}_models.pkl",
+            base / f"models/nifty_{v}_scaler.pkl",
+            base / f"models/feature_cols_{v}.pkl")
+
+
+def load_extra_versions(model_dir: str = "") -> list:
+    """Load ADDITIONAL model versions alongside the primary one.
+
+    Driven by ML_EXTRA_VERSIONS (e.g. "v11" or "v9,v11"). The primary
+    slot is never touched, so predict() and every existing caller keep
+    their current behaviour. Returns the list actually loaded.
+
+    A version whose live pickles are absent is SKIPPED with a warning --
+    a model sitting in the registry as an unpromoted candidate is not
+    loaded, because bypassing the promotion gate is exactly what the
+    gate exists to prevent.
+    """
+    global _extra
+    raw = os.getenv("ML_EXTRA_VERSIONS", "").strip()
+    if not raw:
+        return []
+    base = Path(model_dir) if model_dir else Path(".")
+    want = [v.strip().upper() for v in raw.split(",") if v.strip()]
+    loaded = []
+    for version in want:
+        if _loaded and version == _loaded_version:
+            log.info(f"ML extra: {version} is already the primary — skipping")
+            continue
+        mpath, spath, fpath = _paths_for(version, base)
+        if not (mpath.exists() and spath.exists() and fpath.exists()):
+            log.warning(
+                f"ML extra: {version} requested but its live files are "
+                f"missing ({mpath.name}). It must be PROMOTED first — a "
+                f"registry candidate is deliberately not loaded.")
+            continue
+        try:
+            _extra[version] = {"models": joblib.load(mpath),
+                               "scaler": joblib.load(spath),
+                               "fcols":  joblib.load(fpath)}
+            loaded.append(version)
+            log.info(f"🤖 ML extra model loaded [{version}]: "
+                     f"{len(_extra[version]['fcols'])} features")
+        except Exception as e:
+            log.warning(f"ML extra: {version} load failed ({e}) — skipped")
+    return loaded
+
+
+def available_versions() -> list:
+    """Every version this process can produce a signal for."""
+    return ([_loaded_version] if _loaded else []) + sorted(_extra)
+
+
+def _signal_from_proba(p) -> tuple:
+    """Live decision rule -> (signal, confidence). Same thresholds the
+    pilot uses; kept in one place so extras cannot drift from primary."""
+    sig = 2
+    if (p[0] >= CONFIDENCE_CALL and p[0] - p[1] >= MIN_EDGE and p[2] < SKIP_CEIL):
+        sig = 0
+    elif (p[1] >= CONFIDENCE_PUT and p[1] - p[0] >= MIN_EDGE and p[2] < SKIP_CEIL):
+        sig = 1
+    return sig, float(p.max())
+
+
+def predict_multi(bar_buffer: pd.DataFrame, versions=None) -> dict:
+    """Signals from SEVERAL model versions on one feature build.
+
+    Returns {version: {"signal", "proba", "confidence"}}, signal being
+    0=CALL 1=PUT 2=SKIP. Versions default to everything loaded.
+
+    Feature engineering runs ONCE and is shared: V11's 26 columns are a
+    subset of V9's 163, so the marginal cost of a second model is the
+    predict_proba call, not another feature build.
+
+    Never raises -- a version that cannot be scored is simply absent from
+    the result, so a caller iterating the dict degrades gracefully.
+    """
+    out = {}
+    if not _loaded:
+        return out
+    want = [v.upper() for v in (versions or available_versions())]
+    try:
+        df_feat = _get_engineer_fn()(bar_buffer)
+        df_feat.dropna(inplace=True)
+        if len(df_feat) == 0:
+            return out
+    except Exception as e:
+        log.warning(f"predict_multi: feature build failed: {e}")
+        return out
+
+    for version in want:
+        if _loaded and version == _loaded_version:
+            models, scaler, fcols = _models, _scaler, _fcols
+        elif version in _extra:
+            e = _extra[version]
+            models, scaler, fcols = e["models"], e["scaler"], e["fcols"]
+        else:
+            continue
+        try:
+            missing = [c for c in fcols if c not in df_feat.columns]
+            if missing:
+                log.warning(f"predict_multi[{version}]: missing "
+                            f"{len(missing)} features e.g. {missing[:3]}")
+                continue
+            X = scaler.transform(df_feat[fcols].iloc[[-1]].values)
+            proba = np.mean([m.predict_proba(X) for m in models.values()],
+                            axis=0)[0]
+            sig, conf = _signal_from_proba(proba)
+            out[version] = {"signal": sig, "proba": proba, "confidence": conf}
+        except Exception as e:
+            log.warning(f"predict_multi[{version}] failed: {e}")
+    return out
 
 
 def is_ready() -> bool:
