@@ -436,11 +436,13 @@ def bootstrap():
     # position state, own journal, own Telegram alerts, never places a
     # real broker order. Disabled by default; enable with
     # PSAR_BRAIN_ENABLED=true in settings.env.
-    try:
-        from core.psar_session_brain import start_in_app as _psar_start
-        _psar_start()
-    except Exception as _e:
-        logger.warning(f"PSAR session brain not started (non-fatal): {_e}")
+    # 2026-08-12 — NOT STARTED. Only the one strategy with a confirmed
+    # out-of-sample edge runs (trend_day_brain, TEST PF 1.225, 3/3 folds).
+    # The PSAR brain has never been confirmed on a holdout; on 2026-08-11 it
+    # produced 371 heartbeats and zero trades. core/psar_session_brain.py is
+    # left untouched on disk — restore the two lines below to bring it back.
+    #     from core.psar_session_brain import start_in_app as _psar_start
+    #     _psar_start()
 
     # Trend-day brain (new, opt-in, paper-mode only, FUTURES ONLY): joins an
     # established session trend (VWAP-proxy deficit + 3 sequential closes +
@@ -469,14 +471,35 @@ def bootstrap():
     # evidence, not to replace anything. Own state/journal/Telegram,
     # never touches LivePosition, never places a real order. Disabled by
     # default; enable with ML_EOD_BRAIN_ENABLED=true.
-    try:
-        from core.ml_eod_brain import start_in_app as _mle_start
-        _mle_start()
-    except Exception as _e:
-        logger.warning(f"ML-EOD brain not started (non-fatal): {_e}")
+    # 2026-08-12 — NOT STARTED. It scores PF 1.053 against trend_day_brain's
+    # 1.225, and it rides the SAME ml_engine signal the pilot uses, which has
+    # no confirmed edge (TEST 0.789 even after the MAX_LOSS_PER_TRADE fix).
+    # core/ml_eod_brain.py is left untouched on disk — restore the two lines
+    # below to bring it back.
+    #     from core.ml_eod_brain import start_in_app as _mle_start
+    #     _mle_start()
 
     # Dual-Brain Pilot (ML + Claude)
+    _pilot_trading = os.getenv("PILOT_TRADING_ENABLED", "false").lower() == "true"
+    if _pilot_trading:
+        logger.warning(
+            "=" * 62 + "\n"
+            "  PILOT ENTRIES ARE ENABLED.\n"
+            "  This strategy has no confirmed out-of-sample edge:\n"
+            "  TEST PF 0.789 (gates on) / 0.927 (gates off), and -232 pts\n"
+            "  over the last 91 live sessions. Enabled deliberately.\n"
+            + "=" * 62
+        )
+    else:
+        logger.info(
+            "Pilot entries DISABLED — analysis, monitoring, reconciliation "
+            "and shadow logging all still run; only opening a position is "
+            "blocked. trend_day_brain (TEST PF 1.225) is the live strategy. "
+            "Set PILOT_TRADING_ENABLED=true to re-enable."
+        )
+
     pilot_config = PilotConfig(
+        trading_enabled=_pilot_trading,
         ml_only_mode=os.getenv("ML_ONLY_MODE", "false").lower() == "true",
         # Base LOW_CONF gate for the ML pilot loop -- distinct from
         # CLAUDE_MIN_CONFIDENCE (which only gates the separate /analyze

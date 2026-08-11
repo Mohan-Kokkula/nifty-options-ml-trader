@@ -171,6 +171,22 @@ class PilotConfig:
     # -- it's on the same 0-100 scale as `confidence`/effective_min_conf,
     # NOT the raw backtest quantile that motivated adding this knob.
     futures_min_confidence_pct: float = 0.0
+    # 2026-08-12: the pilot no longer opens positions by default.
+    #
+    # It has no confirmed out-of-sample edge. TEST PF 0.789 with the live
+    # gate stack, 0.927 with no gates at all, over 2025-09-03..2026-08-06 --
+    # and that is AFTER raising MAX_LOSS_PER_TRADE, which was the config bug
+    # that had been blocking every entry. Live paper over the last 91
+    # sessions: 27 trades, -232 pts (about -Rs 15,060).
+    #
+    # Everything else the pilot does stays on: the analysis cycle, the
+    # /analyze endpoint, position monitoring, broker reconciliation, the
+    # shadow logger and the gate-block tally. Only the act of OPENING a
+    # position is blocked, so the bot keeps producing evidence while risking
+    # nothing. Any position already open is still managed and closed normally.
+    #
+    # Set PILOT_TRADING_ENABLED=true to turn entries back on.
+    trading_enabled: bool = False
     # PCR-alignment confidence boost (new, opt-in). Backtested on the PSAR
     # signal + 2+ years of daily PCR data (2024-05 to 2026-07, the only
     # history available -- no proper VAL/TEST split possible with this
@@ -4719,6 +4735,18 @@ class ClaudePilot:
             #   (2) CALL trades only if confidence >= 85% (CALL signals = 17% WR)
             #   (3) Already-applied: 11:00 hard block via morning_hard_block_min=105
             try:
+                # Gate 0: pilot entries switched off (default since 2026-08-12).
+                # Sits ahead of every other gate so the reason is unambiguous
+                # in the tally — see PilotConfig.trading_enabled for the
+                # evidence. Exits and reconciliation are unaffected.
+                if not getattr(self.config, "trading_enabled", False):
+                    logger.info(
+                        f"Cycle #{cycle}: PILOT ENTRIES DISABLED — would have "
+                        f"taken {action} {option_type} at conf {confidence}%. "
+                        f"Set PILOT_TRADING_ENABLED=true to act on it."
+                    )
+                    _shadow_skip("pilot_trading_disabled", conf=confidence)
+                    return
                 # Gate 1: halt-after-loss / emergency-stop
                 if getattr(self, "_emergency_stopped", False):
                     logger.warning(
