@@ -13,6 +13,7 @@ This saves ~95% of Claude API calls (most cycles ML says SKIP).
 import logging
 import time
 import threading
+from collections import Counter
 from datetime import datetime, date, time as dtime, timedelta
 from typing import Optional
 from dataclasses import dataclass, field
@@ -21,6 +22,57 @@ from core.vix_regime import classify_vix, apply_vix_to_sl_tp, format_regime, VIX
 from core.iv_engine  import IVEngine, IVSnapshot, init_iv_engine
 
 logger = logging.getLogger(__name__)
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# GATE BLOCK TALLY
+#
+# Twelve gates sit between a model signal and an order. A full-history
+# replay could only measure seven of them; the other five (IV, OI FILTER,
+# PCR, BRIEF bias, STRUCTURE PENALTY) have no history to judge them by:
+# iv_history.jsonl holds 1 record, oi_archive covers 29 days, there are 18
+# premarket brief files, and STRUCTURE needs 3-minute bars nobody stored.
+#
+# So they get measured live instead. Every skip routed through
+# _shadow_skip() lands here, keyed by its reason, and the tally is logged
+# when the day rolls over. After a few weeks this answers "which gates
+# earn their place" with data rather than argument.
+#
+# Counting only — no gate behaviour changes.
+# ══════════════════════════════════════════════════════════════════════════
+_GATE_BLOCKS: Counter = Counter()
+_GATE_BLOCKS_LOCK = threading.Lock()
+
+
+def _count_gate_block(reason: str) -> None:
+    """Record one blocked entry. Never raises — this must not break a cycle."""
+    try:
+        # "low_conf<65%" and "low_conf<75%" are the same gate; keep the
+        # family, drop the varying threshold, so the tally stays readable.
+        key = str(reason).split(":")[0].split("<")[0].strip() or "unknown"
+        with _GATE_BLOCKS_LOCK:
+            _GATE_BLOCKS[key] += 1
+    except Exception:
+        pass
+
+
+def get_gate_block_tally() -> dict:
+    """Snapshot of today's blocks by gate, biggest first."""
+    with _GATE_BLOCKS_LOCK:
+        return dict(_GATE_BLOCKS.most_common())
+
+
+def _log_and_reset_gate_blocks() -> None:
+    """Emit the day's tally, then start the next day clean."""
+    with _GATE_BLOCKS_LOCK:
+        tally = _GATE_BLOCKS.most_common()
+        _GATE_BLOCKS.clear()
+    if not tally:
+        logger.info("Gate blocks: none — no signal was gated away today")
+        return
+    total = sum(n for _, n in tally)
+    parts = " | ".join(f"{k}={n}" for k, n in tally)
+    logger.info(f"Gate blocks (total {total}): {parts}")
 
 
 @dataclass
@@ -1773,6 +1825,10 @@ class ClaudePilot:
         today = date.today()
         if today != self._today:
             with self._lock:
+                # Report what the gates blocked yesterday before clearing it,
+                # otherwise the one number that says which gates are earning
+                # their place is lost at midnight.
+                _log_and_reset_gate_blocks()
                 logger.info("New trading day - resetting counters")
                 self._trades_today = 0
                 self._analyses_today = 0
@@ -2093,6 +2149,13 @@ class ClaudePilot:
         # convention "bucket_name[:detail]" matching shadow_logger's bucketing.
         # Fail-open: any exception is swallowed — never block trading.
         def _shadow_skip(reason: str, signal: str = "", conf: float = 0.0) -> None:
+            # Count the block before anything that can fail. A full-history
+            # replay (scripts/replay_gate_stack.py) could only measure 7 of
+            # the 12 gates -- IV, OI, PCR, BRIEF and STRUCTURE have no usable
+            # history (1 IV record, 29 days of OI, 18 brief files, no 3-min
+            # bars). This tally is how those five finally get measured: on
+            # live data, by the gate that actually fired.
+            _count_gate_block(reason)
             try:
                 from core.shadow_logger import get_shadow_logger
                 _sig = signal or ml_direction
@@ -4249,7 +4312,7 @@ class ClaudePilot:
         if num_lots == 0 and delta > 0 and sl_pts > 0:
             try:
                 import os as _os_slt
-                _cap = float(_os_slt.getenv("MAX_LOSS_PER_TRADE", "2000"))
+                _cap = float(_os_slt.getenv("MAX_LOSS_PER_TRADE", "3500"))
                 # 0.995 margin so int() truncation in sizing can't round to 0
                 fit_sl = (_cap / (delta * self.config.lot_size)) * 0.995
                 if _cap > 0 and fit_sl >= sl_pts * 0.85:
@@ -5596,7 +5659,7 @@ class ClaudePilot:
         # instead of re-reading the env var directly — was a duplicated,
         # could-drift-out-of-sync config path.
         try:
-            _max_loss = float(getattr(self.trader.risk, "max_loss_per_trade", 2000.0))
+            _max_loss = float(getattr(self.trader.risk, "max_loss_per_trade", 3500.0))
             if _max_loss > 0 and loss_per_lot > 0:
                 _max_lots_safe = int(_max_loss / loss_per_lot)
                 if _max_lots_safe < cfg.min_lots:
@@ -5687,7 +5750,7 @@ class ClaudePilot:
 
         # MAX_LOSS_PER_TRADE hard enforcement — same rule as options sizing.
         try:
-            _max_loss = float(getattr(self.trader.risk, "max_loss_per_trade", 2000.0))
+            _max_loss = float(getattr(self.trader.risk, "max_loss_per_trade", 3500.0))
             if _max_loss > 0 and loss_per_lot > 0:
                 _max_lots_safe = int(_max_loss / loss_per_lot)
                 if _max_lots_safe < cfg.min_lots:

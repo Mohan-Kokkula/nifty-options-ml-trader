@@ -695,6 +695,16 @@ def _build_dashboard() -> dict:
     except Exception as e:
         result["futures_archiver_health"] = {"error": str(e)}
 
+    # Which gates blocked entries today, biggest first. Five of the twelve
+    # gates (IV, OI FILTER, PCR, BRIEF bias, STRUCTURE PENALTY) have too
+    # little history to backtest, so this live tally is the only way they
+    # ever get measured. Read-only, same as everything else here.
+    try:
+        from core.claude_pilot import get_gate_block_tally
+        result["gate_blocks_today"] = get_gate_block_tally()
+    except Exception as e:
+        result["gate_blocks_today"] = {"error": str(e)}
+
     return result
 
 

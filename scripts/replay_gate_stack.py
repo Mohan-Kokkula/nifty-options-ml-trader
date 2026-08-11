@@ -67,7 +67,8 @@ MODELS = ROOT / "models"
 
 # ── Live constants, read from the same places main.py reads them ──────────
 LOT_SIZE = 65                 # DEFAULT_QTY in config/settings.env
-MAX_LOSS_CAP = 2000.0         # MAX_LOSS_PER_TRADE in config/settings.env
+MAX_LOSS_CAP = 3500.0         # MAX_LOSS_PER_TRADE in config/settings.env
+                              # (raised from 2000 on 2026-08-12; --cap overrides)
 SL_TIGHTEN_BAND = 0.85        # claude_pilot.py:4255 — tighten only if within 15%
 FRICTION_PTS = 5.9            # futures round-trip (EXECUTION_MODE=futures)
 BASE_MIN_CONF = 58            # the floor every gate then adjusts
@@ -447,9 +448,13 @@ def main() -> None:
                     choices=("dynamic", "frozen", "eod"))
     ap.add_argument("--cache", default="data/.gate_replay_cache.pkl",
                     help="scores+gates cache; delete the file to rebuild")
+    ap.add_argument("--cap", type=float, default=None,
+                    help="override MAX_LOSS_PER_TRADE for this run")
     ap.add_argument("--quiet", action="store_true")
     a = ap.parse_args()
     verbose = not a.quiet
+    if a.cap:
+        globals()["MAX_LOSS_CAP"] = float(a.cap)
     # Windows consoles default to cp1252 and die on any non-ASCII output.
     try:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")

@@ -17,7 +17,14 @@ class TradingConfig:
     default_qty: int = 65   # NIFTY lot size — confirmed 65 on this account (was 50, bug)
     max_open_positions: int = 3
     max_daily_loss: float = 5000.0
-    max_loss_per_trade: float = 2000.0
+    # 2026-08-12: raised 2000 -> 3500. At DEFAULT_QTY=65 a 2000 cap allows a
+    # stop of only 30.8 pts, but the validated exit is 4 x ATR and NIFTY's
+    # 5-min ATR median is 13.3 pts = a 53.1 pt stop = 3452 per lot. The old
+    # cap rejected EVERY such entry: a full-history replay of the live gate
+    # stack against that exit produced ZERO trades in a year, with
+    # MAX_LOSS_PER_TRADE blocking 4,275 candidates. See
+    # scripts/replay_gate_stack.py.
+    max_loss_per_trade: float = 3500.0
     strategy_name: str = "OpenClawNifty"
     account_capital: float = 500000.0
     risk_pct_per_trade: float = 0.02
@@ -134,7 +141,7 @@ def load_config() -> AppConfig:
             default_qty=_safe_int("DEFAULT_QTY", "65", errors),
             max_open_positions=_safe_int("MAX_OPEN_POSITIONS", "3", errors),
             max_daily_loss=_safe_float("MAX_DAILY_LOSS", "5000", errors),
-            max_loss_per_trade=_safe_float("MAX_LOSS_PER_TRADE", "2000", errors),
+            max_loss_per_trade=_safe_float("MAX_LOSS_PER_TRADE", "3500", errors),
             strategy_name=os.getenv("STRATEGY_NAME", "OpenClawNifty"),
             account_capital=_safe_float("ACCOUNT_CAPITAL", "500000", errors),
             risk_pct_per_trade=_safe_float("RISK_PCT_PER_TRADE", "0.02", errors),
