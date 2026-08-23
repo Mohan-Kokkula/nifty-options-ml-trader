@@ -128,9 +128,9 @@ def main() -> None:
     years = [int(v) for v in sorted(set(yr)) if v >= a.start]
 
     from sklearn.preprocessing import StandardScaler
-    rows, allt = [], []
-    print(f"{'year':<6}{'trades':>7}{'win%':>7}{'PF':>7}{'dir_acc':>9}"
-          f"{'avg':>8}{'pts':>8}{'INR':>10}{'maxDD':>7}{'trainN':>9}")
+    rows, allt, alli = [], [], []
+    print(f"{'year':<6}{'trades':>7}{'PF':>7}{'avg':>8}{'pts':>8}"
+          f"{'|':>3}{'INV PF':>8}{'INV avg':>9}{'INV pts':>9}{'gross':>8}")
     print("-" * 80)
     for Y in years:
         te = np.where(yr == Y)[0]
@@ -152,30 +152,60 @@ def main() -> None:
         m = (sig != SKIP) & (y[te] != SKIP)
         acc = float((sig[m] == y[te][m]).mean()) if m.any() else float("nan")
         t = simulate(df, te, sig)
-        allt.append(t)
-        s = stats(t)
-        rows.append((Y, s, acc))
+        # inverted: swap CALL<->PUT, keep SKIP. Must be RE-SIMULATED, not
+        # negated -- the stop makes the payoff asymmetric, so a flipped
+        # stop-out becomes a trade that may ride to the close instead.
+        inv = sig.copy()
+        inv[sig == CALL] = PUT
+        inv[sig == PUT] = CALL
+        ti = simulate(df, te, inv)
+        allt.append(t); alli.append(ti)
+        s = stats(t); si = stats(ti)
+        rows.append((Y, s, acc, si))
         pf = "  inf " if s["pf"] == float("inf") else f"{s['pf']:6.3f}"
-        print(f"{Y:<6}{s['n']:>7}{s['win']:>6.1f}%{pf}{acc:>8.1%}"
-              f"{s['avg']:>+8.2f}{s['total']:>+8.0f}{s['total']*LOT:>+10,.0f}"
-              f"{s['dd']:>7.0f}{len(tr):>9,}")
+        pfi = "  inf " if si["pf"] == float("inf") else f"{si['pf']:6.3f}"
+        print(f"{Y:<6}{s['n']:>7}{pf}{s['avg']:>+8.2f}{s['total']:>+8.0f}"
+              f"{'|':>3}{pfi}{si['avg']:>+9.2f}{si['total']:>+9.0f}"
+              f"{s['avg']+FRICTION:>+8.2f}")
 
     if not rows:
         print("no evaluable years")
         return
     a_all = np.concatenate(allt)
-    S = stats(a_all)
+    i_all = np.concatenate(alli)
+    S, SI = stats(a_all), stats(i_all)
     accs = [r[2] for r in rows if np.isfinite(r[2])]
     print("-" * 80)
     pf = "  inf " if S["pf"] == float("inf") else f"{S['pf']:6.3f}"
-    print(f"{'ALL':<6}{S['n']:>7}{S['win']:>6.1f}%{pf}"
-          f"{np.mean(accs):>8.1%}{S['avg']:>+8.2f}{S['total']:>+8.0f}"
-          f"{S['total']*LOT:>+10,.0f}{S['dd']:>7.0f}")
-    pos = sum(1 for _, s, _ in rows if s["total"] > 0)
-    print(f"\nprofitable years: {pos}/{len(rows)}   "
-          f"mean dir_acc {np.mean(accs):.1%} (range {min(accs):.1%}-{max(accs):.1%})")
-    print(f"accuracy vs PF rank correlation: "
-          f"{pd.Series(accs).corr(pd.Series([r[1]['pf'] for r in rows if np.isfinite(r[2])]), method='spearman'):+.3f}")
+    pfi = "  inf " if SI["pf"] == float("inf") else f"{SI['pf']:6.3f}"
+    print(f"{'ALL':<6}{S['n']:>7}{pf}{S['avg']:>+8.2f}{S['total']:>+8.0f}"
+          f"{'|':>3}{pfi}{SI['avg']:>+9.2f}{SI['total']:>+9.0f}"
+          f"{S['avg']+FRICTION:>+8.2f}")
+
+    pos = sum(1 for r in rows if r[1]["total"] > 0)
+    posi = sum(1 for r in rows if r[3]["total"] > 0)
+    print(f"\nprofitable years   normal {pos}/{len(rows)}"
+          f"   inverted {posi}/{len(rows)}")
+    print(f"mean dir_acc {np.mean(accs):.1%} "
+          f"(range {min(accs):.1%}-{max(accs):.1%})")
+
+    print("\n" + "=" * 80)
+    print("CAN WE JUST TAKE THE OPPOSITE TRADE?")
+    print("=" * 80)
+    print(f"  normal    {S['avg']:>+7.2f} pts/trade   PF {S['pf']:.3f}   "
+          f"{S['total']*LOT:>+10,.0f} INR   maxDD {S['dd']:.0f}")
+    print(f"  inverted  {SI['avg']:>+7.2f} pts/trade   PF {SI['pf']:.3f}   "
+          f"{SI['total']*LOT:>+10,.0f} INR   maxDD {SI['dd']:.0f}")
+    print(f"\n  gross edge before costs: {S['avg']+FRICTION:+.2f} pts/trade")
+    print(f"  Both directions pay the same {FRICTION} pts round trip. A")
+    print("  positive gross edge flipped becomes negative, and then pays")
+    print("  the toll a second time. Losing net does not imply a winning")
+    print("  opposite -- it usually means the edge was smaller than the cost.")
+    # per-year: does flipping rescue the LOSING years specifically?
+    lost = [r for r in rows if r[1]["total"] < 0]
+    saved = [r for r in lost if r[3]["total"] > 0]
+    print(f"\n  of the {len(lost)} losing years, flipping made "
+          f"{len(saved)} profitable")
     print(f"\nelapsed {time.time()-t0:.0f}s")
 
 
