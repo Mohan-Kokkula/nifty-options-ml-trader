@@ -70,8 +70,16 @@ def _fetch_day(d: date) -> pd.DataFrame | None:
         return None
     fut["TradDt"] = pd.to_datetime(fut["TradDt"]).dt.normalize()
     fut["XpryDt"] = pd.to_datetime(fut["XpryDt"]).dt.normalize()
-    keep = ["TradDt", "XpryDt", "ClsPric", "SttlmPric", "OpnIntrst",
-            "ChngInOpnIntrst", "UndrlygPric"]
+    # 2026-08-12: added volume + OHLC. NIFTY spot carries no volume
+    # (nifty_5min.csv is 0 for 2015-2025), so every volume-named feature in
+    # V9 is a proxy -- cmf_proxy collapses to a close-position indicator.
+    # The NIFTY *futures* contract does have real volume and this bhavcopy
+    # already contains it; the previous keep-list simply discarded it.
+    # TtlTradgVol = contracts traded, TtlNbOfTxsExctd = number of trades.
+    # Purely additive: existing consumers read columns by name.
+    keep = ["TradDt", "XpryDt", "OpnPric", "HghPric", "LwPric", "ClsPric",
+            "SttlmPric", "TtlTradgVol", "TtlTrfVal", "TtlNbOfTxsExctd",
+            "OpnIntrst", "ChngInOpnIntrst", "UndrlygPric"]
     keep = [c for c in keep if c in fut.columns]
     return fut[keep].sort_values("XpryDt")
 
