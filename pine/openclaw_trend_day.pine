@@ -1,0 +1,103 @@
+// =====================================================================
+// openclaw_trend_day.pine — INDICATOR
+// Visual replica of core/trend_day_brain.py, the one strategy in this
+// project that passed a holdout (VAL 1.363, TEST 1.225, 3/3 folds).
+//
+// IMPORTANT — the VWAP here is NOT TradingView's ta.vwap().
+// NIFTY spot carries no volume (data/nifty_5min.csv is 0 for 2015-2025),
+// so the bot uses an EQUAL-WEIGHT cumulative mean of typical price. Using
+// ta.vwap() would plot a different line: on spot it can misbehave with
+// zero volume, and on futures it is genuinely volume-weighted. This file
+// reproduces the proxy the bot actually trades.
+//
+// Apply to: NIFTY, 5-minute, chart timezone Asia/Kolkata.
+// =====================================================================
+//@version=5
+indicator("OpenClaw Trend-Day Brain", overlay = true, max_labels_count = 200)
+
+// ── parameters: defaults match trend_day_brain.py exactly ────────────
+minDev    = input.float(25.0, "Min distance from VWAP proxy (pts)")
+seqN      = input.int(3,      "Consecutive closes required", minval = 1)
+stopBuf   = input.float(10.0, "Stop buffer beyond day extreme (pts)")
+maxStop   = input.float(60.0, "Max stop (pts)")
+rr        = input.float(2.0,  "Target = rr x risk")
+winStart  = input.session("1130-1400", "Entry window (IST)")
+eodTime   = input.session("1515-1530", "EOD squareoff")
+showBands = input.bool(true,  "Show +/- deviation bands")
+
+// ── session state, reset each day ────────────────────────────────────
+newDay = ta.change(time("D")) != 0
+
+var float cumTP   = na
+var int   barsIn  = na
+var float dayOpen = na
+var float dayHi   = na
+var float dayLo   = na
+
+tp = (high + low + close) / 3.0
+
+if newDay
+    cumTP   := tp
+    barsIn  := 1
+    dayOpen := open
+    dayHi   := high
+    dayLo   := low
+else
+    cumTP   := nz(cumTP) + tp
+    barsIn  := nz(barsIn) + 1
+    dayHi   := math.max(nz(dayHi, high), high)
+    dayLo   := math.min(nz(dayLo, low), low)
+
+vwapProxy = cumTP / barsIn          // equal weight — this is the point
+dev       = close - vwapProxy
+
+// ── the three conditions ─────────────────────────────────────────────
+upSeq = true
+dnSeq = true
+for i = 0 to seqN - 1
+    upSeq := upSeq and close[i] > close[i + 1]
+    dnSeq := dnSeq and close[i] < close[i + 1]
+
+inWindow = not na(time(timeframe.period, winStart, "Asia/Kolkata"))
+
+longSig  = inWindow and dev >  minDev and upSeq and close > dayOpen
+shortSig = inWindow and dev < -minDev and dnSeq and close < dayOpen
+
+// one signal per day, like the bot
+var bool firedToday = false
+if newDay
+    firedToday := false
+takeLong  = longSig  and not firedToday
+takeShort = shortSig and not firedToday
+if takeLong or takeShort
+    firedToday := true
+
+// ── plotting ─────────────────────────────────────────────────────────
+plot(vwapProxy, "VWAP proxy (equal weight)", color.new(color.blue, 0), 2)
+plot(showBands ? vwapProxy + minDev : na, "+25", color.new(color.gray, 50))
+plot(showBands ? vwapProxy - minDev : na, "-25", color.new(color.gray, 50))
+plot(dayOpen, "Day open", color.new(color.orange, 30), 1, plot.style_stepline)
+
+bgcolor(inWindow ? color.new(color.blue, 94) : na, title = "Entry window")
+
+plotshape(takeLong,  "LONG",  shape.triangleup,   location.belowbar,
+          color.new(color.green, 0), size = size.small, text = "LONG")
+plotshape(takeShort, "SHORT", shape.triangledown, location.abovebar,
+          color.new(color.red, 0),   size = size.small, text = "SHORT")
+
+// risk preview on the signal bar
+riskLong  = math.min(maxStop, math.abs(close - (dayLo - stopBuf)))
+riskShort = math.min(maxStop, math.abs((dayHi + stopBuf) - close))
+if takeLong
+    label.new(bar_index, low,  "stop " + str.tostring(close - riskLong, "#.#") +
+              "  tgt " + str.tostring(close + riskLong * rr, "#.#"),
+              style = label.style_label_up, color = color.new(color.green, 80),
+              textcolor = color.white, size = size.tiny)
+if takeShort
+    label.new(bar_index, high, "stop " + str.tostring(close + riskShort, "#.#") +
+              "  tgt " + str.tostring(close - riskShort * rr, "#.#"),
+              style = label.style_label_down, color = color.new(color.red, 80),
+              textcolor = color.white, size = size.tiny)
+
+alertcondition(takeLong,  "Trend-day LONG",  "OpenClaw trend-day LONG")
+alertcondition(takeShort, "Trend-day SHORT", "OpenClaw trend-day SHORT")

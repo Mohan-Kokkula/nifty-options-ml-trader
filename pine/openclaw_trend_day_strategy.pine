@@ -1,0 +1,99 @@
+// =====================================================================
+// openclaw_trend_day_strategy.pine — STRATEGY (Strategy Tester)
+// Same rules as core/trend_day_brain.py, so TradingView's results should
+// be comparable to the Python backtest:
+//     VAL 1.363 | TEST 1.225 (3/3 folds) | +5.4 pts/trade
+//
+// COSTS ARE ON BY DEFAULT. The Python work charges 5.9 pts round trip
+// (futures friction, ~0.024% of a 24,400 index). Without this the tester
+// reports GROSS, which is how a +6.47 pts/trade gross edge masquerades as
+// profitable when the net is +0.57. Do not turn it off to make the curve
+// look better.
+//
+// Apply to: NIFTY (or NIFTY futures), 5-minute, timezone Asia/Kolkata.
+// =====================================================================
+//@version=5
+strategy("OpenClaw Trend-Day Strategy", overlay = true,
+     default_qty_type   = strategy.fixed,
+     default_qty_value  = 65,               // NIFTY lot
+     initial_capital    = 500000,
+     commission_type    = strategy.commission.percent,
+     commission_value   = 0.0121,           // x2 sides = 0.0242% = ~5.9 pts
+     calc_on_every_tick = false,
+     process_orders_on_close = true)
+
+minDev   = input.float(25.0, "Min distance from VWAP proxy (pts)")
+seqN     = input.int(3,      "Consecutive closes required", minval = 1)
+stopBuf  = input.float(10.0, "Stop buffer beyond day extreme (pts)")
+maxStop  = input.float(60.0, "Max stop (pts)")
+rr       = input.float(2.0,  "Target = rr x risk")
+winStart = input.session("1130-1400", "Entry window (IST)")
+eodHour  = input.int(15, "EOD squareoff hour", minval = 9, maxval = 15)
+eodMin   = input.int(15, "EOD squareoff minute", minval = 0, maxval = 59)
+
+// ── session state ────────────────────────────────────────────────────
+newDay = ta.change(time("D")) != 0
+var float cumTP   = na
+var int   barsIn  = na
+var float dayOpen = na
+var float dayHi   = na
+var float dayLo   = na
+
+tp = (high + low + close) / 3.0
+if newDay
+    cumTP   := tp
+    barsIn  := 1
+    dayOpen := open
+    dayHi   := high
+    dayLo   := low
+else
+    cumTP   := nz(cumTP) + tp
+    barsIn  := nz(barsIn) + 1
+    dayHi   := math.max(nz(dayHi, high), high)
+    dayLo   := math.min(nz(dayLo, low), low)
+
+vwapProxy = cumTP / barsIn
+dev       = close - vwapProxy
+
+upSeq = true
+dnSeq = true
+for i = 0 to seqN - 1
+    upSeq := upSeq and close[i] > close[i + 1]
+    dnSeq := dnSeq and close[i] < close[i + 1]
+
+inWindow = not na(time(timeframe.period, winStart, "Asia/Kolkata"))
+
+// ── one trade per day, like the bot ──────────────────────────────────
+var bool firedToday = false
+if newDay
+    firedToday := false
+
+longSig  = inWindow and dev >  minDev and upSeq and close > dayOpen and not firedToday
+shortSig = inWindow and dev < -minDev and dnSeq and close < dayOpen and not firedToday
+
+flat = strategy.position_size == 0
+
+if longSig and flat
+    risk = math.min(maxStop, math.abs(close - (dayLo - stopBuf)))
+    if risk > 0
+        firedToday := true
+        strategy.entry("L", strategy.long)
+        strategy.exit("L-x", "L", stop = close - risk, limit = close + risk * rr)
+
+if shortSig and flat
+    risk = math.min(maxStop, math.abs((dayHi + stopBuf) - close))
+    if risk > 0
+        firedToday := true
+        strategy.entry("S", strategy.short)
+        strategy.exit("S-x", "S", stop = close + risk, limit = close - risk * rr)
+
+// ── forced EOD squareoff — the bot never holds overnight ─────────────
+tIST     = timestamp("Asia/Kolkata", year, month, dayofmonth, eodHour, eodMin)
+isEod    = time >= tIST and time[1] < tIST
+if isEod and strategy.position_size != 0
+    strategy.close_all("EOD")
+
+// ── visuals ──────────────────────────────────────────────────────────
+plot(vwapProxy, "VWAP proxy", color.new(color.blue, 0), 2)
+plot(dayOpen,   "Day open",   color.new(color.orange, 40), 1, plot.style_stepline)
+bgcolor(inWindow ? color.new(color.blue, 94) : na)
