@@ -1,0 +1,173 @@
+// =====================================================================
+// MK-Narayanashram + Gap Filter
+//
+// PSAR logic below is UNCHANGED from the original. The only addition is
+// the opening-gap agreement filter from core/psar_session_brain.py:
+//
+//     gap      = today's first open - previous session's last close
+//     gap_sign = sign(gap)
+//     a flip is REJECTED unless its direction agrees with gap_sign
+//
+//   gap UP   (+1) -> only BUY  flips can fire, all session
+//   gap DOWN (-1) -> only SELL flips can fire, all session
+//   gap flat ( 0) -> nothing fires
+//
+// The gap is measured once at the open and locks the session to one side.
+//
+// NOTE ON minGapPts (default 0 = exactly the bot's behaviour):
+//   the Python filter uses np.sign(), so a +0.05 pt gap gates the day as
+//   hard as a +200 pt gap. On 2026-08-26 a +10.5 pt gap (0.043% of a
+//   24,345 open) blocked both PUT flips -- and the day closed at its low,
+//   -137 from the open. Raise minGapPts to require a real gap. Left at 0
+//   this file reproduces the production rule exactly.
+// =====================================================================
+//@version=6
+indicator("MK-Narayanashram + Gap", overlay=true)
+
+// Inputs
+start      = input.float(0.01, "Start")
+increment  = input.float(0.06, "Increment")
+maximum    = input.float(0.2,  "Maximum")
+
+// ── gap filter inputs ────────────────────────────────────────────────
+useGap     = input.bool(true, "Require gap agreement", group="Gap filter")
+minGapPts  = input.float(0.0, "Min |gap| in points (0 = sign only)", group="Gap filter")
+showGap    = input.bool(true, "Tint background by gap direction", group="Gap filter")
+
+// Persistent variables
+var bool  uptrend    = false
+var bool  isInit     = false
+var float EP         = na
+var float SAR        = na
+var float AF         = start
+var float nextBarSAR = na
+var float prevSAR    = na
+var float prevEP     = na
+
+// Signal flags
+var bool buySignal   = false
+var bool sellSignal  = false
+var int  lastSignal  = 0  // 1 = buy, -1 = sell, 0 = none
+
+// ── GAP STATE (computed natively, no request.security, no repaint) ───
+newDay = ta.change(time("D")) != 0
+var float dayOpen      = na
+var float prevDayClose = na
+var float lastCloseSoFar = na
+
+if newDay
+    prevDayClose := lastCloseSoFar   // still holds YESTERDAY's final close
+    dayOpen      := open
+lastCloseSoFar := close              // update AFTER capturing the previous
+
+gapPts  = dayOpen - prevDayClose
+gapSign = na(gapPts) ? 0 : (math.abs(gapPts) < minGapPts ? 0 : (gapPts > 0 ? 1 : (gapPts < 0 ? -1 : 0)))
+
+if bar_index > 0
+    firstTrendBar = false
+    SAR := nextBarSAR
+
+    // One-time initialization
+    if not isInit and bar_index == 1
+        lowPrev   = low[1]
+        highPrev  = high[1]
+        closeCur  = close
+        closePrev = close[1]
+
+        uptrend := closeCur > closePrev
+        if uptrend
+            EP      := high
+            prevSAR := lowPrev
+            prevEP  := high
+        else
+            EP      := low
+            prevSAR := highPrev
+            prevEP  := low
+
+        SAR := prevSAR + start * (prevEP - prevSAR)
+        isInit := true
+        firstTrendBar := true
+
+    // Detect potential flips (based on classic SAR rules)
+    bearFlip = uptrend and SAR > low      // flip to downtrend
+    bullFlip = (not uptrend) and SAR < high // flip to uptrend
+
+    // Apply flips
+    if bearFlip
+        firstTrendBar := true
+        uptrend := false
+        SAR := math.max(EP, high)
+        EP := low
+        AF := start
+    else if bullFlip
+        firstTrendBar := true
+        uptrend := true
+        SAR := math.min(EP, low)
+        EP := high
+        AF := start
+
+    // EP/AF update when trend continues
+    if not firstTrendBar
+        if uptrend and high > EP
+            EP := high
+            AF := math.min(AF + increment, maximum)
+        else if not uptrend and low < EP
+            EP := low
+            AF := math.min(AF + increment, maximum)
+
+    // Clamp SAR to prior extremums
+    SAR := uptrend ? math.min(SAR, low[1]) : math.max(SAR, high[1])
+    if bar_index > 1
+        SAR := uptrend ? math.min(SAR, low[2]) : math.max(SAR, high[2])
+
+    // Next SAR
+    nextBarSAR := SAR + AF * (EP - SAR)
+
+    // ── GAP GATE: flip direction must agree with the gap ─────────────
+    buyAllowed  = not useGap or gapSign ==  1
+    sellAllowed = not useGap or gapSign == -1
+
+    // Signal logic: fire ONLY on flips and ignore consecutive same-side signals
+    if barstate.isconfirmed
+        // BUY on bull flip (downtrend -> uptrend)
+        if bullFlip and lastSignal != 1 and buyAllowed
+            buySignal  := true
+            sellSignal := false
+            lastSignal := 1
+        // SELL on bear flip (uptrend -> downtrend)
+        else if bearFlip and lastSignal != -1 and sellAllowed
+            sellSignal := true
+            buySignal  := false
+            lastSignal := -1
+        else
+            buySignal  := false
+            sellSignal := false
+
+// ── flips that the gap filter suppressed, shown for transparency ─────
+blockedBuy  = barstate.isconfirmed and useGap and (not uptrend[1]) and uptrend and gapSign != 1
+blockedSell = barstate.isconfirmed and useGap and uptrend[1] and (not uptrend) and gapSign != -1
+
+// Plot SARs
+plot(SAR,        title="SAR",      style=plot.style_cross, linewidth=3, color=color.orange)
+plot(nextBarSAR, title="Next SAR", style=plot.style_cross, linewidth=3, color=color.aqua)
+
+// Gap direction tint: green = longs only, red = shorts only, grey = nothing
+bgcolor(showGap ? (gapSign == 1 ? color.new(color.green, 92) : gapSign == -1 ? color.new(color.red, 92) : color.new(color.gray, 94)) : na, title="Gap regime")
+
+// Plot buy/sell markers (placed at sensible levels)
+plotshape(buySignal,  title="Buy",  style=shape.labelup,   text="BUY",  location=location.belowbar, color=color.green, textcolor=color.white, size=size.small, offset=0)
+plotshape(sellSignal, title="Sell", style=shape.labeldown, text="SELL", location=location.abovebar, color=color.red,   textcolor=color.white, size=size.small,  offset=0)
+
+// Suppressed flips — small hollow marks so you can see what the gap cost
+plotshape(blockedBuy,  title="Buy blocked by gap",  style=shape.circle, location=location.belowbar, color=color.new(color.green, 55), size=size.tiny)
+plotshape(blockedSell, title="Sell blocked by gap", style=shape.circle, location=location.abovebar, color=color.new(color.red, 55),   size=size.tiny)
+
+// Gap readout
+var table gt = table.new(position.top_right, 1, 2, border_width=1)
+if barstate.islast
+    table.cell(gt, 0, 0, "gap " + str.tostring(gapPts, "#.#") + " pts", text_size=size.small, bgcolor=color.new(color.gray, 80), text_color=color.white)
+    table.cell(gt, 0, 1, gapSign == 1 ? "LONGS ONLY" : gapSign == -1 ? "SHORTS ONLY" : "NO TRADES", text_size=size.small, bgcolor=gapSign == 1 ? color.new(color.green, 40) : gapSign == -1 ? color.new(color.red, 40) : color.new(color.gray, 40), text_color=color.white)
+
+// Alerts
+alertcondition(buySignal,  title="Buy Signal",  message="PSAR BUY (flip to uptrend, gap agrees)")
+alertcondition(sellSignal, title="Sell Signal", message="PSAR SELL (flip to downtrend, gap agrees)")
