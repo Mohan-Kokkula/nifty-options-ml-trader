@@ -423,10 +423,11 @@ def _sticky_time_exit(raw_time_exit: bool, already_latched: bool) -> bool:
 
 
 class ClaudePilot:
-    def __init__(self, trader, analyzer, ml_engine, notifier, config=None):
+    def __init__(self, trader, analyzer, ml_engine, notifier, config=None, psar_engine=None):
         self.trader = trader
         self.analyzer = analyzer
         self.ml_engine = ml_engine
+        self.psar_engine = psar_engine
         self.notifier = notifier
         self.config = config or PilotConfig()
 
@@ -1868,6 +1869,9 @@ class ClaudePilot:
                 self._v_recovery_fired_spot = 0.0
                 # 2026-05-15 STRATEGY K: reset halt-after-loss flag at new day
                 self._day_halted_after_loss = False
+                # Reset PSAR daily trade counter
+                if self.psar_engine:
+                    self.psar_engine.reset_daily()
                 # ── Apply pre-market brief (if available) ────────────
                 self._apply_premarket_brief()
 
@@ -2273,24 +2277,39 @@ class ClaudePilot:
         except Exception as e:
             logger.debug(f"ADX context check failed: {e}")
 
-        # Step 2: Run ML model
+        # Step 2: Run signal engine (PSAR primary, ML fallback)
         ml_signal = 2
         ml_proba = [0.0, 0.0, 1.0]
         ml_indicators = {}
         ml_direction = "SKIP"
+        signal_source = "NONE"
 
-        if self.ml_engine and self.ml_engine.is_ready():
+        # Primary: PSAR multi-timeframe engine
+        if self.psar_engine:
+            try:
+                ml_signal, ml_proba_arr, ml_conf, ml_indicators = \
+                    self._run_psar_prediction(spot)
+                ml_proba = list(ml_proba_arr)
+                ml_direction = "CALL" if ml_signal == 0 else ("PUT" if ml_signal == 1 else "SKIP")
+                signal_source = "PSAR"
+                self._ml_signals_today += (1 if ml_signal != 2 else 0)
+            except Exception as e:
+                logger.warning(f"PSAR prediction failed, falling back to ML: {e}")
+
+        # Fallback: ML model (if PSAR not available or failed)
+        if signal_source == "NONE" and self.ml_engine and self.ml_engine.is_ready():
             try:
                 ml_signal, ml_proba_arr, ml_conf, ml_indicators = \
                     self._run_ml_prediction(spot)
                 ml_proba = list(ml_proba_arr)
                 ml_direction = "CALL" if ml_signal == 0 else ("PUT" if ml_signal == 1 else "SKIP")
+                signal_source = "ML"
                 self._ml_signals_today += (1 if ml_signal != 2 else 0)
             except Exception as e:
                 logger.warning(f"ML prediction failed: {e}")
 
         logger.info(
-            f"Cycle #{cycle}: ML={ml_direction} "
+            f"Cycle #{cycle}: {signal_source}={ml_direction} "
             f"(C={ml_proba[0]:.3f} P={ml_proba[1]:.3f} S={ml_proba[2]:.3f})"
         )
 
@@ -4932,6 +4951,8 @@ class ClaudePilot:
             with self._lock:
                 self._trades_today += 1
                 self._save_trade_count()  # V9.3: persist across restarts
+                if self.psar_engine:
+                    self.psar_engine.record_trade()
                 self._last_trade_time = time.monotonic()
                 self._live_position = LivePosition(
                     direction=direction,
@@ -5167,6 +5188,13 @@ class ClaudePilot:
         Compute dynamic SL and TP based on current ATR + VIX regime.
         Returns (sl_points, tp_points) scaled by both ATR and VIX.
         """
+        # PSAR engine has its own backtest-proven SL/TP (60/120pts, VIX-scaled)
+        if self.psar_engine:
+            vix_val = self._current_vix or 15.0
+            sl_pts, tp_pts = self.psar_engine.get_sl_tp(vix=vix_val)
+            logger.info(f"PSAR SL/TP: SL={sl_pts}pts TP={tp_pts}pts (VIX={vix_val:.1f})")
+            return sl_pts, tp_pts
+
         cfg = self.config
 
         # ── FROZEN VALIDATED ATR EXIT (opt-in) — bypasses everything below:
@@ -6491,6 +6519,26 @@ class ClaudePilot:
                 pass
 
             time.sleep(self._MONITOR_INTERVAL)
+
+    # ------------------------------------------------------------------
+    # PSAR prediction helper
+    # ------------------------------------------------------------------
+
+    def _run_psar_prediction(self, spot):
+        """Run PSAR multi-TF engine: fetch 5m/15m/30m bars and VIX, return signal."""
+        from core.tv_fetcher import get_tv_fetcher
+        from datetime import datetime as _dt
+
+        tv = get_tv_fetcher()
+        df5 = tv.get_nifty_5min(n_bars=60)
+        df15 = tv.get_nifty_15min(n_bars=30)
+        df30 = tv.get_nifty_30min(n_bars=20)
+
+        vix_val = self._current_vix or 15.0
+        now = _dt.now()
+        current_hm = now.hour * 100 + now.minute
+
+        return self.psar_engine.predict(df5, df15, df30, vix=vix_val, current_hm=current_hm)
 
     # ------------------------------------------------------------------
     # ML prediction helper

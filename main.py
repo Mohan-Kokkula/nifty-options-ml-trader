@@ -547,12 +547,18 @@ def bootstrap():
         f"risk/trade={pilot_config.max_risk_pct*100:.1f}% | "
         f"lot_size={pilot_config.lot_size}"
     )
+    # PSAR engine — primary signal engine (replaces 143-feature ML)
+    from core.psar_engine import PSAREngine
+    psar_engine = PSAREngine()
+    logger.info("PSAR engine initialized (primary signal, ML fallback)")
+
     pilot = ClaudePilot(
         trader=trader,
         analyzer=analyzer,
         ml_engine=ml_engine if ml_loaded else None,
         notifier=notifications,
         config=pilot_config,
+        psar_engine=psar_engine,
     )
 
     # OpenClaw Agent (autonomous AI -- searches web, controls pilot)
