@@ -2313,6 +2313,21 @@ class ClaudePilot:
             f"(C={ml_proba[0]:.3f} P={ml_proba[1]:.3f} S={ml_proba[2]:.3f})"
         )
 
+        # Detailed PSAR logging
+        if signal_source == "PSAR" and ml_indicators:
+            p5 = ml_indicators.get("psar_5m", {})
+            p15 = ml_indicators.get("psar_15m", {})
+            p30 = ml_indicators.get("psar_30m", {})
+            d = lambda x: "BULL" if x.get("direction") == 1 else "BEAR" if x.get("direction") == -1 else "N/A"
+            logger.info(
+                f"Cycle #{cycle}: PSAR 5m={d(p5)} dist={p5.get('distance_pts',0):+.1f}pts flip={p5.get('bars_since_flip',0)}bars | "
+                f"15m={d(p15)} dist={p15.get('distance_pts',0):+.1f}pts | "
+                f"30m={d(p30)} dist={p30.get('distance_pts',0):+.1f}pts | "
+                f"VIX={ml_indicators.get('vix',0):.1f} SL={ml_indicators.get('sl_pts',0)} TP={ml_indicators.get('tp_pts',0)}"
+            )
+            if ml_indicators.get("skip_reason"):
+                logger.info(f"Cycle #{cycle}: PSAR skip reason: {ml_indicators['skip_reason']}")
+
         # Gap override removed — gap magnitude is passed as ML features only.
         # The ML model weights gap size via fut_dist_vwap_pct and gap feature inputs.
 
