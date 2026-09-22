@@ -2319,10 +2319,13 @@ class ClaudePilot:
             p15 = ml_indicators.get("psar_15m", {})
             p30 = ml_indicators.get("psar_30m", {})
             d = lambda x: "BULL" if x.get("direction") == 1 else "BEAR" if x.get("direction") == -1 else "N/A"
+            align_str = f"{ml_indicators.get('aligned_count', '?')}/{3} ({ml_indicators.get('alignment_mode', '?')})"
+            partial = " [PARTIAL]" if ml_indicators.get("partial_alignment") else ""
             logger.info(
                 f"Cycle #{cycle}: PSAR 5m={d(p5)} dist={p5.get('distance_pts',0):+.1f}pts flip={p5.get('bars_since_flip',0)}bars | "
                 f"15m={d(p15)} dist={p15.get('distance_pts',0):+.1f}pts | "
                 f"30m={d(p30)} dist={p30.get('distance_pts',0):+.1f}pts | "
+                f"align={align_str}{partial} | "
                 f"VIX={ml_indicators.get('vix',0):.1f} SL={ml_indicators.get('sl_pts',0)} TP={ml_indicators.get('tp_pts',0)}"
             )
             if ml_indicators.get("skip_reason"):
