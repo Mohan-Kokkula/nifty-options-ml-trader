@@ -170,7 +170,6 @@ class PSAREngine:
     # Backtest-proven SL/TP (points)
     BASE_SL = 60
     BASE_TP = 120
-    MAX_TRADES_PER_DAY = 2
     LUNCH_START = 1200
     LUNCH_END = 1330
 
@@ -243,11 +242,6 @@ class PSAREngine:
         # Lunch chop filter (12:00-13:30)
         if self.LUNCH_START <= current_hm <= self.LUNCH_END:
             indicators["skip_reason"] = "lunch_chop_zone"
-            return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
-
-        # Max trades/day filter
-        if self._trades_today >= self.MAX_TRADES_PER_DAY:
-            indicators["skip_reason"] = "max_trades_reached"
             return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
 
         # ── Signal: VIX-adaptive alignment ──
