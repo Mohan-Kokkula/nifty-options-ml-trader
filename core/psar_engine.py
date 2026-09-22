@@ -161,17 +161,19 @@ class PSAREngine:
     Settings:
       - VIX-adaptive alignment: 2/3 for VIX<22 (faster), 3/3 for VIX>=22 (safer)
       - 5m must always agree (entry trigger TF)
+      - Flip-only: signal only when 5m PSAR flips (not on every aligned bar)
       - Partial (2/3) alignment: 0.85x SL/TP, 0.80x confidence
-      - Skip 12:00-13:30 lunch chop zone
+      - Skip 09:15-09:30 (market open noise) and 12:00-13:30 (lunch chop)
       - SL=60pts, TP=120pts (1:2 R:R), VIX-scaled
-      - Max 2 trades/day
     """
 
     # Backtest-proven SL/TP (points)
     BASE_SL = 60
     BASE_TP = 120
+    OPEN_SETTLE = 930
     LUNCH_START = 1200
     LUNCH_END = 1330
+    FLIP_MAX_BARS = 0
 
     def __init__(self):
         self._ready = False
@@ -239,9 +241,19 @@ class PSAREngine:
 
         # ── Pre-signal filters ──
 
+        # Market open settle (09:15-09:30) — direction not established yet
+        if current_hm < self.OPEN_SETTLE:
+            indicators["skip_reason"] = "market_open_settle"
+            return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
+
         # Lunch chop filter (12:00-13:30)
         if self.LUNCH_START <= current_hm <= self.LUNCH_END:
             indicators["skip_reason"] = "lunch_chop_zone"
+            return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
+
+        # Flip-only: signal only when 5m PSAR has just flipped direction
+        if sig5["bars_since_flip"] > self.FLIP_MAX_BARS:
+            indicators["skip_reason"] = f"no_5m_flip (bars={sig5['bars_since_flip']})"
             return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
 
         # ── Signal: VIX-adaptive alignment ──
