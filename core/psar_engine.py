@@ -161,7 +161,7 @@ class PSAREngine:
     Settings:
       - VIX-adaptive alignment: 2/3 for VIX<22 (faster), 3/3 for VIX>=22 (safer)
       - 5m must always agree (entry trigger TF)
-      - Flip-only: signal only when 5m PSAR flips (not on every aligned bar)
+      - Flip-only: signal within 1 bar of 5m PSAR flip (not on every aligned bar)
       - Partial (2/3) alignment: 0.85x SL/TP, 0.80x confidence
       - Skip 09:15-09:30 (market open noise) and 12:00-13:30 (lunch chop)
       - SL=60pts, TP=120pts (1:2 R:R), VIX-scaled
@@ -173,7 +173,7 @@ class PSAREngine:
     OPEN_SETTLE = 930
     LUNCH_START = 1200
     LUNCH_END = 1330
-    FLIP_MAX_BARS = 0
+    FLIP_MAX_BARS = 1
 
     def __init__(self):
         self._ready = False
@@ -303,12 +303,30 @@ class PSAREngine:
         """Call after a trade is taken to track daily count."""
         self._trades_today += 1
 
-    def get_sl_tp(self, vix: float = 15.0) -> tuple:
-        """Get SL/TP in points, scaled by VIX and alignment strength."""
+    def get_sl_tp(self, vix: float = 15.0, max_loss_budget: float = 0,
+                  lot_size: int = 0) -> tuple:
+        """Get SL/TP in points, scaled by VIX, alignment, and risk budget.
+
+        If max_loss_budget and lot_size are provided, caps SL so that
+        1 lot × SL ≤ budget.  TP scales proportionally to maintain R:R.
+        """
         vix_mult = 1.5 if vix >= 22 else (1.2 if vix >= 17 else 1.0)
         align_mult = 0.85 if self._last_aligned < 3 else 1.0
-        return (round(self.BASE_SL * vix_mult * align_mult, 1),
-                round(self.BASE_TP * vix_mult * align_mult, 1))
+        sl = self.BASE_SL * vix_mult * align_mult
+        tp = self.BASE_TP * vix_mult * align_mult
+
+        if max_loss_budget > 0 and lot_size > 0:
+            max_sl = (max_loss_budget / lot_size) * 0.995
+            if max_sl < sl:
+                ratio = max_sl / sl
+                sl = max_sl
+                tp = tp * ratio
+                logger.info(
+                    f"PSAR SL capped by risk budget: SL={sl:.1f}pts TP={tp:.1f}pts "
+                    f"(budget=₹{max_loss_budget:.0f}, lot={lot_size})"
+                )
+
+        return round(sl, 1), round(tp, 1)
 
     def _calc_confidence(self, sig5: dict, sig15: dict, sig30: dict,
                          vix: float) -> float:
