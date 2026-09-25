@@ -3767,7 +3767,9 @@ class ClaudePilot:
             return
 
         # 09:25-09:45 = secondary trap zone — require 75%.
-        if hard_block_min <= session_minutes < 30:
+        # PSAR bypass: PSAR has its own OPEN_SETTLE filter and confidence
+        # range is inherently lower (50-73%), so the 75% gate always blocks.
+        if hard_block_min <= session_minutes < 30 and not self.psar_engine:
             morning_min_conf = 75
             if confidence < morning_min_conf:
                 logger.info(
