@@ -3699,6 +3699,15 @@ class ClaudePilot:
         except Exception as _e:
             logger.debug(f"Regime engine unavailable (fail-open): {_e}")
 
+        # PSAR: regime floor is calibrated for ML probabilities, not PSAR
+        # alignment scores. Cap effective_min_conf at PSAR's base (50%).
+        if self.psar_engine and effective_min_conf > 50:
+            logger.info(
+                f"Cycle #{cycle}: PSAR regime-floor cap: "
+                f"{effective_min_conf}%→50% (PSAR alignment is the filter)"
+            )
+            effective_min_conf = 50
+
         # ── PERSISTENT VWAP BIAS BLOCK ─────────────────────────────────────
         # If spot has been >50pts below (or above) the futures VWAP for 3+
         # consecutive cycles (~15 min), the session has an established
@@ -4712,7 +4721,8 @@ class ClaudePilot:
                                 ml_indicators.get("tf15_ema21", 0))
                 ema_60m_bull = (ml_indicators.get("tf60_ema9", 0) >
                                 ml_indicators.get("tf60_ema21", 0))
-                if tf_dir_5m is not None:
+                # PSAR: skip — PSAR has its own multi-TF PSAR alignment
+                if tf_dir_5m is not None and not self.psar_engine:
                     htf_against = (
                         (tf_dir_5m == "CALL" and not (ema_15m_bull or ema_60m_bull))
                         or (tf_dir_5m == "PUT" and (ema_15m_bull and ema_60m_bull))
@@ -4782,7 +4792,9 @@ class ClaudePilot:
                 # Sits ahead of every other gate so the reason is unambiguous
                 # in the tally — see PilotConfig.trading_enabled for the
                 # evidence. Exits and reconciliation are unaffected.
-                if not getattr(self.config, "trading_enabled", False):
+                # PSAR bypass: trading_enabled kill switch was for ML (no
+                # confirmed edge). PSAR mode is explicitly chosen by the user.
+                if not getattr(self.config, "trading_enabled", False) and not self.psar_engine:
                     logger.info(
                         f"Cycle #{cycle}: PILOT ENTRIES DISABLED — would have "
                         f"taken {action} {option_type} at conf {confidence}%. "
@@ -4798,7 +4810,9 @@ class ClaudePilot:
                     )
                     _shadow_skip("strategy_k:emergency_stopped", conf=confidence)
                     return
-                if getattr(self, "_day_halted_after_loss", False):
+                # PSAR bypass: 1:2 R:R needs 34% WR — halting after 1 loss
+                # kills expected profitability.
+                if getattr(self, "_day_halted_after_loss", False) and not self.psar_engine:
                     logger.warning(
                         f"Cycle #{cycle}: 🛑 DAY HALTED (after loss) — "
                         f"{action} {option_type} BLOCKED until tomorrow"
@@ -4806,7 +4820,9 @@ class ClaudePilot:
                     _shadow_skip("strategy_k:day_halted", conf=confidence)
                     return
                 # Gate 2: CALL-specific high-confidence threshold
-                if option_type == "CE" and confidence < 85:
+                # PSAR bypass: PSAR max confidence is ~73% (3/3 alignment).
+                # This gate was calibrated for ML's 0-100 probability scale.
+                if option_type == "CE" and confidence < 85 and not self.psar_engine:
                     logger.warning(
                         f"Cycle #{cycle}: 🛑 CALL FILTER — conf {confidence}% < 85% "
                         f"(13-day backtest: CALL trades had 17% WR, need >=85% conf to fire)"
