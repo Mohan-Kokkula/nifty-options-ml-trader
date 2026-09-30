@@ -120,7 +120,8 @@ def compute_psar(df: pd.DataFrame, af_start=0.03, af_step=0.02, af_max=0.2):
     )
 
 
-def _psar_signal_for_tf(df: pd.DataFrame) -> dict:
+def _psar_signal_for_tf(df: pd.DataFrame,
+                        af_start=0.03, af_step=0.02, af_max=0.2) -> dict:
     """Compute PSAR signal for one timeframe.
     Returns direction, SAR value, distance, bars since flip, and whether
     the last confirmed bar was a flip (matching Pine's barstate.isconfirmed)."""
@@ -128,7 +129,7 @@ def _psar_signal_for_tf(df: pd.DataFrame) -> dict:
         return {"direction": 0, "psar": 0, "distance_pts": 0,
                 "bars_since_flip": 0, "is_flip": False}
 
-    psar_vals, psar_dirs, psar_flips = compute_psar(df)
+    psar_vals, psar_dirs, psar_flips = compute_psar(df, af_start, af_step, af_max)
 
     # Use second-to-last bar as "confirmed" (last bar may still be forming)
     confirmed_idx = -2 if len(df) > 5 else -1
@@ -170,7 +171,7 @@ class PSAREngine:
     # Backtest-proven SL/TP (points)
     BASE_SL = 60
     BASE_TP = 120
-    OPEN_SETTLE = 930
+    OPEN_SETTLE = 920
     LUNCH_START = 1200
     LUNCH_END = 1330
     FLIP_MAX_BARS = 1
@@ -180,6 +181,17 @@ class PSAREngine:
         self._trades_today = 0
         self._today = None
         self._last_aligned = 3
+
+    @staticmethod
+    def _time_adaptive_af(current_hm: int) -> tuple:
+        """Return (af_start, af_step, af_max) based on time of day.
+        Morning momentum gets faster tracking, afternoon gets slower."""
+        if current_hm < 1000:
+            return 0.04, 0.025, 0.25
+        elif current_hm < 1200:
+            return 0.03, 0.02, 0.2
+        else:
+            return 0.025, 0.02, 0.2
 
     def is_ready(self) -> bool:
         return self._ready
@@ -206,10 +218,13 @@ class PSAREngine:
         """
         self._ready = True
 
+        # Time-adaptive AF: faster tracking in morning, slower in afternoon
+        af_start, af_step, af_max = self._time_adaptive_af(current_hm)
+
         # Compute PSAR for each timeframe
-        sig5 = _psar_signal_for_tf(df5)
-        sig15 = _psar_signal_for_tf(df15)
-        sig30 = _psar_signal_for_tf(df30)
+        sig5 = _psar_signal_for_tf(df5, af_start, af_step, af_max)
+        sig15 = _psar_signal_for_tf(df15, af_start, af_step, af_max)
+        sig30 = _psar_signal_for_tf(df30, af_start, af_step, af_max)
 
         # ── VIX-adaptive alignment threshold ──
         # Normal/Low VIX (<22): 2/3 OK — trends are cleaner, enter faster
@@ -228,6 +243,7 @@ class PSAREngine:
             "vix": round(vix, 2),
             "sl_pts": round(sl_pts, 1),
             "tp_pts": round(tp_pts, 1),
+            "af_params": {"start": af_start, "step": af_step, "max": af_max},
         }
 
         dirs = [sig5["direction"], sig15["direction"], sig30["direction"]]
