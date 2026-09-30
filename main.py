@@ -453,11 +453,14 @@ def bootstrap():
     # trades score PF 0.666 under options friction. Own state/journal/Telegram,
     # never touches LivePosition, never places a real broker order. Disabled by
     # default; enable with TREND_DAY_BRAIN_ENABLED=true in settings.env.
-    try:
-        from core.trend_day_brain import start_in_app as _td_start
-        _td_start()
-    except Exception as _e:
-        logger.warning(f"Trend-day brain not started (non-fatal): {_e}")
+    # PSAR is the primary signal — skip trend_day_brain to avoid
+    # conflicting trades (it entered CALL during lunch on 2026-09-29).
+    # try:
+    #     from core.trend_day_brain import start_in_app as _td_start
+    #     _td_start()
+    # except Exception as _e:
+    #     logger.warning(f"Trend-day brain not started (non-fatal): {_e}")
+    logger.info("Trend-day brain: SKIPPED (PSAR is primary signal source)")
 
     # ML-EOD brain (new, opt-in, paper-mode only, FUTURES ONLY): the SAME
     # ml_engine signal the pilot uses, but held to the close instead of
