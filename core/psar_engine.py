@@ -27,6 +27,22 @@ from typing import Optional
 logger = logging.getLogger(__name__)
 
 
+def _compute_adx(df: pd.DataFrame, period: int = 14):
+    """Compute ADX (Average Directional Index) for trend strength."""
+    high, low, close = df["high"], df["low"], df["close"]
+    tr = pd.concat([(high - low), (high - close.shift()).abs(),
+                     (low - close.shift()).abs()], axis=1).max(axis=1)
+    atr = tr.rolling(period).mean()
+    up = high.diff()
+    dn = -low.diff()
+    plus_dm = ((up > dn) & (up > 0)).astype(float) * up
+    minus_dm = ((dn > up) & (dn > 0)).astype(float) * dn
+    plus_di = 100 * (plus_dm.rolling(period).mean() / atr.replace(0, np.nan))
+    minus_di = 100 * (minus_dm.rolling(period).mean() / atr.replace(0, np.nan))
+    dx = 100 * (plus_di - minus_di).abs() / (plus_di + minus_di).replace(0, np.nan)
+    return dx.rolling(period).mean()
+
+
 def compute_psar(df: pd.DataFrame, af_start=0.03, af_step=0.02, af_max=0.2):
     """Compute Parabolic SAR matching MK-Narayanashram-I Pine Script exactly.
     Start=0.03, Increment=0.02, Maximum=0.2.
@@ -183,15 +199,17 @@ class PSAREngine:
         self._last_aligned = 3
 
     @staticmethod
-    def _time_adaptive_af(current_hm: int) -> tuple:
-        """Return (af_start, af_step, af_max) based on time of day.
-        Morning momentum gets faster tracking, afternoon gets slower."""
-        if current_hm < 1000:
-            return 0.04, 0.025, 0.25
-        elif current_hm < 1200:
-            return 0.03, 0.02, 0.2
-        else:
-            return 0.025, 0.02, 0.2
+    def _adx_adaptive_af(adx_val) -> tuple:
+        """Return (af_start, af_step, af_max) based on ADX trend strength.
+        Backtest-tuned: aggressive in normal trends, moderate in strong, conservative in ranging."""
+        if adx_val is not None and not np.isnan(adx_val):
+            if adx_val > 30:
+                return 0.03, 0.025, 0.3
+            elif adx_val > 20:
+                return 0.045, 0.03, 0.3
+            else:
+                return 0.02, 0.015, 0.15
+        return 0.03, 0.02, 0.2
 
     def is_ready(self) -> bool:
         return self._ready
@@ -218,8 +236,10 @@ class PSAREngine:
         """
         self._ready = True
 
-        # Time-adaptive AF: faster tracking in morning, slower in afternoon
-        af_start, af_step, af_max = self._time_adaptive_af(current_hm)
+        # ADX-adaptive AF: tune tracking speed based on trend strength
+        adx_series = _compute_adx(df5)
+        adx_val = float(adx_series.iloc[-2]) if len(adx_series) > 1 and not np.isnan(adx_series.iloc[-2]) else None
+        af_start, af_step, af_max = self._adx_adaptive_af(adx_val)
 
         # Compute PSAR for each timeframe
         sig5 = _psar_signal_for_tf(df5, af_start, af_step, af_max)
@@ -243,6 +263,7 @@ class PSAREngine:
             "vix": round(vix, 2),
             "sl_pts": round(sl_pts, 1),
             "tp_pts": round(tp_pts, 1),
+            "adx": round(adx_val, 1) if adx_val is not None else None,
             "af_params": {"start": af_start, "step": af_step, "max": af_max},
         }
 
