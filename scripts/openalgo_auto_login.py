@@ -259,12 +259,7 @@ def auto_login(retries: int = 2) -> bool:
             log.info(f"  Waiting 15s before retry {attempt + 1}...")
             time.sleep(15)
 
-    log.error("FAILED — All auto-login attempts exhausted")
-    _telegram(
-        "<b>OpenAlgo auto-login FAILED</b>\n"
-        f"Manual login required: {OPENALGO_URL}\n"
-        "OI/PCR data will use fallback (pcr=1.0) until fixed."
-    )
+    log.error("FAILED — All auto-login attempts exhausted (fallback pcr=1.0 active)")
     return False
 
 

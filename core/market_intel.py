@@ -109,38 +109,7 @@ def _try_connect_openalgo() -> bool:
             )
             return True
         else:
-            # ping() returned False — could be HTML (broker not logged in).
-            # Try auto-login via scripts/openalgo_auto_login.py, then re-ping.
-            logger.info(
-                "OpenAlgo ping failed (HTML or unreachable) — "
-                "attempting auto-login (scripts/openalgo_auto_login.py)..."
-            )
-            try:
-                import importlib.util, sys as _sys
-                _script = _os.path.join(
-                    _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))),
-                    "scripts", "openalgo_auto_login.py"
-                )
-                _spec = importlib.util.spec_from_file_location(
-                    "openalgo_auto_login", _script
-                )
-                _mod = importlib.util.module_from_spec(_spec)
-                _spec.loader.exec_module(_mod)
-                _login_ok = _mod.auto_login(retries=1)
-                if _login_ok:
-                    # Re-ping after successful login
-                    oa2 = OpenAlgoClient(base_url=url, api_key=key)
-                    if oa2.ping():
-                        _openalgo_client = oa2
-                        logger.info(
-                            f"✅ OpenAlgo connected (after auto-login) at {url}"
-                        )
-                        return True
-                    logger.warning("OpenAlgo auto-login reported success but ping still fails")
-                else:
-                    logger.warning("OpenAlgo auto-login failed — will retry in 5 min")
-            except Exception as _login_err:
-                logger.debug(f"OpenAlgo auto-login attempt failed: {_login_err}")
+            logger.debug("OpenAlgo ping failed — using fallback pcr=1.0")
     except Exception as _e:
         logger.debug(f"OpenAlgo retry failed: {_e}")
     return False
