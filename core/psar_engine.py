@@ -191,6 +191,7 @@ class PSAREngine:
     LUNCH_START = 1200
     LUNCH_END = 1330
     FLIP_MAX_BARS = 1
+    FLAT_THRESHOLD = 40
 
     def __init__(self):
         self._ready = False
@@ -267,6 +268,15 @@ class PSAREngine:
             "af_params": {"start": af_start, "step": af_step, "max": af_max},
         }
 
+        # Day open for FLAT detection — first bar of today in df5
+        today = df5.index[-1].date()
+        today_bars = df5[df5.index.date == today]
+        day_open = float(today_bars.iloc[0]["open"]) if not today_bars.empty else float(df5["open"].iloc[-1])
+        spot = float(df5["close"].iloc[-1])
+        is_flat = abs(spot - day_open) <= self.FLAT_THRESHOLD
+        indicators["day_open"] = round(day_open, 2)
+        indicators["is_flat"] = is_flat
+
         dirs = [sig5["direction"], sig15["direction"], sig30["direction"]]
         bullish_count = sum(1 for d in dirs if d == 1)
         bearish_count = sum(1 for d in dirs if d == -1)
@@ -313,6 +323,9 @@ class PSAREngine:
             return 0, np.array([p_call, p_put, p_skip]), confidence, indicators
 
         if bearish_count >= min_align and sig5["direction"] == -1:
+            if is_flat:
+                indicators["skip_reason"] = f"flat_day_put (spot={spot:.0f} open={day_open:.0f} diff={abs(spot-day_open):.0f}pts)"
+                return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
             self._last_aligned = bearish_count
             confidence = self._calc_confidence(sig5, sig15, sig30, vix)
             if bearish_count == 2:
