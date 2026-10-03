@@ -192,6 +192,7 @@ class PSAREngine:
     LUNCH_END = 1330
     FLIP_MAX_BARS = 1
     FLAT_THRESHOLD = 40
+    EMA_PERIOD = 40
 
     def __init__(self):
         self._ready = False
@@ -277,6 +278,10 @@ class PSAREngine:
         indicators["day_open"] = round(day_open, 2)
         indicators["is_flat"] = is_flat
 
+        # EMA side filter — CALL only above EMA, PUT only below
+        ema_val = float(df5["close"].ewm(span=self.EMA_PERIOD, adjust=False).mean().iloc[-1])
+        indicators["ema"] = round(ema_val, 2)
+
         dirs = [sig5["direction"], sig15["direction"], sig30["direction"]]
         bullish_count = sum(1 for d in dirs if d == 1)
         bearish_count = sum(1 for d in dirs if d == -1)
@@ -307,6 +312,9 @@ class PSAREngine:
         # 5m MUST agree with signal direction (fastest TF = entry trigger)
 
         if bullish_count >= min_align and sig5["direction"] == 1:
+            if spot < ema_val:
+                indicators["skip_reason"] = f"ema_side_call (spot={spot:.0f} < EMA={ema_val:.0f})"
+                return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
             self._last_aligned = bullish_count
             confidence = self._calc_confidence(sig5, sig15, sig30, vix)
             if bullish_count == 2:
@@ -325,6 +333,9 @@ class PSAREngine:
         if bearish_count >= min_align and sig5["direction"] == -1:
             if is_flat:
                 indicators["skip_reason"] = f"flat_day_put (spot={spot:.0f} open={day_open:.0f} diff={abs(spot-day_open):.0f}pts)"
+                return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
+            if spot > ema_val:
+                indicators["skip_reason"] = f"ema_side_put (spot={spot:.0f} > EMA={ema_val:.0f})"
                 return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
             self._last_aligned = bearish_count
             confidence = self._calc_confidence(sig5, sig15, sig30, vix)
