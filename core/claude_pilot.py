@@ -455,6 +455,30 @@ class ClaudePilot:
             logger.warning(f"Trade journal init failed: {e}")
             self._journal = None
 
+        # Multi-strategy SignalRouter (opt-in via MULTI_STRATEGY=true)
+        self._signal_router = None
+        import os as _os_ms
+        if _os_ms.getenv("MULTI_STRATEGY", "false").strip().lower() in ("true", "1", "yes"):
+            try:
+                from core.signal_router import SignalRouter
+                from core.macd_engine import MACDEngine
+                from core.oi_engine import OIEngine
+                from core.vwap_reversion_engine import VWAPReversionEngine
+                engines = {}
+                if self.psar_engine:
+                    engines["PSAR"] = self.psar_engine
+                engines["MACD"] = MACDEngine()
+                engines["OI"] = OIEngine()
+                engines["VWAP"] = VWAPReversionEngine()
+                self._signal_router = SignalRouter(engines)
+                logger.info(
+                    f"SignalRouter initialized with {len(engines)} engines: "
+                    f"{list(engines.keys())}"
+                )
+            except Exception as e:
+                logger.warning(f"SignalRouter init failed (single-engine fallback): {e}")
+                self._signal_router = None
+
         self._running = False
         self._thread: Optional[threading.Thread] = None
         self._monitor_thread: Optional[threading.Thread] = None
@@ -1011,6 +1035,13 @@ class ClaudePilot:
                         self._journal.mark_entry_closed(je, reason=reason)
                 except Exception as e:
                     logger.warning(f"Journal synthetic-exit record failed: {e}")
+
+        # ── SignalRouter position tracking ─────────────────────────────
+        if self._signal_router:
+            try:
+                self._signal_router.on_position_closed(pnl=pnl_rupees)
+            except Exception as _e:
+                logger.debug(f"SignalRouter on_position_closed failed: {_e}")
 
         # ── Cleanup / state transition ────────────────────────────────
         self._clear_live_position(pos)
@@ -2283,9 +2314,60 @@ class ClaudePilot:
         ml_indicators = {}
         ml_direction = "SKIP"
         signal_source = "NONE"
+        router_result = None  # set when multi-strategy is active
 
-        # Primary: PSAR multi-timeframe engine
-        if self.psar_engine:
+        # ── Multi-strategy SignalRouter path ──
+        if self._signal_router:
+            try:
+                router_result = self._run_router_prediction(spot)
+                action = router_result.get("action", "SKIP")
+                if action in ("OPEN", "CLOSE_AND_OPEN"):
+                    ml_direction = router_result["direction"]
+                    ml_signal = 0 if ml_direction == "CALL" else 1
+                    ml_indicators = router_result.get("indicators", {})
+                    ml_indicators["router_action"] = action
+                    ml_indicators["router_strategy"] = router_result["strategy"]
+                    ml_indicators["router_all"] = {
+                        k: v.get("direction", "SKIP")
+                        for k, v in router_result.get("all_signals", {}).items()
+                    }
+                    if action == "CLOSE_AND_OPEN":
+                        ml_indicators["close_reason"] = router_result.get("close_reason", "")
+                    conf = router_result.get("confidence", 0.5)
+                    ml_proba = [conf if ml_signal == 0 else (1-conf)*0.2,
+                                conf if ml_signal == 1 else (1-conf)*0.2,
+                                0.0]
+                    ml_proba[2] = 1.0 - ml_proba[0] - ml_proba[1]
+                    signal_source = f"ROUTER/{router_result['strategy']}"
+                    self._ml_signals_today += 1
+                elif action == "HOLD":
+                    ml_indicators = router_result.get("indicators", {})
+                    ml_indicators["router_action"] = "HOLD"
+                    ml_indicators["hold_reason"] = router_result.get("hold_reason", "")
+                    signal_source = "ROUTER/HOLD"
+                else:
+                    signal_source = "ROUTER/SKIP"
+                    ml_indicators = {"router_action": "SKIP",
+                                     "skip_reason": router_result.get("skip_reason", "")}
+                logger.info(
+                    f"Cycle #{cycle}: Router action={action} "
+                    f"strategy={router_result.get('strategy', 'N/A')} "
+                    f"dir={router_result.get('direction', 'SKIP')} "
+                    f"conf={router_result.get('confidence', 0):.3f}"
+                )
+                if router_result.get("all_signals"):
+                    sigs = " | ".join(
+                        f"{k}={v.get('direction', 'SKIP')}({v.get('confidence', 0):.2f})"
+                        for k, v in router_result["all_signals"].items()
+                    )
+                    logger.info(f"Cycle #{cycle}: All signals: {sigs}")
+            except Exception as e:
+                logger.warning(f"SignalRouter failed, falling back to single PSAR: {e}")
+                self._signal_router = None
+                router_result = None
+
+        # Primary: PSAR multi-timeframe engine (single-engine mode)
+        if signal_source == "NONE" and self.psar_engine:
             try:
                 ml_signal, ml_proba_arr, ml_conf, ml_indicators = \
                     self._run_psar_prediction(spot)
@@ -2548,7 +2630,7 @@ class ClaudePilot:
         except Exception as e:
             logger.debug(f"Feature engineering directive failed: {e}")
 
-        # Step 3: If ML says SKIP → done (no Claude call needed)
+        # Step 3: If ML says SKIP or Router says HOLD → done
         if ml_signal == 2:
             logger.info(f"Cycle #{cycle}: ML SKIP - no trade")
             self._prev_ml_signal = 2
@@ -2556,6 +2638,19 @@ class ClaudePilot:
                 self._last_recommendation = {
                     "cycle": cycle, "ml_signal": "SKIP",
                     "action": "WAIT", "confidence": 0,
+                    "time": datetime.now().isoformat(),
+                }
+            return
+
+        if router_result and router_result.get("action") == "HOLD":
+            logger.info(
+                f"Cycle #{cycle}: Router HOLD — "
+                f"{router_result.get('hold_reason', 'same direction')}"
+            )
+            with self._lock:
+                self._last_recommendation = {
+                    "cycle": cycle, "ml_signal": ml_direction,
+                    "action": "HOLD", "confidence": 0,
                     "time": datetime.now().isoformat(),
                 }
             return
@@ -4554,6 +4649,15 @@ class ClaudePilot:
                         f"SL={sl_price:.0f} TP={tp_price:.0f} "
                         f"→ Telegram alert fires on PAPER_EXIT_SL/TP"
                     )
+                    if self._signal_router:
+                        try:
+                            _rs = (router_result or {}).get("strategy", signal_source)
+                            self._signal_router.on_position_opened(
+                                direction=direction, strategy=_rs,
+                                entry_price=spot, sl=sl_pts, tp=tp_pts,
+                            )
+                        except Exception:
+                            pass
             self._save_session_state()
             return
 
@@ -5018,6 +5122,16 @@ class ClaudePilot:
                             ml_indicators.get("regime", "ANY"))
                 except Exception:
                     pass
+                # Notify SignalRouter of position open
+                if self._signal_router:
+                    try:
+                        _rs = (router_result or {}).get("strategy", signal_source)
+                        self._signal_router.on_position_opened(
+                            direction=direction, strategy=_rs,
+                            entry_price=spot, sl=sl_pts, tp=tp_pts,
+                        )
+                    except Exception:
+                        pass
                 # Reset peak/drawdown trackers for new position
                 self._pos_peak_profit_pts = 0.0
                 self._pos_max_drawdown_pts = 0.0
@@ -5228,6 +5342,25 @@ class ClaudePilot:
         Compute dynamic SL and TP based on current ATR + VIX regime.
         Returns (sl_points, tp_points) scaled by both ATR and VIX.
         """
+        # When SignalRouter is active, use the winning strategy's SL/TP
+        if self._signal_router and self._signal_router.active_position:
+            strat_name = self._signal_router.active_position.strategy
+            eng = self._signal_router.engines.get(strat_name)
+            if eng:
+                vix_val = self._current_vix or 15.0
+                _budget = 0.0
+                _lot_sz = 0
+                try:
+                    _budget = float(getattr(self.trader.risk, "max_loss_per_trade", 0))
+                    _lot_sz = self.config.lot_size
+                except Exception:
+                    pass
+                sl_pts, tp_pts = eng.get_sl_tp(
+                    vix=vix_val, max_loss_budget=_budget, lot_size=_lot_sz
+                )
+                logger.info(f"{strat_name} SL/TP: SL={sl_pts}pts TP={tp_pts}pts (VIX={vix_val:.1f})")
+                return sl_pts, tp_pts
+
         # PSAR engine has its own backtest-proven SL/TP (60/120pts, VIX-scaled)
         # Pass risk budget so PSAR can cap SL to fit MAX_LOSS_PER_TRADE
         if self.psar_engine:
@@ -6573,6 +6706,32 @@ class ClaudePilot:
     # ------------------------------------------------------------------
     # PSAR prediction helper
     # ------------------------------------------------------------------
+
+    def _run_router_prediction(self, spot) -> dict:
+        """Run all strategy engines via SignalRouter."""
+        from core.tv_fetcher import get_tv_fetcher
+        from datetime import datetime as _dt
+
+        tv = get_tv_fetcher()
+        df5 = tv.get_nifty_5min(n_bars=60)
+        df15 = tv.get_nifty_15min(n_bars=30)
+        df30 = tv.get_nifty_30min(n_bars=20)
+
+        vix_val = self._current_vix or 15.0
+        now = _dt.now()
+        current_hm = now.hour * 100 + now.minute
+
+        chain_data = None
+        try:
+            from core.market_intel import get_option_chain
+            chain_data = get_option_chain()
+        except Exception:
+            pass
+
+        return self._signal_router.evaluate(
+            df5, df15, df30, vix=vix_val,
+            current_hm=current_hm, chain_data=chain_data
+        )
 
     def _run_psar_prediction(self, spot):
         """Run PSAR multi-TF engine: fetch 5m/15m/30m bars and VIX, return signal."""
