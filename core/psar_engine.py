@@ -2,21 +2,18 @@
 psar_engine.py — Parabolic SAR Signal Engine
 =============================================
 Replaces the 143-feature ML model with a simple, robust signal:
-  - Multi-timeframe PSAR alignment (5m, 15m, 30m)
+  - Dual-timeframe PSAR alignment (5m + 15m)
   - VIX regime as chop filter (from sentinel/regime engine)
   - Output: CALL / PUT / SKIP with confidence scores
 
-Signal logic (VIX-adaptive alignment):
-  CALL: 5m bullish + enough TFs agree (2/3 or 3/3 based on VIX)
-  PUT:  5m bearish + enough TFs agree (2/3 or 3/3 based on VIX)
-  SKIP: insufficient alignment or 5m disagrees
+Signal logic:
+  CALL: 5m PSAR flip bullish + 15m PSAR bullish + EMA40 side filter
+  PUT:  5m PSAR flip bearish + 15m PSAR bearish + EMA40 side filter
+  SKIP: 15m disagrees or filters not met
 
-VIX-adaptive alignment:
-  Normal/Low VIX (<22): 2/3 TF alignment — faster entries on clean trends
-  High VIX (>=22): 3/3 required — avoid whipsaws in volatile markets
-  5m must ALWAYS agree (fastest TF = entry trigger)
-  Partial alignment (2/3): tighter SL/TP (0.85x) + reduced confidence (0.80x)
-  VIX scales SL/TP: 1.0x normal, 1.2x elevated (17-22), 1.5x high (22+).
+Backtest-optimized: 5m+15m only (PF 1.18, +218pts) outperforms
+3-TF alignment which over-filters and misses entries.
+VIX scales SL/TP: 1.0x normal, 1.2x elevated (17-22), 1.5x high (22+).
 """
 
 import logging
@@ -173,13 +170,12 @@ def _psar_signal_for_tf(df: pd.DataFrame,
 
 
 class PSAREngine:
-    """Multi-timeframe PSAR signal engine with VIX-adaptive alignment.
+    """Dual-timeframe PSAR signal engine (5m + 15m).
 
     Settings:
-      - VIX-adaptive alignment: 2/3 for VIX<22 (faster), 3/3 for VIX>=22 (safer)
-      - 5m must always agree (entry trigger TF)
-      - Flip-only: signal within 1 bar of 5m PSAR flip (not on every aligned bar)
-      - Partial (2/3) alignment: 0.85x SL/TP, 0.80x confidence
+      - 5m PSAR flip as entry trigger + 15m PSAR direction must agree
+      - Flip-only: signal within 1 bar of 5m PSAR flip
+      - EMA40 side filter + FLAT day PUT filter
       - Skip 09:15-09:30 (market open noise) and 12:00-13:30 (lunch chop)
       - SL=60pts, TP=120pts (1:2 R:R), VIX-scaled
     """
@@ -198,7 +194,6 @@ class PSAREngine:
         self._ready = False
         self._trades_today = 0
         self._today = None
-        self._last_aligned = 3
 
     @staticmethod
     def _adx_adaptive_af(adx_val) -> tuple:
@@ -248,11 +243,6 @@ class PSAREngine:
         sig15 = _psar_signal_for_tf(df15, af_start, af_step, af_max)
         sig30 = _psar_signal_for_tf(df30, af_start, af_step, af_max)
 
-        # ── VIX-adaptive alignment threshold ──
-        # Normal/Low VIX (<22): 2/3 OK — trends are cleaner, enter faster
-        # High VIX (>=22): 3/3 required — volatile, avoid whipsaws
-        min_align = 3 if vix >= 22 else 2
-
         # SL/TP scaled by VIX regime
         vix_mult = 1.5 if vix >= 22 else (1.2 if vix >= 17 else 1.0)
         sl_pts = self.BASE_SL * vix_mult
@@ -282,14 +272,15 @@ class PSAREngine:
         ema_val = float(df5["close"].ewm(span=self.EMA_PERIOD, adjust=False).mean().iloc[-1])
         indicators["ema"] = round(ema_val, 2)
 
-        dirs = [sig5["direction"], sig15["direction"], sig30["direction"]]
-        bullish_count = sum(1 for d in dirs if d == 1)
-        bearish_count = sum(1 for d in dirs if d == -1)
+        d5 = sig5["direction"]
+        d15 = sig15["direction"]
+        both_bull = d5 == 1 and d15 == 1
+        both_bear = d5 == -1 and d15 == -1
 
-        indicators["bullish_count"] = bullish_count
-        indicators["bearish_count"] = bearish_count
-        indicators["min_aligned_required"] = min_align
-        indicators["alignment_mode"] = "strict" if min_align == 3 else "fast"
+        indicators["d5"] = d5
+        indicators["d15"] = d15
+        indicators["psar_30m"] = sig30
+        indicators["alignment"] = "bull" if both_bull else ("bear" if both_bear else "none")
 
         # ── Pre-signal filters ──
 
@@ -308,21 +299,13 @@ class PSAREngine:
             indicators["skip_reason"] = f"no_5m_flip (bars={sig5['bars_since_flip']})"
             return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
 
-        # ── Signal: VIX-adaptive alignment ──
-        # 5m MUST agree with signal direction (fastest TF = entry trigger)
+        # ── Signal: 5m + 15m must both agree ──
 
-        if bullish_count >= min_align and sig5["direction"] == 1:
+        if both_bull:
             if spot < ema_val:
                 indicators["skip_reason"] = f"ema_side_call (spot={spot:.0f} < EMA={ema_val:.0f})"
                 return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
-            self._last_aligned = bullish_count
             confidence = self._calc_confidence(sig5, sig15, sig30, vix)
-            if bullish_count == 2:
-                confidence *= 0.80
-                sl_pts *= 0.85
-                tp_pts *= 0.85
-                indicators["partial_alignment"] = True
-            indicators["aligned_count"] = bullish_count
             indicators["sl_pts"] = round(sl_pts, 1)
             indicators["tp_pts"] = round(tp_pts, 1)
             p_call = confidence
@@ -330,21 +313,14 @@ class PSAREngine:
             p_skip = 1.0 - p_call - p_put
             return 0, np.array([p_call, p_put, p_skip]), confidence, indicators
 
-        if bearish_count >= min_align and sig5["direction"] == -1:
+        if both_bear:
             if is_flat:
                 indicators["skip_reason"] = f"flat_day_put (spot={spot:.0f} open={day_open:.0f} diff={abs(spot-day_open):.0f}pts)"
                 return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
             if spot > ema_val:
                 indicators["skip_reason"] = f"ema_side_put (spot={spot:.0f} > EMA={ema_val:.0f})"
                 return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
-            self._last_aligned = bearish_count
             confidence = self._calc_confidence(sig5, sig15, sig30, vix)
-            if bearish_count == 2:
-                confidence *= 0.80
-                sl_pts *= 0.85
-                tp_pts *= 0.85
-                indicators["partial_alignment"] = True
-            indicators["aligned_count"] = bearish_count
             indicators["sl_pts"] = round(sl_pts, 1)
             indicators["tp_pts"] = round(tp_pts, 1)
             p_put = confidence
@@ -352,12 +328,7 @@ class PSAREngine:
             p_skip = 1.0 - p_call - p_put
             return 1, np.array([p_call, p_put, p_skip]), confidence, indicators
 
-        # SKIP — insufficient alignment or 5m disagrees
-        self._last_aligned = 3
-        if bullish_count >= 2 or bearish_count >= 2:
-            indicators["skip_reason"] = "5m_disagrees"
-        else:
-            indicators["skip_reason"] = "tf_disagreement"
+        indicators["skip_reason"] = "5m_15m_disagree"
         return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
 
     def record_trade(self):
@@ -366,15 +337,14 @@ class PSAREngine:
 
     def get_sl_tp(self, vix: float = 15.0, max_loss_budget: float = 0,
                   lot_size: int = 0) -> tuple:
-        """Get SL/TP in points, scaled by VIX, alignment, and risk budget.
+        """Get SL/TP in points, scaled by VIX and risk budget.
 
         If max_loss_budget and lot_size are provided, caps SL so that
         1 lot × SL ≤ budget.  TP scales proportionally to maintain R:R.
         """
         vix_mult = 1.5 if vix >= 22 else (1.2 if vix >= 17 else 1.0)
-        align_mult = 0.85 if self._last_aligned < 3 else 1.0
-        sl = self.BASE_SL * vix_mult * align_mult
-        tp = self.BASE_TP * vix_mult * align_mult
+        sl = self.BASE_SL * vix_mult
+        tp = self.BASE_TP * vix_mult
 
         if max_loss_budget > 0 and lot_size > 0:
             max_sl = (max_loss_budget / lot_size) * 0.995

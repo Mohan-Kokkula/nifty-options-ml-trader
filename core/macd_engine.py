@@ -2,17 +2,13 @@
 macd_engine.py — MACD Momentum Signal Engine (Strategy 2)
 =========================================================
 Primary signal: MACD histogram crossover on 5m
-Confirmation:   PSAR direction on 15m (trend context)
-Context:        VIX regime, ADX trend strength
+Filters:        ADX trend strength (>15), VIX regime
+Standalone:     No PSAR confirmation — backtest-proven best without it
 
 Signal logic:
-  CALL: MACD histogram crosses above zero on 5m
-        + 15m PSAR direction is bullish
-        + VIX filter
-  PUT:  MACD histogram crosses below zero on 5m
-        + 15m PSAR direction is bearish
-        + VIX filter
-  SKIP: no crossover, or PSAR disagrees, or time filter
+  CALL: MACD histogram crosses above zero on 5m + ADX>15 + VIX filter
+  PUT:  MACD histogram crosses below zero on 5m + ADX>15 + VIX filter
+  SKIP: no crossover, ADX too low, or time filter
 """
 
 import logging
@@ -20,7 +16,6 @@ import numpy as np
 import pandas as pd
 
 from core.strategy_base import StrategyEngine
-from core.psar_engine import compute_psar
 
 logger = logging.getLogger(__name__)
 
@@ -52,18 +47,8 @@ def _compute_adx(df: pd.DataFrame, period: int = 14):
     return dx.rolling(period).mean()
 
 
-def _psar_direction(df: pd.DataFrame, af_start=0.03, af_step=0.02,
-                    af_max=0.2) -> int:
-    """Get PSAR direction: 1=bullish, -1=bearish, 0=unknown."""
-    if df is None or df.empty or len(df) < 5:
-        return 0
-    psar_val, psar_dir, _ = compute_psar(df, af_start, af_step, af_max)
-    idx = -2 if len(df) > 5 else -1
-    return int(psar_dir.iloc[idx])
-
-
 class MACDEngine(StrategyEngine):
-    """MACD histogram crossover strategy with PSAR confirmation.
+    """MACD histogram crossover strategy — standalone with ADX + VIX.
 
     Uses MACD(8,17,9) on 5m as primary signal — tuned for NIFTY intraday.
     Standard MACD(12,26,9) is too slow for 5m bars.
@@ -126,19 +111,12 @@ class MACDEngine(StrategyEngine):
         if not cross_bull and not cross_bear:
             return self._skip("no_macd_crossover", indicators)
 
-        # ── Confirmation: PSAR direction on 15m ──
-        psar_dir_15m = _psar_direction(df15)
-        psar_dir_30m = _psar_direction(df30)
-        indicators["psar_15m_dir"] = psar_dir_15m
-        indicators["psar_30m_dir"] = psar_dir_30m
-
         # ── ADX trend strength ──
         adx_series = _compute_adx(df5)
         adx_val = float(adx_series.iloc[-2]) if len(adx_series) > 1 and \
             not np.isnan(adx_series.iloc[-2]) else 25.0
         indicators["adx"] = round(adx_val, 1)
 
-        # Skip in very ranging markets (ADX < 15)
         if adx_val < 15:
             return self._skip(f"adx_too_low ({adx_val:.0f})", indicators)
 
@@ -146,29 +124,22 @@ class MACDEngine(StrategyEngine):
         vix_mult = self._vix_multiplier(vix)
         self._last_vix_mult = vix_mult
 
-        # ── Generate signal ──
-        if cross_bull and psar_dir_15m == 1:
-            # MACD bullish cross + 15m PSAR bullish
-            confidence = self._calc_confidence(hist_cur, adx_val, vix,
-                                                psar_dir_30m == 1)
-            indicators["aligned_count"] = 2 + (1 if psar_dir_30m == 1 else 0)
+        # ── Generate signal (standalone — no PSAR confirmation) ──
+        if cross_bull:
+            confidence = self._calc_confidence(hist_cur, adx_val, vix)
             p_call = confidence
             p_put = (1.0 - confidence) * 0.2
             p_skip = 1.0 - p_call - p_put
             return 0, np.array([p_call, p_put, p_skip]), confidence, indicators
 
-        if cross_bear and psar_dir_15m == -1:
-            # MACD bearish cross + 15m PSAR bearish
-            confidence = self._calc_confidence(abs(hist_cur), adx_val, vix,
-                                                psar_dir_30m == -1)
-            indicators["aligned_count"] = 2 + (1 if psar_dir_30m == -1 else 0)
+        if cross_bear:
+            confidence = self._calc_confidence(abs(hist_cur), adx_val, vix)
             p_put = confidence
             p_call = (1.0 - confidence) * 0.2
             p_skip = 1.0 - p_call - p_put
             return 1, np.array([p_call, p_put, p_skip]), confidence, indicators
 
-        # Crossover exists but PSAR disagrees
-        return self._skip("psar_disagrees", indicators)
+        return self._skip("no_signal", indicators)
 
     def get_sl_tp(self, vix: float = 15.0, max_loss_budget: float = 0,
                   lot_size: int = 0) -> tuple:
@@ -186,27 +157,20 @@ class MACDEngine(StrategyEngine):
         return round(sl, 1), round(tp, 1)
 
     def _calc_confidence(self, hist_magnitude: float, adx: float,
-                         vix: float, tf30_agrees: bool) -> float:
+                         vix: float) -> float:
         """Confidence from MACD histogram strength + ADX + VIX."""
         base = 0.50
 
-        # Histogram magnitude (stronger cross = more confidence)
         if hist_magnitude > 5:
             base += 0.10
         elif hist_magnitude > 2:
             base += 0.05
 
-        # ADX trend strength
         if adx > 30:
             base += 0.08
         elif adx > 20:
             base += 0.04
 
-        # 30m PSAR also agrees (3-way alignment)
-        if tf30_agrees:
-            base += 0.05
-
-        # VIX penalty
         if vix >= 28:
             base -= 0.05
         elif vix >= 22:
