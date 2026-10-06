@@ -464,12 +464,14 @@ class ClaudePilot:
                 from core.macd_engine import MACDEngine
                 from core.oi_engine import OIEngine
                 from core.vwap_reversion_engine import VWAPReversionEngine
+                from core.supertrend_engine import SupertrendEngine
                 engines = {}
                 if self.psar_engine:
                     engines["PSAR"] = self.psar_engine
                 engines["MACD"] = MACDEngine()
                 engines["OI"] = OIEngine()
                 engines["VWAP"] = VWAPReversionEngine()
+                engines["ST"] = SupertrendEngine()
                 self._signal_router = SignalRouter(engines)
                 logger.info(
                     f"SignalRouter initialized with {len(engines)} engines: "
