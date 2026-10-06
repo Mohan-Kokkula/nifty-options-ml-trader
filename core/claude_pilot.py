@@ -465,6 +465,9 @@ class ClaudePilot:
                 from core.oi_engine import OIEngine
                 from core.vwap_reversion_engine import VWAPReversionEngine
                 from core.supertrend_engine import SupertrendEngine
+                from core.orb_engine import ORBEngine
+                from core.rsi2_engine import RSI2Engine
+                from core.holy_grail_engine import HolyGrailEngine
                 engines = {}
                 if self.psar_engine:
                     engines["PSAR"] = self.psar_engine
@@ -472,6 +475,9 @@ class ClaudePilot:
                 engines["OI"] = OIEngine()
                 engines["VWAP"] = VWAPReversionEngine()
                 engines["ST"] = SupertrendEngine()
+                engines["ORB"] = ORBEngine()
+                engines["RSI2"] = RSI2Engine()
+                engines["HG"] = HolyGrailEngine()
                 self._signal_router = SignalRouter(engines)
                 logger.info(
                     f"SignalRouter initialized with {len(engines)} engines: "

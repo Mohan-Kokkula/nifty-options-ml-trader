@@ -1,7 +1,7 @@
 """
 signal_router.py — Multi-Strategy Signal Router
 ================================================
-Orchestrates 4 independent signal engines, manages conflict resolution,
+Orchestrates 8 independent signal engines, manages conflict resolution,
 and enforces risk budgets.
 
 Rules:
