@@ -456,7 +456,10 @@ class ClaudePilot:
             self._journal = None
 
         # Multi-strategy SignalRouter (opt-in via MULTI_STRATEGY=true)
+        # Router A: existing S1-S5 (PSAR, MACD, OI, VWAP, Supertrend)
+        # Router B: new S6-S8 (ORB, RSI2, HolyGrail) — independent positions
         self._signal_router = None
+        self._signal_router_b = None
         import os as _os_ms
         if _os_ms.getenv("MULTI_STRATEGY", "false").strip().lower() in ("true", "1", "yes"):
             try:
@@ -468,24 +471,28 @@ class ClaudePilot:
                 from core.orb_engine import ORBEngine
                 from core.rsi2_engine import RSI2Engine
                 from core.holy_grail_engine import HolyGrailEngine
-                engines = {}
+                engines_a = {}
                 if self.psar_engine:
-                    engines["PSAR"] = self.psar_engine
-                engines["MACD"] = MACDEngine()
-                engines["OI"] = OIEngine()
-                engines["VWAP"] = VWAPReversionEngine()
-                engines["ST"] = SupertrendEngine()
-                engines["ORB"] = ORBEngine()
-                engines["RSI2"] = RSI2Engine()
-                engines["HG"] = HolyGrailEngine()
-                self._signal_router = SignalRouter(engines)
+                    engines_a["PSAR"] = self.psar_engine
+                engines_a["MACD"] = MACDEngine()
+                engines_a["OI"] = OIEngine()
+                engines_a["VWAP"] = VWAPReversionEngine()
+                engines_a["ST"] = SupertrendEngine()
+                self._signal_router = SignalRouter(engines_a)
+                engines_b = {
+                    "ORB": ORBEngine(),
+                    "RSI2": RSI2Engine(),
+                    "HG": HolyGrailEngine(),
+                }
+                self._signal_router_b = SignalRouter(engines_b)
                 logger.info(
-                    f"SignalRouter initialized with {len(engines)} engines: "
-                    f"{list(engines.keys())}"
+                    f"SignalRouter A (S1-S5): {list(engines_a.keys())} | "
+                    f"SignalRouter B (S6-S8): {list(engines_b.keys())}"
                 )
             except Exception as e:
                 logger.warning(f"SignalRouter init failed (single-engine fallback): {e}")
                 self._signal_router = None
+                self._signal_router_b = None
 
         self._running = False
         self._thread: Optional[threading.Thread] = None
@@ -1049,7 +1056,12 @@ class ClaudePilot:
             try:
                 self._signal_router.on_position_closed(pnl=pnl_rupees)
             except Exception as _e:
-                logger.debug(f"SignalRouter on_position_closed failed: {_e}")
+                logger.debug(f"SignalRouter A on_position_closed failed: {_e}")
+        if self._signal_router_b:
+            try:
+                self._signal_router_b.on_position_closed(pnl=pnl_rupees)
+            except Exception as _e:
+                logger.debug(f"SignalRouter B on_position_closed failed: {_e}")
 
         # ── Cleanup / state transition ────────────────────────────────
         self._clear_live_position(pos)
@@ -2370,9 +2382,66 @@ class ClaudePilot:
                     )
                     logger.info(f"Cycle #{cycle}: All signals: {sigs}")
             except Exception as e:
-                logger.warning(f"SignalRouter failed, falling back to single PSAR: {e}")
+                logger.warning(f"SignalRouter A failed, falling back to single PSAR: {e}")
                 self._signal_router = None
                 router_result = None
+
+        # ── Router B: S6-S8 independent signals ──
+        router_b_result = None
+        if self._signal_router_b:
+            try:
+                router_b_result = self._run_router_b_prediction(spot)
+                action_b = router_b_result.get("action", "SKIP")
+                if action_b in ("OPEN", "CLOSE_AND_OPEN"):
+                    logger.info(
+                        f"Cycle #{cycle}: Router B action={action_b} "
+                        f"strategy={router_b_result.get('strategy', 'N/A')} "
+                        f"dir={router_b_result.get('direction', 'SKIP')} "
+                        f"conf={router_b_result.get('confidence', 0):.3f}"
+                    )
+                    # If Router A didn't produce a signal, use Router B's
+                    if signal_source in ("NONE", "ROUTER/SKIP", "ROUTER/HOLD"):
+                        ml_direction = router_b_result["direction"]
+                        ml_signal = 0 if ml_direction == "CALL" else 1
+                        ml_indicators = router_b_result.get("indicators", {})
+                        ml_indicators["router_action"] = action_b
+                        ml_indicators["router_strategy"] = router_b_result["strategy"]
+                        ml_indicators["router_group"] = "B"
+                        conf = router_b_result.get("confidence", 0.5)
+                        ml_proba = [conf if ml_signal == 0 else (1-conf)*0.2,
+                                    conf if ml_signal == 1 else (1-conf)*0.2,
+                                    0.0]
+                        ml_proba[2] = 1.0 - ml_proba[0] - ml_proba[1]
+                        signal_source = f"ROUTER_B/{router_b_result['strategy']}"
+                        router_result = router_b_result
+                        self._ml_signals_today += 1
+                    # If Router A also has a signal, pick higher confidence
+                    elif router_result and router_result.get("action") in ("OPEN", "CLOSE_AND_OPEN"):
+                        conf_a = router_result.get("confidence", 0)
+                        conf_b = router_b_result.get("confidence", 0)
+                        if conf_b > conf_a:
+                            ml_direction = router_b_result["direction"]
+                            ml_signal = 0 if ml_direction == "CALL" else 1
+                            ml_indicators = router_b_result.get("indicators", {})
+                            ml_indicators["router_action"] = action_b
+                            ml_indicators["router_strategy"] = router_b_result["strategy"]
+                            ml_indicators["router_group"] = "B"
+                            ml_proba = [conf_b if ml_signal == 0 else (1-conf_b)*0.2,
+                                        conf_b if ml_signal == 1 else (1-conf_b)*0.2,
+                                        0.0]
+                            ml_proba[2] = 1.0 - ml_proba[0] - ml_proba[1]
+                            signal_source = f"ROUTER_B/{router_b_result['strategy']}"
+                            router_result = router_b_result
+                            logger.info(f"Cycle #{cycle}: Router B wins over A ({conf_b:.3f} > {conf_a:.3f})")
+                if router_b_result.get("all_signals"):
+                    sigs_b = " | ".join(
+                        f"{k}={v.get('direction', 'SKIP')}({v.get('confidence', 0):.2f})"
+                        for k, v in router_b_result["all_signals"].items()
+                    )
+                    logger.info(f"Cycle #{cycle}: Router B signals: {sigs_b}")
+            except Exception as e:
+                logger.warning(f"SignalRouter B failed: {e}")
+                router_b_result = None
 
         # Primary: PSAR multi-timeframe engine (single-engine mode)
         if signal_source == "NONE" and self.psar_engine:
@@ -4657,10 +4726,19 @@ class ClaudePilot:
                         f"SL={sl_price:.0f} TP={tp_price:.0f} "
                         f"→ Telegram alert fires on PAPER_EXIT_SL/TP"
                     )
-                    if self._signal_router:
+                    _rs = (router_result or {}).get("strategy", signal_source)
+                    _rg = ml_indicators.get("router_group", "A")
+                    if self._signal_router and _rg == "A":
                         try:
-                            _rs = (router_result or {}).get("strategy", signal_source)
                             self._signal_router.on_position_opened(
+                                direction=direction, strategy=_rs,
+                                entry_price=spot, sl=sl_pts, tp=tp_pts,
+                            )
+                        except Exception:
+                            pass
+                    if self._signal_router_b and _rg == "B":
+                        try:
+                            self._signal_router_b.on_position_opened(
                                 direction=direction, strategy=_rs,
                                 entry_price=spot, sl=sl_pts, tp=tp_pts,
                             )
@@ -5130,11 +5208,20 @@ class ClaudePilot:
                             ml_indicators.get("regime", "ANY"))
                 except Exception:
                     pass
-                # Notify SignalRouter of position open
-                if self._signal_router:
+                # Notify SignalRouter(s) of position open
+                _rs = (router_result or {}).get("strategy", signal_source)
+                _router_group = ml_indicators.get("router_group", "A")
+                if self._signal_router and _router_group == "A":
                     try:
-                        _rs = (router_result or {}).get("strategy", signal_source)
                         self._signal_router.on_position_opened(
+                            direction=direction, strategy=_rs,
+                            entry_price=spot, sl=sl_pts, tp=tp_pts,
+                        )
+                    except Exception:
+                        pass
+                if self._signal_router_b and _router_group == "B":
+                    try:
+                        self._signal_router_b.on_position_opened(
                             direction=direction, strategy=_rs,
                             entry_price=spot, sl=sl_pts, tp=tp_pts,
                         )
@@ -5351,28 +5438,29 @@ class ClaudePilot:
         Returns (sl_points, tp_points) scaled by both ATR and VIX.
         """
         # When SignalRouter is active, use the winning strategy's dynamic SL/TP
-        if self._signal_router and self._signal_router.active_position:
-            strat_name = self._signal_router.active_position.strategy
-            eng = self._signal_router.engines.get(strat_name)
-            if eng:
-                vix_val = self._current_vix or 15.0
-                atr_val = self._compute_current_atr()
-                _budget = 0.0
-                _lot_sz = 0
-                try:
-                    _budget = float(getattr(self.trader.risk, "max_loss_per_trade", 0))
-                    _lot_sz = self.config.lot_size
-                except Exception:
-                    pass
-                sl_pts, tp_pts = eng.get_sl_tp(
-                    vix=vix_val, max_loss_budget=_budget, lot_size=_lot_sz,
-                    atr=atr_val
-                )
-                logger.info(
-                    f"{strat_name} dynamic SL/TP: SL={sl_pts}pts TP={tp_pts}pts "
-                    f"(ATR={atr_val:.1f} VIX={vix_val:.1f})"
-                )
-                return sl_pts, tp_pts
+        for _router in (self._signal_router, self._signal_router_b):
+            if _router and _router.active_position:
+                strat_name = _router.active_position.strategy
+                eng = _router.engines.get(strat_name)
+                if eng:
+                    vix_val = self._current_vix or 15.0
+                    atr_val = self._compute_current_atr()
+                    _budget = 0.0
+                    _lot_sz = 0
+                    try:
+                        _budget = float(getattr(self.trader.risk, "max_loss_per_trade", 0))
+                        _lot_sz = self.config.lot_size
+                    except Exception:
+                        pass
+                    sl_pts, tp_pts = eng.get_sl_tp(
+                        vix=vix_val, max_loss_budget=_budget, lot_size=_lot_sz,
+                        atr=atr_val
+                    )
+                    logger.info(
+                        f"{strat_name} dynamic SL/TP: SL={sl_pts}pts TP={tp_pts}pts "
+                        f"(ATR={atr_val:.1f} VIX={vix_val:.1f})"
+                    )
+                    return sl_pts, tp_pts
 
         # PSAR engine dynamic SL/TP based on ATR
         if self.psar_engine:
@@ -6748,6 +6836,25 @@ class ClaudePilot:
         return self._signal_router.evaluate(
             df5, df15, df30, vix=vix_val,
             current_hm=current_hm, chain_data=chain_data
+        )
+
+    def _run_router_b_prediction(self, spot) -> dict:
+        """Run S6-S8 engines via independent SignalRouter B."""
+        from core.tv_fetcher import get_tv_fetcher
+        from datetime import datetime as _dt
+
+        tv = get_tv_fetcher()
+        df5 = tv.get_nifty_5min(n_bars=60)
+        df15 = tv.get_nifty_15min(n_bars=30)
+        df30 = tv.get_nifty_30min(n_bars=20)
+
+        vix_val = self._current_vix or 15.0
+        now = _dt.now()
+        current_hm = now.hour * 100 + now.minute
+
+        return self._signal_router_b.evaluate(
+            df5, df15, df30, vix=vix_val,
+            current_hm=current_hm
         )
 
     def _run_psar_prediction(self, spot):
