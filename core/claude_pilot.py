@@ -5344,12 +5344,13 @@ class ClaudePilot:
         Compute dynamic SL and TP based on current ATR + VIX regime.
         Returns (sl_points, tp_points) scaled by both ATR and VIX.
         """
-        # When SignalRouter is active, use the winning strategy's SL/TP
+        # When SignalRouter is active, use the winning strategy's dynamic SL/TP
         if self._signal_router and self._signal_router.active_position:
             strat_name = self._signal_router.active_position.strategy
             eng = self._signal_router.engines.get(strat_name)
             if eng:
                 vix_val = self._current_vix or 15.0
+                atr_val = self._compute_current_atr()
                 _budget = 0.0
                 _lot_sz = 0
                 try:
@@ -5358,15 +5359,19 @@ class ClaudePilot:
                 except Exception:
                     pass
                 sl_pts, tp_pts = eng.get_sl_tp(
-                    vix=vix_val, max_loss_budget=_budget, lot_size=_lot_sz
+                    vix=vix_val, max_loss_budget=_budget, lot_size=_lot_sz,
+                    atr=atr_val
                 )
-                logger.info(f"{strat_name} SL/TP: SL={sl_pts}pts TP={tp_pts}pts (VIX={vix_val:.1f})")
+                logger.info(
+                    f"{strat_name} dynamic SL/TP: SL={sl_pts}pts TP={tp_pts}pts "
+                    f"(ATR={atr_val:.1f} VIX={vix_val:.1f})"
+                )
                 return sl_pts, tp_pts
 
-        # PSAR engine has its own backtest-proven SL/TP (60/120pts, VIX-scaled)
-        # Pass risk budget so PSAR can cap SL to fit MAX_LOSS_PER_TRADE
+        # PSAR engine dynamic SL/TP based on ATR
         if self.psar_engine:
             vix_val = self._current_vix or 15.0
+            atr_val = self._compute_current_atr()
             _budget = 0.0
             _lot_sz = 0
             try:
@@ -5375,9 +5380,13 @@ class ClaudePilot:
             except Exception:
                 pass
             sl_pts, tp_pts = self.psar_engine.get_sl_tp(
-                vix=vix_val, max_loss_budget=_budget, lot_size=_lot_sz
+                vix=vix_val, max_loss_budget=_budget, lot_size=_lot_sz,
+                atr=atr_val
             )
-            logger.info(f"PSAR SL/TP: SL={sl_pts}pts TP={tp_pts}pts (VIX={vix_val:.1f})")
+            logger.info(
+                f"PSAR dynamic SL/TP: SL={sl_pts}pts TP={tp_pts}pts "
+                f"(ATR={atr_val:.1f} VIX={vix_val:.1f})"
+            )
             return sl_pts, tp_pts
 
         cfg = self.config

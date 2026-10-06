@@ -335,16 +335,24 @@ class PSAREngine:
         """Call after a trade is taken to track daily count."""
         self._trades_today += 1
 
-    def get_sl_tp(self, vix: float = 15.0, max_loss_budget: float = 0,
-                  lot_size: int = 0) -> tuple:
-        """Get SL/TP in points, scaled by VIX and risk budget.
+    # ATR multipliers for dynamic SL/TP (BASE values used as min floor)
+    SL_ATR_MULT = 2.0
+    TP_ATR_MULT = 4.0
 
-        If max_loss_budget and lot_size are provided, caps SL so that
-        1 lot × SL ≤ budget.  TP scales proportionally to maintain R:R.
+    def get_sl_tp(self, vix: float = 15.0, max_loss_budget: float = 0,
+                  lot_size: int = 0, atr: float = 0.0) -> tuple:
+        """Get SL/TP in points — ATR-based when atr>0, else VIX-scaled base.
+
+        Dynamic: SL = 2.0 × ATR, TP = 4.0 × ATR (VIX-scaled, floored by BASE).
         """
         vix_mult = 1.5 if vix >= 22 else (1.2 if vix >= 17 else 1.0)
-        sl = self.BASE_SL * vix_mult
-        tp = self.BASE_TP * vix_mult
+
+        if atr > 0:
+            sl = max(self.SL_ATR_MULT * atr * vix_mult, self.BASE_SL)
+            tp = max(self.TP_ATR_MULT * atr * vix_mult, self.BASE_TP)
+        else:
+            sl = self.BASE_SL * vix_mult
+            tp = self.BASE_TP * vix_mult
 
         if max_loss_budget > 0 and lot_size > 0:
             max_sl = (max_loss_budget / lot_size) * 0.995

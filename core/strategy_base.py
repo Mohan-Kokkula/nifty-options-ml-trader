@@ -62,8 +62,9 @@ class StrategyEngine(ABC):
 
     @abstractmethod
     def get_sl_tp(self, vix: float = 15.0, max_loss_budget: float = 0,
-                  lot_size: int = 0) -> tuple:
-        """Return (sl_pts, tp_pts) for this strategy."""
+                  lot_size: int = 0, atr: float = 0.0) -> tuple:
+        """Return (sl_pts, tp_pts) for this strategy.
+        When atr > 0, use ATR-based dynamic sizing instead of fixed BASE values."""
         ...
 
     def _skip(self, reason: str, indicators: dict) -> tuple:

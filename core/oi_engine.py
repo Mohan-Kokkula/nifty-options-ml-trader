@@ -219,11 +219,19 @@ class OIEngine(StrategyEngine):
 
         return self._skip("psar_disagrees", indicators)
 
+    SL_ATR_MULT = 1.7
+    TP_ATR_MULT = 3.3
+
     def get_sl_tp(self, vix: float = 15.0, max_loss_budget: float = 0,
-                  lot_size: int = 0) -> tuple:
+                  lot_size: int = 0, atr: float = 0.0) -> tuple:
         vix_mult = self._vix_multiplier(vix)
-        sl = self.BASE_SL * vix_mult
-        tp = self.BASE_TP * vix_mult
+
+        if atr > 0:
+            sl = max(self.SL_ATR_MULT * atr * vix_mult, self.BASE_SL)
+            tp = max(self.TP_ATR_MULT * atr * vix_mult, self.BASE_TP)
+        else:
+            sl = self.BASE_SL * vix_mult
+            tp = self.BASE_TP * vix_mult
 
         if max_loss_budget > 0 and lot_size > 0:
             max_sl = (max_loss_budget / lot_size) * 0.995
