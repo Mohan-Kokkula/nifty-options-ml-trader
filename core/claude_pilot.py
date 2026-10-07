@@ -457,7 +457,7 @@ class ClaudePilot:
 
         # Multi-strategy SignalRouter (opt-in via MULTI_STRATEGY=true)
         # Router A: S1-S5 (PSAR, MACD, OI, VWAP, Supertrend)
-        # Router B: S6-S10 (ORB, RSI2, HolyGrail, RangeReversal, MomentumConf) — independent positions
+        # Router B: S6-S11 (ORB, RSI2, HolyGrail, RangeReversal, MomConf, MktEnergy) — independent positions
         self._signal_router = None
         self._signal_router_b = None
         import os as _os_ms
@@ -473,6 +473,7 @@ class ClaudePilot:
                 from core.holy_grail_engine import HolyGrailEngine
                 from core.range_reversal_engine import RangeReversalEngine
                 from core.momentum_confluence_engine import MomentumConfluenceEngine
+                from core.market_energy_engine import MarketEnergyEngine
                 engines_a = {}
                 if self.psar_engine:
                     engines_a["PSAR"] = self.psar_engine
@@ -487,11 +488,12 @@ class ClaudePilot:
                     "HG": HolyGrailEngine(),
                     "RR": RangeReversalEngine(),
                     "MC": MomentumConfluenceEngine(),
+                    "ME": MarketEnergyEngine(),
                 }
                 self._signal_router_b = SignalRouter(engines_b)
                 logger.info(
                     f"SignalRouter A (S1-S5): {list(engines_a.keys())} | "
-                    f"SignalRouter B (S6-S10): {list(engines_b.keys())}"
+                    f"SignalRouter B (S6-S11): {list(engines_b.keys())}"
                 )
             except Exception as e:
                 logger.warning(f"SignalRouter init failed (single-engine fallback): {e}")
@@ -6802,7 +6804,7 @@ class ClaudePilot:
         )
 
     def _run_router_b_prediction(self, spot) -> dict:
-        """Run S6-S10 engines via independent SignalRouter B."""
+        """Run S6-S11 engines via independent SignalRouter B."""
         from core.tv_fetcher import get_tv_fetcher
         from datetime import datetime as _dt
 
