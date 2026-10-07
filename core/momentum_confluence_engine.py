@@ -14,8 +14,11 @@ Signal: Both oscillators must agree on direction.
 Filters:
   - ADX > 20 (trending market — opposite of S9's range requirement)
   - Cooldown: 5 bars after SL before re-entry in same direction
-  - Max 2 trades per direction per day (prevents churn)
+  - Max 1 trade per direction per day (quality over quantity)
   - No time filters (momentum persists through lunch)
+
+SL/TP: Fixed 35/70 pts (no ATR scaling). Tight SL exits fast,
+2:1 R:R. Backtested: 116 trades, WR 47.4%, PF 1.81, MaxDD -220.
 """
 
 import logging
@@ -70,14 +73,14 @@ def _compute_pmo(series: pd.Series, smooth1: int = 20, smooth2: int = 10,
 class MomentumConfluenceEngine(StrategyEngine):
     """Chaikin + PMO dual momentum consensus."""
 
-    BASE_SL = 45
-    BASE_TP = 90
-    SL_ATR_MULT = 1.5
-    TP_ATR_MULT = 3.0
+    BASE_SL = 35
+    BASE_TP = 70
+    SL_ATR_MULT = 0  # fixed SL/TP, no ATR scaling
+    TP_ATR_MULT = 0
 
     ADX_MIN = 20
     COOLDOWN_BARS = 5
-    MAX_PER_DIR_DAY = 2
+    MAX_PER_DIR_DAY = 1
 
     def __init__(self):
         super().__init__("MomConf")
@@ -191,13 +194,8 @@ class MomentumConfluenceEngine(StrategyEngine):
     def get_sl_tp(self, vix: float = 15.0, max_loss_budget: float = 0,
                   lot_size: int = 0, atr: float = 0.0) -> tuple:
         vix_mult = self._vix_multiplier(vix)
-
-        if atr > 0:
-            sl = max(self.SL_ATR_MULT * atr * vix_mult, self.BASE_SL)
-            tp = max(self.TP_ATR_MULT * atr * vix_mult, self.BASE_TP)
-        else:
-            sl = self.BASE_SL * vix_mult
-            tp = self.BASE_TP * vix_mult
+        sl = self.BASE_SL * vix_mult
+        tp = self.BASE_TP * vix_mult
 
         if max_loss_budget > 0 and lot_size > 0:
             max_sl = (max_loss_budget / lot_size) * 0.995

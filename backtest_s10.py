@@ -1,7 +1,8 @@
 """
 backtest_s10.py — Backtest S10 Momentum Confluence.
 Chaikin Oscillator + PMO dual consensus, ADX > 20 trending filter.
-Cooldown 5 bars after SL, max 2 trades per direction per day.
+Fixed SL=35, TP=70 (2:1 R:R). Cooldown 5 bars after SL.
+Max 1 trade per direction per day (quality over quantity).
 """
 
 import sys, os
@@ -54,12 +55,10 @@ def _compute_pmo(series, smooth1=20, smooth2=10, signal_period=35):
 
 
 ADX_MIN = 20
-BASE_SL = 45
-BASE_TP = 90
-SL_ATR_MULT = 1.5
-TP_ATR_MULT = 3.0
+BASE_SL = 35
+BASE_TP = 70
 COOLDOWN_BARS = 5
-MAX_PER_DIR_DAY = 2
+MAX_PER_DIR_DAY = 1
 LOT_SIZE = 65
 
 
@@ -148,9 +147,8 @@ def run_backtest(df, use_time_filters=False):
         if adx_val < ADX_MIN:
             continue
 
-        atr_val = float(atr.iloc[i]) if not np.isnan(atr.iloc[i]) else 0
-        sl = max(SL_ATR_MULT * atr_val, BASE_SL) if atr_val > 0 else BASE_SL
-        tp = max(TP_ATR_MULT * atr_val, BASE_TP) if atr_val > 0 else BASE_TP
+        sl = BASE_SL
+        tp = BASE_TP
 
         # ── Oscillator consensus ──
         cv = float(chaikin.iloc[i]) if not np.isnan(chaikin.iloc[i]) else 0
