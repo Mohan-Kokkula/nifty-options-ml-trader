@@ -83,6 +83,8 @@ class MarketEnergyEngine(StrategyEngine):
     COOLDOWN_BARS = 5
     MAX_PER_DIR_DAY = 1
     MAX_PER_DAY = 2
+    TRAIL_AFTER_TP = True
+    TRAIL_AFTER_TP_STEP = 20
 
     def __init__(self):
         super().__init__("MktEnergy")

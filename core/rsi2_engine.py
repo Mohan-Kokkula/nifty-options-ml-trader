@@ -44,6 +44,8 @@ class RSI2Engine(StrategyEngine):
 
     BASE_SL = 40
     BASE_TP = 80
+    TRAIL_AFTER_TP = True
+    TRAIL_AFTER_TP_STEP = 20
     SL_ATR_MULT = 1.5
     TP_ATR_MULT = 3.0
     RSI_PERIOD = 2

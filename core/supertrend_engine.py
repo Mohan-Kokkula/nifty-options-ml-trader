@@ -135,6 +135,8 @@ class SupertrendEngine(StrategyEngine):
 
     BASE_SL = 60
     BASE_TP = 120
+    TRAIL_AFTER_TP = True
+    TRAIL_AFTER_TP_STEP = 20
     CONSENSUS_THRESHOLD = 0.70
     FLIP_MAX_BARS = 1
     EMA_PERIOD = 40

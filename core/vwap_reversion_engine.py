@@ -55,6 +55,8 @@ class VWAPReversionEngine(StrategyEngine):
 
     BASE_SL = 40   # tighter SL for reversion trades
     BASE_TP = 60   # target is VWAP (not a runaway move)
+    TRAIL_AFTER_TP = True
+    TRAIL_AFTER_TP_STEP = 20
     DEVIATION_PTS = 30  # min distance from VWAP to trigger
     MIN_BARS_TODAY = 6  # need ~30 min of data for meaningful VWAP
 

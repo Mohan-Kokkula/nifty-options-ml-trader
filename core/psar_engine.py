@@ -183,6 +183,8 @@ class PSAREngine:
     # Backtest-proven SL/TP (points)
     BASE_SL = 60
     BASE_TP = 120
+    TRAIL_AFTER_TP = True
+    TRAIL_AFTER_TP_STEP = 20
     OPEN_SETTLE = 920
     LUNCH_START = 1200
     LUNCH_END = 1330

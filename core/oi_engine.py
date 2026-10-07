@@ -56,6 +56,8 @@ class OIEngine(StrategyEngine):
 
     BASE_SL = 50
     BASE_TP = 100
+    TRAIL_AFTER_TP = True
+    TRAIL_AFTER_TP_STEP = 20
     PCR_BULL_THRESHOLD = 0.05   # PCR increase of 0.05+ = bullish
     PCR_BEAR_THRESHOLD = -0.05  # PCR decrease of 0.05+ = bearish
 

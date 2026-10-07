@@ -50,6 +50,8 @@ class HolyGrailEngine(StrategyEngine):
 
     BASE_SL = 60
     BASE_TP = 120
+    TRAIL_AFTER_TP = True
+    TRAIL_AFTER_TP_STEP = 20
     SL_ATR_MULT = 2.0
     TP_ATR_MULT = 4.0
     ADX_THRESHOLD = 35

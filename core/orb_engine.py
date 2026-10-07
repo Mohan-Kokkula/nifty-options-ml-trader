@@ -30,6 +30,8 @@ class ORBEngine(StrategyEngine):
 
     BASE_SL = 50
     BASE_TP = 100
+    TRAIL_AFTER_TP = True
+    TRAIL_AFTER_TP_STEP = 20
     SL_ATR_MULT = 2.0
     TP_ATR_MULT = 4.0
     CONSENSUS_THRESHOLD = 0.70

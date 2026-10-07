@@ -338,6 +338,11 @@ class LivePosition:
     # no premium-based exchange SL can be computed (skip placement).
     exchange_sl_trigger: float = 0.0
     exchange_sl_limit: float = 0.0
+    # Trail-after-TP: for strategies (S10/S11) that trail 20 pts behind peak
+    # once TP is reached, instead of exiting at fixed TP.
+    trail_after_tp: bool = False
+    trail_after_tp_step: float = 20.0
+    trail_after_tp_active: bool = False
 
 
 # ── Pure stop-management helpers ───────────────────────────────────────
@@ -1056,6 +1061,19 @@ class ClaudePilot:
                         self._journal.mark_entry_closed(je, reason=reason)
                 except Exception as e:
                     logger.warning(f"Journal synthetic-exit record failed: {e}")
+
+        # ── Engine on_exit callback (S10/S11 cooldown tracking) ───────
+        # Must run BEFORE on_position_closed clears active_position
+        if _known_outcome:
+            for _rtr in (self._signal_router, self._signal_router_b):
+                if _rtr and _rtr.active_position:
+                    _strat = _rtr.active_position.strategy
+                    _eng = _rtr.engines.get(_strat)
+                    if _eng and hasattr(_eng, "on_exit"):
+                        try:
+                            _eng.on_exit(pos.direction, reason)
+                        except Exception:
+                            pass
 
         # ── SignalRouter position tracking ─────────────────────────────
         if self._signal_router:
@@ -4685,14 +4703,25 @@ class ClaudePilot:
                         original_qty=trade_qty,
                         entry_cycle=cycle,
                     )
+                    # Trail-after-TP for paper positions (S10/S11)
+                    _rs = (router_result or {}).get("strategy", signal_source)
+                    _rg = ml_indicators.get("router_group", "A")
+                    _winning_eng = None
+                    for _rtr in (self._signal_router, self._signal_router_b):
+                        if _rtr and _rs in _rtr.engines:
+                            _winning_eng = _rtr.engines[_rs]
+                            break
+                    if _winning_eng and getattr(_winning_eng, "TRAIL_AFTER_TP", False):
+                        self._live_position.trail_after_tp = True
+                        self._live_position.trail_after_tp_step = getattr(
+                            _winning_eng, "TRAIL_AFTER_TP_STEP", 20.0)
                     logger.info(
                         f"Cycle #{cycle}: [PAPER] Position tracker armed — "
                         f"{direction} entry={spot:.0f} "
                         f"SL={sl_price:.0f} TP={tp_price:.0f} "
+                        f"{'trail-after-TP=' + str(self._live_position.trail_after_tp_step) + 'pts ' if self._live_position.trail_after_tp else ''}"
                         f"→ Telegram alert fires on PAPER_EXIT_SL/TP"
                     )
-                    _rs = (router_result or {}).get("strategy", signal_source)
-                    _rg = ml_indicators.get("router_group", "A")
                     if self._signal_router and _rg == "A":
                         try:
                             self._signal_router.on_position_opened(
@@ -5173,6 +5202,23 @@ class ClaudePilot:
                             ml_indicators.get("regime", "ANY"))
                 except Exception:
                     pass
+                # Trail-after-TP: if winning engine supports it (S10/S11),
+                # set flag so monitor trails 20 pts behind peak after TP hit
+                _rs_name = (router_result or {}).get("strategy", signal_source)
+                _rg = ml_indicators.get("router_group", "A")
+                _winning_eng = None
+                for _rtr in (self._signal_router, self._signal_router_b):
+                    if _rtr and _rs_name in _rtr.engines:
+                        _winning_eng = _rtr.engines[_rs_name]
+                        break
+                if _winning_eng and getattr(_winning_eng, "TRAIL_AFTER_TP", False):
+                    self._live_position.trail_after_tp = True
+                    self._live_position.trail_after_tp_step = getattr(
+                        _winning_eng, "TRAIL_AFTER_TP_STEP", 20.0)
+                    logger.info(
+                        f"Trail-after-TP armed for {_rs_name}: "
+                        f"trail {self._live_position.trail_after_tp_step}pts behind peak after TP"
+                    )
                 # Notify SignalRouter(s) of position open
                 _rs = (router_result or {}).get("strategy", signal_source)
                 _router_group = ml_indicators.get("router_group", "A")
@@ -6599,6 +6645,61 @@ class ClaudePilot:
                 tp_hit = (pos.direction == "CALL" and spot >= pos.tp_price) or \
                          (pos.direction == "PUT" and spot <= pos.tp_price)
 
+                # --- Trail-after-TP (S10/S11): on TP hit, check momentum ---
+                # If still trending, switch to trailing mode (20pts behind peak)
+                # instead of exiting at fixed TP. Locks in at least +50 pts.
+                if tp_hit and pos.trail_after_tp and not pos.trail_after_tp_active:
+                    _momentum_ok = False
+                    try:
+                        _last_close = float(self._df5["close"].iloc[-1])
+                        _last_open = float(self._df5["open"].iloc[-1])
+                        if pos.direction == "CALL":
+                            _momentum_ok = _last_close >= _last_open
+                        else:
+                            _momentum_ok = _last_close <= _last_open
+                    except Exception:
+                        _momentum_ok = True
+                    if _momentum_ok:
+                        pos.trail_after_tp_active = True
+                        _tp_dist = abs(pos.tp_price - pos.entry_price)
+                        _lock_pts = _tp_dist - pos.trail_after_tp_step
+                        if pos.direction == "CALL":
+                            pos.sl_price = pos.entry_price + _lock_pts
+                            pos.tp_price = spot + 10000
+                        else:
+                            pos.sl_price = pos.entry_price - _lock_pts
+                            pos.tp_price = spot - 10000
+                        tp_hit = False
+                        logger.warning(
+                            f"TRAIL-AFTER-TP ACTIVATED: {pos.direction} "
+                            f"TP reached at +{_tp_dist:.0f}pts, momentum continuing. "
+                            f"SL locked at +{_lock_pts:.0f}pts, trailing {pos.trail_after_tp_step}pts behind peak"
+                        )
+
+                if pos.trail_after_tp_active:
+                    if unrealized > pos.peak_unrealized:
+                        pos.peak_unrealized = unrealized
+                    _trail_sl_pts = pos.peak_unrealized - pos.trail_after_tp_step
+                    if _trail_sl_pts > 0:
+                        if pos.direction == "CALL":
+                            _new_trail_sl = pos.entry_price + _trail_sl_pts
+                            if _new_trail_sl > pos.sl_price:
+                                old_sl = pos.sl_price
+                                pos.sl_price = _new_trail_sl
+                                logger.info(
+                                    f"TRAIL-AFTER-TP SL: {old_sl:.0f} -> {_new_trail_sl:.0f} "
+                                    f"(peak +{pos.peak_unrealized:.0f}pts, locking +{_trail_sl_pts:.0f}pts)"
+                                )
+                        else:
+                            _new_trail_sl = pos.entry_price - _trail_sl_pts
+                            if _new_trail_sl < pos.sl_price:
+                                old_sl = pos.sl_price
+                                pos.sl_price = _new_trail_sl
+                                logger.info(
+                                    f"TRAIL-AFTER-TP SL: {old_sl:.0f} -> {_new_trail_sl:.0f} "
+                                    f"(peak +{pos.peak_unrealized:.0f}pts, locking +{_trail_sl_pts:.0f}pts)"
+                                )
+
                 # --- Check time-based exit (15:14:30 — beat broker auto-square-off) ---
                 now = datetime.now()
                 time_exit = now.hour == 15 and (now.minute > 14 or (now.minute == 14 and now.second >= 30))
@@ -6635,7 +6736,9 @@ class ClaudePilot:
                     elif premium_trail_hit:
                         reason = "PREMIUM_TRAIL_STOP"
                     elif sl_hit:
-                        if pos.trail_activated:
+                        if pos.trail_after_tp_active:
+                            reason = "TRAIL_AFTER_TP"
+                        elif pos.trail_activated:
                             reason = "TRAIL_SL"
                         elif pos.breakeven_activated:
                             reason = "BE_SL"

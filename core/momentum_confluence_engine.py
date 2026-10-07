@@ -81,6 +81,8 @@ class MomentumConfluenceEngine(StrategyEngine):
     ADX_MIN = 20
     COOLDOWN_BARS = 5
     MAX_PER_DIR_DAY = 1
+    TRAIL_AFTER_TP = True
+    TRAIL_AFTER_TP_STEP = 20
 
     def __init__(self):
         super().__init__("MomConf")

@@ -56,6 +56,8 @@ class MACDEngine(StrategyEngine):
 
     BASE_SL = 60
     BASE_TP = 120
+    TRAIL_AFTER_TP = True
+    TRAIL_AFTER_TP_STEP = 20
     MACD_FAST = 8
     MACD_SLOW = 17
     MACD_SIGNAL = 9

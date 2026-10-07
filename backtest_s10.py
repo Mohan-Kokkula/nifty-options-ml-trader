@@ -3,6 +3,7 @@ backtest_s10.py — Backtest S10 Momentum Confluence.
 Chaikin Oscillator + PMO dual consensus, ADX > 20 trending filter.
 Fixed SL=35, TP=70 (2:1 R:R). Cooldown 5 bars after SL.
 Max 1 trade per direction per day (quality over quantity).
+Trail-after-TP: once TP reached, if momentum continues trail 20pts behind peak.
 """
 
 import sys, os
@@ -59,6 +60,7 @@ BASE_SL = 35
 BASE_TP = 70
 COOLDOWN_BARS = 5
 MAX_PER_DIR_DAY = 1
+TRAIL_AFTER_TP_STEP = 20
 LOT_SIZE = 65
 
 
@@ -103,30 +105,71 @@ def run_backtest(df, use_time_filters=False):
 
         # ── Exit ──
         if position is not None:
-            pnl_pts = (position["entry_nifty"] - spot) if position["dir"] == "PUT" else (spot - position["entry_nifty"])
+            entry = position["entry_nifty"]
+            d = position["dir"]
+            trailing = position.get("trailing", False)
+            peak = position.get("peak", 0.0)
+
+            unrealized = (entry - spot) if d == "PUT" else (spot - entry)
             hit_sl = hit_tp = eod = False
-            if position["dir"] == "PUT":
-                if bar_high >= position["entry_nifty"] + position["sl"]:
-                    hit_sl, pnl_pts = True, -position["sl"]
-                elif bar_low <= position["entry_nifty"] - position["tp"]:
-                    hit_tp, pnl_pts = True, position["tp"]
+
+            if trailing:
+                if d == "CALL":
+                    peak = max(peak, bar_high)
+                else:
+                    peak = min(peak, bar_low)
+                position["peak"] = peak
+                trail_sl = peak - TRAIL_AFTER_TP_STEP if d == "CALL" else peak + TRAIL_AFTER_TP_STEP
+                if d == "CALL" and bar_low <= trail_sl:
+                    hit_sl = True
+                    pnl_pts = trail_sl - entry
+                elif d == "PUT" and bar_high >= trail_sl:
+                    hit_sl = True
+                    pnl_pts = entry - trail_sl
+                else:
+                    pnl_pts = unrealized
             else:
-                if bar_low <= position["entry_nifty"] - position["sl"]:
-                    hit_sl, pnl_pts = True, -position["sl"]
-                elif bar_high >= position["entry_nifty"] + position["tp"]:
-                    hit_tp, pnl_pts = True, position["tp"]
+                if d == "PUT":
+                    if bar_high >= entry + position["sl"]:
+                        hit_sl, pnl_pts = True, -position["sl"]
+                    elif bar_low <= entry - position["tp"]:
+                        hit_tp, pnl_pts = True, position["tp"]
+                    else:
+                        pnl_pts = unrealized
+                else:
+                    if bar_low <= entry - position["sl"]:
+                        hit_sl, pnl_pts = True, -position["sl"]
+                    elif bar_high >= entry + position["tp"]:
+                        hit_tp, pnl_pts = True, position["tp"]
+                    else:
+                        pnl_pts = unrealized
+
+            # Trail-after-TP: on TP hit, check if bar still trending
+            if hit_tp:
+                bar_open = float(bar["open"])
+                momentum_ok = (spot >= bar_open) if d == "CALL" else (spot <= bar_open)
+                if momentum_ok:
+                    hit_tp = False
+                    position["trailing"] = True
+                    if d == "CALL":
+                        position["peak"] = bar_high
+                    else:
+                        position["peak"] = bar_low
+                    pnl_pts = unrealized
+
             hm = ts.hour * 100 + ts.minute if hasattr(ts, 'hour') else 0
             if hm >= 1515:
                 eod = True
             if hit_sl or hit_tp or eod:
-                if hit_sl:
+                if hit_sl and not trailing:
                     last_sl_bar[position["dir"]] = i
+                reason = "TRAIL_TP" if trailing else ("SL" if hit_sl else ("TP" if hit_tp else "EOD"))
                 trades.append({
                     "entry_time": position["entry_time"], "exit_time": ts,
-                    "dir": position["dir"], "entry_nifty": position["entry_nifty"],
+                    "dir": d, "entry_nifty": entry,
                     "exit_nifty": spot, "sl": position["sl"], "tp": position["tp"],
                     "pnl_pts": round(pnl_pts, 2), "pnl_rs": round(pnl_pts * LOT_SIZE, 2),
-                    "exit_reason": "SL" if hit_sl else ("TP" if hit_tp else "EOD"),
+                    "exit_reason": reason,
                     "hour": position["entry_time"].hour if hasattr(position["entry_time"], 'hour') else 0,
                     "adx": position.get("adx", 0),
                 })

@@ -154,6 +154,8 @@ class RangeReversalEngine(StrategyEngine):
 
     BASE_SL = 45
     BASE_TP = 90
+    TRAIL_AFTER_TP = True
+    TRAIL_AFTER_TP_STEP = 20
     SL_ATR_MULT = 1.5
     TP_ATR_MULT = 3.0
 
