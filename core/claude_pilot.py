@@ -2331,6 +2331,7 @@ class ClaudePilot:
         # Step 2: Run signal engine (PSAR primary, ML fallback)
         ml_signal = 2
         ml_proba = [0.0, 0.0, 1.0]
+        ml_conf = 0.0
         ml_indicators = {}
         ml_direction = "SKIP"
         signal_source = "NONE"
@@ -2354,6 +2355,7 @@ class ClaudePilot:
                     if action == "CLOSE_AND_OPEN":
                         ml_indicators["close_reason"] = router_result.get("close_reason", "")
                     conf = router_result.get("confidence", 0.5)
+                    ml_conf = conf
                     ml_proba = [conf if ml_signal == 0 else (1-conf)*0.2,
                                 conf if ml_signal == 1 else (1-conf)*0.2,
                                 0.0]
@@ -2408,6 +2410,7 @@ class ClaudePilot:
                         ml_indicators["router_strategy"] = router_b_result["strategy"]
                         ml_indicators["router_group"] = "B"
                         conf = router_b_result.get("confidence", 0.5)
+                        ml_conf = conf
                         ml_proba = [conf if ml_signal == 0 else (1-conf)*0.2,
                                     conf if ml_signal == 1 else (1-conf)*0.2,
                                     0.0]
@@ -2426,6 +2429,7 @@ class ClaudePilot:
                             ml_indicators["router_action"] = action_b
                             ml_indicators["router_strategy"] = router_b_result["strategy"]
                             ml_indicators["router_group"] = "B"
+                            ml_conf = conf_b
                             ml_proba = [conf_b if ml_signal == 0 else (1-conf_b)*0.2,
                                         conf_b if ml_signal == 1 else (1-conf_b)*0.2,
                                         0.0]
@@ -2443,55 +2447,10 @@ class ClaudePilot:
                 logger.warning(f"SignalRouter B failed: {e}")
                 router_b_result = None
 
-        # Primary: PSAR multi-timeframe engine (single-engine mode)
-        if signal_source == "NONE" and self.psar_engine:
-            try:
-                ml_signal, ml_proba_arr, ml_conf, ml_indicators = \
-                    self._run_psar_prediction(spot)
-                ml_proba = list(ml_proba_arr)
-                ml_direction = "CALL" if ml_signal == 0 else ("PUT" if ml_signal == 1 else "SKIP")
-                signal_source = "PSAR"
-                self._ml_signals_today += (1 if ml_signal != 2 else 0)
-            except Exception as e:
-                logger.warning(f"PSAR prediction failed, falling back to ML: {e}")
-
-        # Fallback: ML model (if PSAR not available or failed)
-        if signal_source == "NONE" and self.ml_engine and self.ml_engine.is_ready():
-            try:
-                ml_signal, ml_proba_arr, ml_conf, ml_indicators = \
-                    self._run_ml_prediction(spot)
-                ml_proba = list(ml_proba_arr)
-                ml_direction = "CALL" if ml_signal == 0 else ("PUT" if ml_signal == 1 else "SKIP")
-                signal_source = "ML"
-                self._ml_signals_today += (1 if ml_signal != 2 else 0)
-            except Exception as e:
-                logger.warning(f"ML prediction failed: {e}")
-
         logger.info(
             f"Cycle #{cycle}: {signal_source}={ml_direction} "
             f"(C={ml_proba[0]:.3f} P={ml_proba[1]:.3f} S={ml_proba[2]:.3f})"
         )
-
-        # Detailed PSAR logging
-        if signal_source == "PSAR" and ml_indicators:
-            p5 = ml_indicators.get("psar_5m", {})
-            p15 = ml_indicators.get("psar_15m", {})
-            p30 = ml_indicators.get("psar_30m", {})
-            d = lambda x: "BULL" if x.get("direction") == 1 else "BEAR" if x.get("direction") == -1 else "N/A"
-            align_str = f"{ml_indicators.get('aligned_count', '?')}/{3} ({ml_indicators.get('alignment_mode', '?')})"
-            partial = " [PARTIAL]" if ml_indicators.get("partial_alignment") else ""
-            logger.info(
-                f"Cycle #{cycle}: PSAR 5m={d(p5)} dist={p5.get('distance_pts',0):+.1f}pts flip={p5.get('bars_since_flip',0)}bars | "
-                f"15m={d(p15)} dist={p15.get('distance_pts',0):+.1f}pts | "
-                f"30m={d(p30)} dist={p30.get('distance_pts',0):+.1f}pts | "
-                f"align={align_str}{partial} | "
-                f"VIX={ml_indicators.get('vix',0):.1f} SL={ml_indicators.get('sl_pts',0)} TP={ml_indicators.get('tp_pts',0)}"
-            )
-            if ml_indicators.get("skip_reason"):
-                logger.info(f"Cycle #{cycle}: PSAR skip reason: {ml_indicators['skip_reason']}")
-
-        # Gap override removed — gap magnitude is passed as ML features only.
-        # The ML model weights gap size via fut_dist_vwap_pct and gap feature inputs.
 
         # ══════════════════════════════════════════════════════════════
         # V9.3: INTRADAY V-RECOVERY OVERRIDE

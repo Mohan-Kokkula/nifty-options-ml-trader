@@ -118,65 +118,34 @@ class StrikeSelector:
         return round_to_strike(spot)
 
     def get_next_expiry(self) -> str:
-        """Get nearest expiry in DDMMMYY format (e.g. '24MAR26').
-        Priority: 1) NIFTY_EXPIRY env var  2) Kotak Neo API  3) calculated fallback
+        """Get nearest expiry in DDMMMYY format (e.g. '13OCT26').
+        Uses expiry_utils.get_expiry_date() which auto-calculates next Tuesday
+        when NIFTY_EXPIRY is stale or missing. Kotak Neo API tried as upgrade.
         """
-        import os
+        # ── Try Kotak Neo API for authoritative expiry list ───────
+        if not self._cached_expiry:
+            for exchange in ["NFO", "NSE_INDEX"]:
+                try:
+                    dates = self.client.get_expiry_dates("NIFTY", exchange)
+                    if dates:
+                        self._cached_expiry_list = dates
+                        self._cached_expiry = dates[0]
+                        logger.info(f"Expiry: {self._cached_expiry} (Kotak Neo/{exchange})")
+                        from core.expiry_utils import set_expiry_from_api
+                        set_expiry_from_api(self._cached_expiry)
+                        return self._cached_expiry
+                except Exception as e:
+                    logger.debug(f"Kotak Neo expiry failed ({exchange}): {e}")
 
-        # ── Priority 1: Manual override from settings.env ─────────
-        env_expiry_is_stale = False
-        env_expiry = os.getenv("NIFTY_EXPIRY", "").strip().upper()
-        if env_expiry:
-            from core.expiry_utils import _parse_expiry_str
-            parsed = _parse_expiry_str(env_expiry)
-            if parsed is None or parsed >= date.today():
-                logger.info(f"Expiry: {env_expiry} (settings.env override)")
-                self._cached_expiry = env_expiry
-                return env_expiry
-            env_expiry_is_stale = True
-            logger.warning(
-                f"NIFTY_EXPIRY={env_expiry} is in the past — ignoring stale "
-                f"override, update settings.env! Falling back to broker/calculated expiry."
-            )
-
-        # ── Priority 2: Cached from previous call ─────────────────
         if self._cached_expiry:
             return self._cached_expiry
 
-        # ── Priority 3: Kotak Neo search_scrip ────────────────────
-        for exchange in ["NFO", "NSE_INDEX"]:
-            try:
-                dates = self.client.get_expiry_dates("NIFTY", exchange)
-                if dates:
-                    self._cached_expiry_list = dates
-                    self._cached_expiry = dates[0]
-                    logger.info(f"Expiry: {self._cached_expiry} (Kotak Neo/{exchange})")
-                    return self._cached_expiry
-            except Exception as e:
-                logger.debug(f"Kotak Neo expiry failed ({exchange}): {e}")
-
-        # ── Priority 4: Derive from NIFTY_EXPIRY env var ──────────
-        # Skipped when Priority 1 already found this same env var stale —
-        # it reads the identical value and would rediscover the same problem.
-        if not env_expiry_is_stale:
-            try:
-                from core.expiry_utils import get_expiry_date
-                exp_date = get_expiry_date()
-                if exp_date is not None:
-                    fallback = exp_date.strftime("%d%b%y").upper()
-                    logger.info(f"Expiry from NIFTY_EXPIRY: {fallback}")
-                    return fallback
-            except Exception:
-                pass
-        # Last resort: next Tuesday (may be wrong if holiday-shifted)
-        today = date.today()
-        days_ahead = (1 - today.weekday()) % 7 or 7
-        exp = today + timedelta(days=days_ahead)
-        fallback = exp.strftime("%d%b%y").upper()
-        logger.warning(
-            f"Using calculated expiry: {fallback} — "
-            f"set NIFTY_EXPIRY={fallback} in settings.env to fix"
-        )
+        # ── Fallback: auto-calculated from expiry_utils ───────────
+        from core.expiry_utils import get_expiry_date
+        exp_date = get_expiry_date()
+        fallback = exp_date.strftime("%d%b%y").upper()
+        self._cached_expiry = fallback
+        logger.info(f"Expiry: {fallback} (auto-calculated)")
         return fallback
 
     def get_nse_expiry_format(self) -> str:

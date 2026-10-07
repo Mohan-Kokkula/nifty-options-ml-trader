@@ -1,8 +1,9 @@
 """
 expiry_utils.py — Expiry Date & DTE Utilities
 ===============================================
-Derives DTE from the actual NIFTY_EXPIRY env var (or OpenAlgo API),
-NOT hardcoded to any day of week. Handles holiday-shifted expiries.
+Auto-calculates the next Nifty weekly expiry (Tuesday) when
+NIFTY_EXPIRY is not set or stale. Manual override via env var
+still works for holiday-shifted expiries.
 
 Usage:
     from core.expiry_utils import get_dte, is_expiry_day, get_expiry_date
@@ -16,6 +17,7 @@ from typing import Optional
 logger = logging.getLogger(__name__)
 
 _cached_expiry_date: Optional[date] = None
+_EXPIRY_WEEKDAY = 1  # Tuesday = 1 (Monday=0 ... Sunday=6)
 
 
 def _parse_expiry_str(s: str) -> Optional[date]:
@@ -28,10 +30,23 @@ def _parse_expiry_str(s: str) -> Optional[date]:
     return None
 
 
-def get_expiry_date() -> Optional[date]:
+def _next_tuesday(from_date: date = None) -> date:
+    """Return the next Tuesday on or after from_date."""
+    if from_date is None:
+        from_date = date.today()
+    days_ahead = (_EXPIRY_WEEKDAY - from_date.weekday()) % 7
+    if days_ahead == 0:
+        return from_date
+    return from_date + timedelta(days=days_ahead)
+
+
+def get_expiry_date() -> date:
     """
     Get the current weekly expiry date.
-    Priority: NIFTY_EXPIRY env var → cached → None.
+    Priority:
+      1. NIFTY_EXPIRY env var (if set and not in the past)
+      2. Cached from API
+      3. Auto-calculate next Tuesday
     """
     global _cached_expiry_date
 
@@ -39,12 +54,27 @@ def get_expiry_date() -> Optional[date]:
     if env_val:
         parsed = _parse_expiry_str(env_val)
         if parsed:
-            _cached_expiry_date = parsed
-            return parsed
+            if parsed >= date.today():
+                _cached_expiry_date = parsed
+                return parsed
+            else:
+                auto = _next_tuesday()
+                logger.warning(
+                    f"NIFTY_EXPIRY={env_val} is in the past — "
+                    f"auto-using next Tuesday {auto.strftime('%d%b%y').upper()}"
+                )
+                _cached_expiry_date = auto
+                return auto
         else:
             logger.warning(f"Cannot parse NIFTY_EXPIRY='{env_val}' — expected DDMMMYY")
 
-    return _cached_expiry_date
+    if _cached_expiry_date and _cached_expiry_date >= date.today():
+        return _cached_expiry_date
+
+    auto = _next_tuesday()
+    logger.info(f"No NIFTY_EXPIRY set — auto-calculated next Tuesday: {auto.strftime('%d%b%y').upper()}")
+    _cached_expiry_date = auto
+    return auto
 
 
 def set_expiry_from_api(expiry_str: str):
@@ -58,25 +88,12 @@ def set_expiry_from_api(expiry_str: str):
 def get_dte() -> int:
     """
     Days to expiry from TODAY. Returns 0 on expiry day.
-    Uses actual NIFTY_EXPIRY date — handles holiday shifts correctly.
-    Falls back to 3 if no expiry date is available.
+    Auto-calculates next Tuesday if env var is stale/missing.
     """
     exp = get_expiry_date()
-    if not exp:
-        return 3  # safe middle-of-week default
-
     today = date.today()
     dte = (exp - today).days
-
-    # If expiry is past (forgot to update env var), assume next week
-    if dte < 0:
-        logger.warning(
-            f"NIFTY_EXPIRY={exp.strftime('%d%b%y')} is in the past "
-            f"({dte} days ago) — update settings.env!"
-        )
-        return 3  # don't assume
-
-    return dte
+    return max(0, dte)
 
 
 def is_expiry_day() -> bool:
@@ -115,6 +132,6 @@ def get_expiry_context() -> dict:
         "is_expiry": dte == 0,
         "is_pre_expiry": dte == 1,
         "label": label,
-        "expiry_date": exp.isoformat() if exp else "UNKNOWN",
-        "expiry_day_name": exp.strftime("%A") if exp else "UNKNOWN",
+        "expiry_date": exp.isoformat(),
+        "expiry_day_name": exp.strftime("%A"),
     }

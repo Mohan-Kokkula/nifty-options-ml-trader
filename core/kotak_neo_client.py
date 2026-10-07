@@ -2136,16 +2136,13 @@ class KotakNeoClient:
             return self._empty_chain()
 
     def _get_nearest_expiry(self) -> str:
-        """Return nearest expiry in Neo (DDMMMYYYY) format, or '' on failure."""
+        """Return nearest expiry in Neo (DDMMMYYYY) format.
+        Uses expiry_utils which auto-calculates next Tuesday if env var is stale."""
         try:
             from core.expiry_utils import get_expiry_date
-            oa = get_expiry_date()   # returns a date object, e.g. date(2026, 5, 26)
-            if oa is None:
-                logger.warning("_get_nearest_expiry: NIFTY_EXPIRY not set in settings.env")
-                return ""
-            # get_expiry_date() returns a date object — convert to "26MAY26" string first
-            oa_str = oa.strftime("%d%b%y").upper()   # → "26MAY26"
-            return self._expiry_oa_to_neo(oa_str)    # → "26MAY2026"
+            oa = get_expiry_date()
+            oa_str = oa.strftime("%d%b%y").upper()
+            return self._expiry_oa_to_neo(oa_str)
         except Exception as e:
             logger.warning(f"_get_nearest_expiry failed: {e}")
             return ""
