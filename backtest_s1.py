@@ -1,6 +1,6 @@
 """
 backtest_s1.py — Backtest S1 PSAR (dual-timeframe 5m+15m alignment).
-OPEN_SETTLE=10:00 (was 09:20). SL=60, TP=120 (1:2 R:R).
+OPEN_SETTLE=10:00 (was 09:20). SL=45, TP=70 (trail +20 after TP).
 Trail-after-TP: 20pts behind peak once TP reached.
 EMA40 side filter, flat-day PUT filter, flip-only entry.
 """
@@ -110,8 +110,8 @@ def resample_15m(df5):
     return df15
 
 
-SL = 60
-TP = 120
+SL = 45
+TP = 70
 OPEN_SETTLE = 1000
 LUNCH_START = 1200
 LUNCH_END = 1330

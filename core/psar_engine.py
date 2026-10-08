@@ -177,12 +177,12 @@ class PSAREngine:
       - Flip-only: signal within 1 bar of 5m PSAR flip
       - EMA40 side filter + FLAT day PUT filter
       - Skip 09:15-09:30 (market open noise) and 12:00-13:30 (lunch chop)
-      - SL=60pts, TP=120pts (1:2 R:R), VIX-scaled
+      - SL=45pts, TP=70pts, trail +20 after TP, VIX-scaled
     """
 
-    # Backtest-proven SL/TP (points)
-    BASE_SL = 60
-    BASE_TP = 120
+    # SL/TP (points) — SL 40-50 range, TP=70 then trail +20
+    BASE_SL = 45
+    BASE_TP = 70
     TRAIL_AFTER_TP = True
     TRAIL_AFTER_TP_STEP = 20
     OPEN_SETTLE = 1000
