@@ -3921,13 +3921,12 @@ class ClaudePilot:
         # at opening-range extremes (day high/low not yet established).
         # By 10:00, 9 bars of session data exist → trap detector + regime
         # engine have proper inputs to filter bad setups.
-        # 2026-09-24: PSAR has its own OPEN_SETTLE (09:30) filter — reduce
-        # hard block to 15 min for PSAR so it can trade from 09:30 onward.
+        # 2026-10-08: All engines (including PSAR) blocked until 10:00.
+        # PSAR's 09:20 OPEN_SETTLE was too early — opening traps triggered
+        # wrong-direction signals (e.g. BUY at 09:20 in a gap-down).
         now_time = datetime.now()
         session_minutes = (now_time.hour - 9) * 60 + now_time.minute - 15
         hard_block_min = getattr(self.config, "morning_hard_block_min", 45)
-        if is_psar_signal:
-            hard_block_min = 15
         if 0 <= session_minutes < hard_block_min:
             logger.info(
                 f"Cycle #{cycle}: MORNING HARD BLOCK (first {hard_block_min} min): "
