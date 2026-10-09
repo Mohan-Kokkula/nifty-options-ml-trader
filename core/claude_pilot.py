@@ -3757,25 +3757,18 @@ class ClaudePilot:
             )
             effective_min_conf = 50
 
-        # 2026-04-27: STRUCTURE PENALTY (replaces old binary block).
-        # If trade is counter-structure, raise the bar by 12% — high-quality
-        # reversal trades will still pass; weak counter-trend chases won't.
-        struct_pen = int(ml_indicators.get("structure_penalty", 0) or 0)
-        # 2026-06-11: OI-buildup contradiction penalty (was a hard block)
-        struct_pen += int(ml_indicators.get("oi_penalty", 0) or 0)
-        # 2026-08-06: PCR-alignment boost (negative -- reduces the bar).
-        # Opt-in, see PilotConfig.pcr_alignment_boost_enabled.
-        struct_pen += int(ml_indicators.get("pcr_boost", 0) or 0)
-        if struct_pen:
-            old = effective_min_conf
-            # Floor at 50 (matches the floor used elsewhere in this function,
-            # e.g. the regime-alignment branch) so a PCR boost can never push
-            # the bar below the same safety floor every other lowering path respects.
-            effective_min_conf = min(85, max(50, effective_min_conf + struct_pen))
-            logger.info(
-                f"Cycle #{cycle}: STRUCTURE PENALTY {struct_pen:+d}% → "
-                f"min_conf {old}%→{effective_min_conf}%"
-            )
+        # Structure penalty — only applies in Claude AI mode (confidence gate active).
+        if _run_confidence_adjustments:
+            struct_pen = int(ml_indicators.get("structure_penalty", 0) or 0)
+            struct_pen += int(ml_indicators.get("oi_penalty", 0) or 0)
+            struct_pen += int(ml_indicators.get("pcr_boost", 0) or 0)
+            if struct_pen:
+                old = effective_min_conf
+                effective_min_conf = min(85, max(50, effective_min_conf + struct_pen))
+                logger.info(
+                    f"Cycle #{cycle}: STRUCTURE PENALTY {struct_pen:+d}% → "
+                    f"min_conf {old}%→{effective_min_conf}%"
+                )
 
         # ══════════════════════════════════════════════════════════════
         # 2026-04-27 EXPERT FIX: REGIME-AWARE THRESHOLD
