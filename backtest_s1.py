@@ -112,9 +112,7 @@ def resample_15m(df5):
 
 SL = 45
 TP = 70
-OPEN_SETTLE = 1000
-LUNCH_START = 1200
-LUNCH_END = 1330
+AUCTION_END = 920
 FLIP_MAX_BARS = 3
 FLAT_THRESHOLD = 40
 EMA_PERIOD = 40
@@ -246,9 +244,7 @@ def run_backtest(df5):
         # ── Time filters ──
         if hm >= 1500:
             continue
-        if hm < OPEN_SETTLE:
-            continue
-        if LUNCH_START <= hm <= LUNCH_END:
+        if hm < AUCTION_END:
             continue
 
         # ── Compute PSAR signals ──

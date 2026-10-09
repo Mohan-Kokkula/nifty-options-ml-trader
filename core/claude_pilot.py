@@ -3916,95 +3916,62 @@ class ClaudePilot:
                     _shadow_skip(f"vwap_bias:above_{self._consec_vwap_above}c")
                     return
 
-        # 2026-05-05: HARD BLOCK 09:15-10:00 (45 min, was 10 min).
-        # Reason: 09:55 entries lost ₹7,800 across May 4-5 — bot kept entering
-        # at opening-range extremes (day high/low not yet established).
-        # By 10:00, 9 bars of session data exist → trap detector + regime
-        # engine have proper inputs to filter bad setups.
-        # 2026-10-08: All engines (including PSAR) blocked until 10:00.
-        # PSAR's 09:20 OPEN_SETTLE was too early — opening traps triggered
-        # wrong-direction signals (e.g. BUY at 09:20 in a gap-down).
+        # ══════════════════════════════════════════════════════════════
+        # NEWS-BASED CONTEXT ASSESSMENT
+        # ══════════════════════════════════════════════════════════════
+        # Replaces rigid morning block, lunch block, trap detector, and
+        # old binary news gate with a single intelligent assessment.
+        # Like a decade-experienced trader: no catalyst → cautious,
+        # strong catalyst → trade any session, news opposes → block.
+        # Fail-safe: agent down or exception → pass (never block on bug).
         now_time = datetime.now()
-        session_minutes = (now_time.hour - 9) * 60 + now_time.minute - 15
-        hard_block_min = getattr(self.config, "morning_hard_block_min", 45)
-        if 0 <= session_minutes < hard_block_min:
-            logger.info(
-                f"Cycle #{cycle}: MORNING HARD BLOCK (first {hard_block_min} min): "
-                f"{action} {option_type} conf={confidence}% → SKIP "
-                f"(opening trap window — wait until 10:00 IST)"
-            )
-            _shadow_skip("morning_hard_block", conf=confidence)
-            return
-
-        # 09:25-09:45 = secondary trap zone — require 75%.
-        # PSAR bypass: PSAR has its own OPEN_SETTLE filter and confidence
-        # range is inherently lower (50-73%), so the 75% gate always blocks.
-        if hard_block_min <= session_minutes < 30 and not is_psar_signal:
-            morning_min_conf = 75
-            if confidence < morning_min_conf:
-                logger.info(
-                    f"Cycle #{cycle}: MORNING TRAP GUARD (09:25-09:45): "
-                    f"{action} {option_type} conf {confidence}% < {morning_min_conf}% → SKIP"
-                )
-                _shadow_skip("morning_trap_guard", conf=confidence)
-                return
-            # BUG FIX 2026-06-01: was `= morning_min_conf` which silently
-            # LOWERED effective_min_conf back to 75 after counter-regime had
-            # already raised it to 80. Use max() so the stricter threshold wins.
-            effective_min_conf = max(effective_min_conf, morning_min_conf)
-            logger.info(f"Cycle #{cycle}: Morning session — raised min conf to {effective_min_conf}%")
-
-        # ══════════════════════════════════════════════════════════════
-        # ADVISORY GATES (2026-04-24 fixes) — NEWS BIAS + TRAP DETECTOR
-        # Both are fail-safe: any exception → pass (never block on bug).
-        # ══════════════════════════════════════════════════════════════
-        try:
-            from core.trap_detector import get_trap_detector
-            trap = get_trap_detector().is_trap(
-                option_type=option_type,
-                spot=spot,
-                ml_indicators=ml_indicators,
-            )
-            if trap.is_trap:
-                logger.warning(
-                    f"Cycle #{cycle}: TRAP GATE [{trap.reason}] — "
-                    f"{action} {option_type} conf={confidence}% → SKIP. {trap.detail}"
-                )
-                _shadow_skip(f"trap_gate:{trap.reason}", conf=confidence)
-                return
-        except Exception as _e:
-            logger.debug(f"Trap detector unavailable (fail-open): {_e}")
-
         try:
             import os
             if os.getenv("NEWS_AGENT_ENABLED", "true").lower() == "true":
                 from core.news_agent import get_news_agent
-                bias = get_news_agent().current_bias()
-                nb = (bias or {}).get("bias", "neutral")
-                nconf = float((bias or {}).get("confidence", 0.0) or 0.0)
-                hot = (bias or {}).get("hot_event")
-                # Only block when news is confident AND directly opposes the trade
-                if nconf >= 0.55:
-                    if option_type == "CE" and nb == "bearish":
-                        logger.warning(
-                            f"Cycle #{cycle}: NEWS GATE — CALL vs bearish news "
-                            f"(conf={nconf:.2f}) → SKIP. hot={hot}"
-                        )
-                        _shadow_skip("news_gate:bearish_vs_call", conf=confidence)
-                        return
-                    if option_type == "PE" and nb == "bullish":
-                        logger.warning(
-                            f"Cycle #{cycle}: NEWS GATE — PUT vs bullish news "
-                            f"(conf={nconf:.2f}) → SKIP. hot={hot}"
-                        )
-                        _shadow_skip("news_gate:bullish_vs_put", conf=confidence)
-                        return
+                _news = get_news_agent()
+                _is_expiry = False
+                try:
+                    from core.expiry_utils import is_expiry_day as _ied
+                    _is_expiry = _ied()
+                except Exception:
+                    pass
+                _hm = int(now_time.hour * 100 + now_time.minute)
+                _ctx = _news.assess_signal_context(
+                    signal_direction=ml_direction,
+                    current_hm=_hm,
+                    is_expiry=_is_expiry,
+                )
+                if not _ctx.get("allow", True):
                     logger.info(
-                        f"Cycle #{cycle}: NEWS OK — {option_type} aligns with "
-                        f"news bias={nb} conf={nconf:.2f}"
+                        f"Cycle #{cycle}: NEWS CONTEXT BLOCK: "
+                        f"{_ctx.get('reasoning', '')} → SKIP "
+                        f"(phase={_ctx.get('phase', '')} "
+                        f"catalyst={_ctx.get('catalyst_strength', 0):.2f} "
+                        f"sentiment={_ctx.get('news_sentiment', 0):+.2f})"
+                    )
+                    _shadow_skip(
+                        f"news_context:{_ctx.get('phase', '')}",
+                        conf=confidence,
+                    )
+                    return
+                _adj = _ctx.get("confidence_adjustment", 0)
+                if _adj != 0:
+                    _old = effective_min_conf
+                    effective_min_conf = max(45, min(85, effective_min_conf + _adj))
+                    logger.info(
+                        f"Cycle #{cycle}: NEWS CONTEXT: {_ctx.get('reasoning', '')} "
+                        f"→ min_conf {_old}%→{effective_min_conf}% "
+                        f"(phase={_ctx.get('phase', '')} "
+                        f"catalyst={_ctx.get('catalyst_strength', 0):.2f})"
+                    )
+                elif _ctx.get("reasoning") and _ctx["reasoning"] != "Normal conditions":
+                    logger.info(
+                        f"Cycle #{cycle}: NEWS CONTEXT OK: {_ctx.get('reasoning', '')} "
+                        f"(phase={_ctx.get('phase', '')})"
                     )
         except Exception as _e:
-            logger.debug(f"News agent unavailable (fail-open): {_e}")
+            logger.debug(f"News context assessment failed (fail-open): {_e}")
 
         # V10 #6 — VIX-expansion confidence floor: VIX>28 → require 65%+
         try:
@@ -4257,45 +4224,14 @@ class ClaudePilot:
             except Exception as _e:
                 logger.debug(f"Theta-time adj failed: {_e}")
 
-        # ══════════════════════════════════════════════════════════════
-        # EXPIRY DAY ADJUSTMENTS — Gamma risk + Theta decay
-        # ══════════════════════════════════════════════════════════════
-        # On expiry day: gamma is extreme (SL gets hit faster), theta
-        # crushes premium. Widen SL by 20% to absorb gamma spikes,
-        # tighten TP by 20% to lock profit before theta kills it.
-        # Pre-expiry (DTE=1): moderate 10% adjustment.
+        # DTE tracking (informational only — no SL/TP adjustments)
+        # Expiry-day decisions now handled by news context assessment above.
         try:
-            from core.expiry_utils import get_dte, is_expiry_day, is_pre_expiry
-            dte = get_dte()
-            # SL/TP widening skipped under the frozen validated exit -- "no
-            # additional filters" / "no regime adjustments". dte/expiry_day
-            # are still recorded below (informational journal fields only).
-            if self.config.use_frozen_atr_exit:
-                pass
-            elif is_expiry_day():
-                old_sl, old_tp = sl_pts, tp_pts
-                sl_pts = round(sl_pts * 1.20, 1)  # wider SL for gamma
-                tp_pts = round(tp_pts * 0.80, 1)  # faster TP for theta
-                sl_pts = min(sl_pts, self.config.max_sl_points)
-                tp_pts = max(tp_pts, self.config.min_tp_points)
-                logger.info(
-                    f"Cycle #{cycle}: EXPIRY DAY adj: SL {old_sl:.0f}→{sl_pts:.0f} (+20%) "
-                    f"TP {old_tp:.0f}→{tp_pts:.0f} (-20%) [gamma/theta protection]"
-                )
-            elif is_pre_expiry():
-                old_sl, old_tp = sl_pts, tp_pts
-                sl_pts = round(sl_pts * 1.10, 1)
-                tp_pts = round(tp_pts * 0.90, 1)
-                sl_pts = min(sl_pts, self.config.max_sl_points)
-                tp_pts = max(tp_pts, self.config.min_tp_points)
-                logger.info(
-                    f"Cycle #{cycle}: PRE-EXPIRY adj: SL {old_sl:.0f}→{sl_pts:.0f} (+10%) "
-                    f"TP {old_tp:.0f}→{tp_pts:.0f} (-10%)"
-                )
-            ml_indicators["dte"] = dte
+            from core.expiry_utils import get_dte, is_expiry_day
+            ml_indicators["dte"] = get_dte()
             ml_indicators["expiry_day"] = is_expiry_day()
         except Exception as e:
-            logger.debug(f"Expiry adjustment skipped: {e}")
+            logger.debug(f"Expiry info skipped: {e}")
 
         # ══════════════════════════════════════════════════════════════
         # SMC FEATURES — inject into ml_indicators for live context log

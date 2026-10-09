@@ -185,9 +185,7 @@ class PSAREngine:
     BASE_TP = 70
     TRAIL_AFTER_TP = True
     TRAIL_AFTER_TP_STEP = 20
-    OPEN_SETTLE = 1000
-    LUNCH_START = 1200
-    LUNCH_END = 1330
+    AUCTION_END = 920
     FLIP_MAX_BARS = 3
     FLAT_THRESHOLD = 40
 
@@ -283,14 +281,9 @@ class PSAREngine:
 
         # ── Pre-signal filters ──
 
-        # Market open settle (09:15-09:30) — direction not established yet
-        if current_hm < self.OPEN_SETTLE:
-            indicators["skip_reason"] = "market_open_settle"
-            return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
-
-        # Lunch chop filter (12:00-13:30)
-        if self.LUNCH_START <= current_hm <= self.LUNCH_END:
-            indicators["skip_reason"] = "lunch_chop_zone"
+        # Market auction (9:15-9:20) — opening cross, data unreliable
+        if current_hm < self.AUCTION_END:
+            indicators["skip_reason"] = "market_auction"
             return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
 
         # Flip-only: signal only when 5m PSAR has just flipped direction

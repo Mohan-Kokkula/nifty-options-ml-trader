@@ -271,6 +271,128 @@ class NewsAgent:
             logger.debug("news_agent.current_bias() failed: %s", e)
             return empty
 
+    def assess_signal_context(
+        self,
+        signal_direction: str,
+        current_hm: int,
+        is_expiry: bool = False,
+    ) -> dict:
+        """
+        Intelligent signal filter replacing rigid morning/lunch/trap/expiry gates.
+
+        Thinks like a decade-experienced intraday trader:
+        - No catalyst + opening/lunch → raise confidence bar (don't hard-block)
+        - Strong catalyst → trade ANY session including open, lunch, expiry
+        - News opposes signal → block
+        - Breaking news aligns → lower confidence bar (high conviction)
+        - Expiry without catalyst → slight caution, not a hard block
+
+        Returns:
+            allow: bool — should the signal proceed?
+            confidence_adjustment: int — adjust effective_min_conf by this
+            phase: str — current market phase
+            catalyst_strength: float — 0-1 strength of news catalyst
+            reasoning: str — human-readable log
+        """
+        bias = self.current_bias()
+        catalyst = abs(bias.get("confidence", 0))
+        news_sent = bias.get("bias", 0)
+        hot = bias.get("hot_event")
+        event_count = bias.get("event_count", 0)
+
+        if current_hm < 920:
+            phase = "auction"
+        elif current_hm < 945:
+            phase = "opening"
+        elif current_hm < 1200:
+            phase = "morning"
+        elif current_hm < 1330:
+            phase = "lunch"
+        elif current_hm < 1500:
+            phase = "afternoon"
+        else:
+            phase = "close"
+
+        has_breaking = (
+            hot is not None
+            and getattr(hot, "urgency", "") == "breaking"
+            and hot.age_minutes() < 15
+        )
+        is_call = signal_direction.upper() in ("CALL", "CE")
+        news_supports = (is_call and news_sent > 0.2) or (not is_call and news_sent < -0.2)
+        news_opposes = (is_call and news_sent < -0.3) or (not is_call and news_sent > 0.3)
+
+        allow = True
+        conf_adj = 0
+        reasons = []
+
+        # 1. Auction (9:15-9:20): no reliable data, always skip
+        if phase == "auction":
+            return {
+                "allow": False, "confidence_adjustment": 0,
+                "phase": phase, "catalyst_strength": 0,
+                "has_breaking": has_breaking, "news_sentiment": round(news_sent, 3),
+                "reasoning": "Market auction — no reliable data",
+            }
+
+        # 2. News opposes signal with conviction → block
+        if news_opposes and catalyst >= 0.4:
+            return {
+                "allow": False, "confidence_adjustment": -15,
+                "phase": phase, "catalyst_strength": round(catalyst, 3),
+                "has_breaking": has_breaking, "news_sentiment": round(news_sent, 3),
+                "reasoning": (
+                    f"News opposes {signal_direction} "
+                    f"(sentiment={news_sent:+.2f} conf={catalyst:.2f})"
+                ),
+            }
+
+        # 3. Opening (9:20-9:45): experienced trader trades the open with conviction
+        if phase == "opening":
+            if has_breaking or catalyst >= 0.5:
+                reasons.append(f"Opening with catalyst ({catalyst:.2f})")
+                if news_supports:
+                    conf_adj -= 5
+            elif catalyst >= 0.25:
+                reasons.append("Opening — moderate catalyst")
+            else:
+                reasons.append("Opening — no catalyst, +10% bar")
+                conf_adj += 10
+
+        # 4. Lunch (12:00-13:30): trade on catalyst, cautious otherwise
+        if phase == "lunch":
+            if has_breaking or catalyst >= 0.4:
+                reasons.append(f"Lunch with catalyst ({catalyst:.2f})")
+            elif catalyst >= 0.2:
+                reasons.append("Lunch — weak catalyst, +5% bar")
+                conf_adj += 5
+            else:
+                reasons.append("Lunch — no catalyst, +8% bar")
+                conf_adj += 8
+
+        # 5. Expiry: catalyst decides, never hard-block
+        if is_expiry:
+            if has_breaking or catalyst >= 0.4:
+                reasons.append("Expiry with catalyst — normal trading")
+            else:
+                reasons.append("Expiry — no catalyst, +5% bar")
+                conf_adj += 5
+
+        # 6. News alignment bonus — lower the bar when news confirms signal
+        if news_supports and catalyst >= 0.3:
+            conf_adj -= 5
+            reasons.append(f"News supports {signal_direction}")
+
+        return {
+            "allow": allow,
+            "confidence_adjustment": conf_adj,
+            "phase": phase,
+            "catalyst_strength": round(catalyst, 3),
+            "has_breaking": has_breaking,
+            "news_sentiment": round(news_sent, 3),
+            "reasoning": " | ".join(reasons) if reasons else "Normal conditions",
+        }
+
     def recent_events(self, limit: int = 20) -> list[NewsEvent]:
         with self._state_lock:
             events = sorted(
