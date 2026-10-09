@@ -1539,9 +1539,10 @@ class ClaudePilot:
             target=self._reconciliation_loop, daemon=True, name="Reconciliation"
         )
         self._reconciliation_thread.start()
+        _conf_display = "bypassed (strategy mode)" if self.config.ml_only_mode else f">={self.config.min_confidence}%"
         logger.info(
             f"Pilot STARTED | interval={self.config.analyze_interval}s "
-            f"| confidence>={self.config.min_confidence}% "
+            f"| confidence={_conf_display} "
             f"| ML-only={self.config.ml_only_mode} "
             f"| dynamic_sl_tp={self.config.use_dynamic_sl_tp} "
             f"| trailing_stop={self.config.use_trailing_stop}"
