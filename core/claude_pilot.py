@@ -4236,7 +4236,7 @@ class ClaudePilot:
         # Late-day entries have less time for TP to be hit AND more theta decay.
         # Scale TP down as session progresses (morning=full, afternoon=tighter).
         # (skipped under the frozen validated exit -- "no dynamic TP/SL")
-        if not self.config.use_frozen_atr_exit:
+        if not self.config.use_frozen_atr_exit and not is_psar_signal:
             try:
                 now_for_theta = datetime.now()
                 session_min = (now_for_theta.hour - 9) * 60 + now_for_theta.minute - 15

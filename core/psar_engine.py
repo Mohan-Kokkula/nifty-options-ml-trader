@@ -188,9 +188,8 @@ class PSAREngine:
     OPEN_SETTLE = 1000
     LUNCH_START = 1200
     LUNCH_END = 1330
-    FLIP_MAX_BARS = 1
+    FLIP_MAX_BARS = 3
     FLAT_THRESHOLD = 40
-    EMA_PERIOD = 40
 
     def __init__(self):
         self._ready = False
@@ -270,9 +269,7 @@ class PSAREngine:
         indicators["day_open"] = round(day_open, 2)
         indicators["is_flat"] = is_flat
 
-        # EMA side filter — CALL only above EMA, PUT only below
-        ema_val = float(df5["close"].ewm(span=self.EMA_PERIOD, adjust=False).mean().iloc[-1])
-        indicators["ema"] = round(ema_val, 2)
+        indicators["ema"] = None
 
         d5 = sig5["direction"]
         d15 = sig15["direction"]
@@ -304,9 +301,6 @@ class PSAREngine:
         # ── Signal: 5m + 15m must both agree ──
 
         if both_bull:
-            if spot < ema_val:
-                indicators["skip_reason"] = f"ema_side_call (spot={spot:.0f} < EMA={ema_val:.0f})"
-                return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
             confidence = self._calc_confidence(sig5, sig15, sig30, vix)
             indicators["sl_pts"] = round(sl_pts, 1)
             indicators["tp_pts"] = round(tp_pts, 1)
@@ -318,9 +312,6 @@ class PSAREngine:
         if both_bear:
             if is_flat:
                 indicators["skip_reason"] = f"flat_day_put (spot={spot:.0f} open={day_open:.0f} diff={abs(spot-day_open):.0f}pts)"
-                return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
-            if spot > ema_val:
-                indicators["skip_reason"] = f"ema_side_put (spot={spot:.0f} > EMA={ema_val:.0f})"
                 return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
             confidence = self._calc_confidence(sig5, sig15, sig30, vix)
             indicators["sl_pts"] = round(sl_pts, 1)
