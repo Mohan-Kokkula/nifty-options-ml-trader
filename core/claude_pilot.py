@@ -3656,15 +3656,24 @@ class ClaudePilot:
         # 60% matches Claude-confirmed threshold. Better to miss trades than
         # take bad ones. For 94%+ accuracy, high conviction only.
         #
-        # 2026-06-11 ASYMMETRIC GATE: live CALL WR=22.2% vs PUT near backtest.
-        # The shared 70% bar over-blocked PUTs (Jun 10: market weakened all
-        # afternoon, zero trades) while still admitting losing CALLs.
-        # CALL 70→72 (tighten the weak side), PUT 70→58 (loosen the side
-        # tracking backtest). Pairs with CONFIDENCE_CALL/PUT in ml_engine.py.
+        # Strategy signals (S1-S12) are rule-based, not ML probabilities.
+        # Their confidence scores aren't calibrated — the strategy conditions
+        # themselves are the filter. Bypass the confidence gate entirely for
+        # strategy signals. Keep it only for Claude AI validation mode.
         if self.config.ml_only_mode:
-            effective_min_conf = 72 if option_type == "CE" else 58
+            effective_min_conf = 0
         else:
             effective_min_conf = self.config.min_confidence
+
+        # Skip all confidence adjustments for strategy signals (gate=0).
+        if effective_min_conf > 0:
+            _run_confidence_adjustments = True
+        else:
+            _run_confidence_adjustments = False
+            logger.info(
+                f"Cycle #{cycle}: Strategy signal — confidence gate bypassed "
+                f"(strategy conditions are the filter)"
+            )
 
         # V9.4 (2026-04-16): MOMENTUM OVERRIDE — lower threshold to 55% when
         # price structure strongly confirms the ML direction. Fixes the April
@@ -3861,14 +3870,8 @@ class ClaudePilot:
         # for PSAR only — using self.psar_engine was always True.
         is_psar_signal = "PSAR" in signal_source
 
-        # PSAR: regime floor is calibrated for ML probabilities, not PSAR
-        # alignment scores. Cap effective_min_conf at PSAR's base (50%).
-        if is_psar_signal and effective_min_conf > 50:
-            logger.info(
-                f"Cycle #{cycle}: PSAR regime-floor cap: "
-                f"{effective_min_conf}%→50% (PSAR alignment is the filter)"
-            )
-            effective_min_conf = 50
+        # PSAR cap removed — all strategy signals bypass the confidence
+        # gate entirely in ml_only_mode (effective_min_conf=0).
 
         # ── PERSISTENT VWAP BIAS BLOCK ─────────────────────────────────────
         # If spot has been >50pts below (or above) the futures VWAP for 3+
@@ -4043,7 +4046,7 @@ class ClaudePilot:
                 and self.config.futures_min_confidence_pct > 0):
             effective_min_conf = max(effective_min_conf, self.config.futures_min_confidence_pct)
 
-        if confidence < effective_min_conf:
+        if _run_confidence_adjustments and confidence < effective_min_conf:
             logger.info(
                 f"Cycle #{cycle}: {action} {option_type} but conf {confidence}% < "
                 f"{effective_min_conf}% ({'ML-only' if self.config.ml_only_mode else 'Claude'})"
