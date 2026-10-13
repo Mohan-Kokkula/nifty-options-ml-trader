@@ -4553,7 +4553,7 @@ class ClaudePilot:
         _strategy_name = signal_source.replace("ROUTER/", "").replace("ROUTER_B/", "")
         logger.info(
             f"Cycle #{cycle}: EXECUTING {action} {option_type} ({strike_mode}) "
-            f"strategy={_strategy_name} conf={confidence}% SL={sl_pts:.0f}pts TP={tp_pts:.0f}pts "
+            f"strategy={_strategy_name} SL={sl_pts:.0f}pts TP={tp_pts:.0f}pts "
             f"lots={num_lots} qty={trade_qty}"
         )
 
@@ -4566,7 +4566,7 @@ class ClaudePilot:
             logger.info(
                 f"Cycle #{cycle}: [DRY RUN] WOULD EXECUTE {action} {display_label} "
                 f"strategy={_strategy_name} ({'futures' if is_futures_mode else strike_mode}) "
-                f"conf={confidence}% SL={sl_pts:.0f} TP={tp_pts:.0f} lots={num_lots} spot={spot:.0f}"
+                f"SL={sl_pts:.0f} TP={tp_pts:.0f} lots={num_lots} spot={spot:.0f}"
             )
             self.notifier.notify_trade(
                 action="DRY_RUN",
@@ -4578,7 +4578,7 @@ class ClaudePilot:
                 status="simulated",
                 details=(
                     f"[PAPER] {action} {display_label} "
-                    f"[{_strategy_name}] conf={confidence}% SL={sl_pts:.0f} TP={tp_pts:.0f} "
+                    f"[{_strategy_name}] SL={sl_pts:.0f} TP={tp_pts:.0f} "
                     f"R:R=1:{tp_pts/sl_pts:.1f}"
                 ),
             )
@@ -4587,7 +4587,7 @@ class ClaudePilot:
                 symbol=display_label,
                 side=action,
                 details=(
-                    f"conf={confidence}% SL={sl_pts:.0f} TP={tp_pts:.0f} "
+                    f"strategy={_strategy_name} SL={sl_pts:.0f} TP={tp_pts:.0f} "
                     f"spot={spot:.0f} lots={num_lots}"
                 ),
             )
@@ -5249,7 +5249,7 @@ class ClaudePilot:
                 details=(
                     f"AUTO-PILOT TRADE #{self._trades_today}\n"
                     f"Strategy: {_strategy_name} | {action} {option_type}\n"
-                    f"Confidence: {confidence}% | Bias: {bias}\n"
+                    f"Bias: {bias}\n"
                     f"Lots: {num_lots} ({trade_qty} qty) | Fill: {fill_type}\n"
                     f"SL: {sl_price:.0f} ({sl_pts:.0f}pts) | "
                     f"TP: {tp_price:.0f} ({tp_pts:.0f}pts) | "
