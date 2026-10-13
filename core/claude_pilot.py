@@ -4550,9 +4550,10 @@ class ClaudePilot:
                 return
 
         # Step 8: SMART EXECUTION
+        _strategy_name = signal_source.replace("ROUTER/", "").replace("ROUTER_B/", "")
         logger.info(
             f"Cycle #{cycle}: EXECUTING {action} {option_type} ({strike_mode}) "
-            f"conf={confidence}% SL={sl_pts:.0f}pts TP={tp_pts:.0f}pts "
+            f"strategy={_strategy_name} conf={confidence}% SL={sl_pts:.0f}pts TP={tp_pts:.0f}pts "
             f"lots={num_lots} qty={trade_qty}"
         )
 
@@ -4564,8 +4565,8 @@ class ClaudePilot:
             display_label = f"NIFTY FUT ({direction})" if is_futures_mode else f"NIFTY {option_type}"
             logger.info(
                 f"Cycle #{cycle}: [DRY RUN] WOULD EXECUTE {action} {display_label} "
-                f"({'futures' if is_futures_mode else strike_mode}) conf={confidence}% "
-                f"SL={sl_pts:.0f} TP={tp_pts:.0f} lots={num_lots} spot={spot:.0f}"
+                f"strategy={_strategy_name} ({'futures' if is_futures_mode else strike_mode}) "
+                f"conf={confidence}% SL={sl_pts:.0f} TP={tp_pts:.0f} lots={num_lots} spot={spot:.0f}"
             )
             self.notifier.notify_trade(
                 action="DRY_RUN",
@@ -4577,7 +4578,7 @@ class ClaudePilot:
                 status="simulated",
                 details=(
                     f"[PAPER] {action} {display_label} "
-                    f"conf={confidence}% SL={sl_pts:.0f} TP={tp_pts:.0f} "
+                    f"[{_strategy_name}] conf={confidence}% SL={sl_pts:.0f} TP={tp_pts:.0f} "
                     f"R:R=1:{tp_pts/sl_pts:.1f}"
                 ),
             )
@@ -4656,7 +4657,7 @@ class ClaudePilot:
                             _winning_eng, "TRAIL_AFTER_TP_STEP", 20.0)
                     logger.info(
                         f"Cycle #{cycle}: [PAPER] Position tracker armed — "
-                        f"{direction} entry={spot:.0f} "
+                        f"[{_strategy_name}] {direction} entry={spot:.0f} "
                         f"SL={sl_price:.0f} TP={tp_price:.0f} "
                         f"{'trail-after-TP=' + str(self._live_position.trail_after_tp_step) + 'pts ' if self._live_position.trail_after_tp else ''}"
                         f"→ Telegram alert fires on PAPER_EXIT_SL/TP"
@@ -5247,7 +5248,7 @@ class ClaudePilot:
                 status="executed",
                 details=(
                     f"AUTO-PILOT TRADE #{self._trades_today}\n"
-                    f"ML: {ml_direction} | Claude: {action} {option_type}\n"
+                    f"Strategy: {_strategy_name} | {action} {option_type}\n"
                     f"Confidence: {confidence}% | Bias: {bias}\n"
                     f"Lots: {num_lots} ({trade_qty} qty) | Fill: {fill_type}\n"
                     f"SL: {sl_price:.0f} ({sl_pts:.0f}pts) | "
