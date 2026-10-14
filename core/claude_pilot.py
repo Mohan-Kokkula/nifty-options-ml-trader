@@ -462,7 +462,7 @@ class ClaudePilot:
 
         # Multi-strategy SignalRouter (opt-in via MULTI_STRATEGY=true)
         # Router A: S1-S5 (PSAR, MACD, OI, VWAP, Supertrend)
-        # Router B: S6-S12 (ORB, RSI2, HolyGrail, RangeReversal, MomConf, MktEnergy, EnergyFlow) — independent positions
+        # Router B: S6-S13 (ORB, RSI2, HolyGrail, RangeReversal, MomConf, MktEnergy, EnergyFlow, Donchian) — independent positions
         self._signal_router = None
         self._signal_router_b = None
         import os as _os_ms
@@ -480,6 +480,7 @@ class ClaudePilot:
                 from core.momentum_confluence_engine import MomentumConfluenceEngine
                 from core.market_energy_engine import MarketEnergyEngine
                 from core.energy_flow_engine import EnergyFlowEngine
+                from core.donchian_engine import DonchianEngine
                 engines_a = {}
                 if self.psar_engine:
                     engines_a["PSAR"] = self.psar_engine
@@ -496,11 +497,12 @@ class ClaudePilot:
                     "MC": MomentumConfluenceEngine(),
                     "ME": MarketEnergyEngine(),
                     "EF": EnergyFlowEngine(),
+                    "DONCH": DonchianEngine(),
                 }
                 self._signal_router_b = SignalRouter(engines_b)
                 logger.info(
                     f"SignalRouter A (S1-S5): {list(engines_a.keys())} | "
-                    f"SignalRouter B (S6-S12): {list(engines_b.keys())}"
+                    f"SignalRouter B (S6-S13): {list(engines_b.keys())}"
                 )
             except Exception as e:
                 logger.warning(f"SignalRouter init failed (single-engine fallback): {e}")
