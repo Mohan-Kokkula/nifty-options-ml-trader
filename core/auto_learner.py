@@ -38,7 +38,7 @@ SL_ADJUST_MIN = -15
 SL_ADJUST_MAX = 15
 TP_ADJUST_MIN = -15
 TP_ADJUST_MAX = 15
-PAUSE_AFTER_LOSSES = 2
+STREAK_HEAVY_PENALTY = 3  # apply heavy weight penalty after this many consecutive losses
 MIN_TRADES_FOR_ADJUST = 2
 MIN_PERSISTENT_TRADES = 5  # cross-day minimum before using history for weights
 
@@ -61,7 +61,6 @@ class AutoLearner:
         self.weights = {}           # {"PSAR": 1.0, "MC": 0.8, ...}
         self.sl_adjust = {}         # {"PSAR": 0, "MC": +5, ...}
         self.tp_adjust = {}         # {"PSAR": 0, ...}
-        self.paused = set()         # strategies auto-paused today
         self.streak = {}            # {"PSAR": 2, "MC": -3} positive=wins, negative=losses
         self.trade_count = {}       # trades today per strategy
         self.win_count = {}         # wins today per strategy
@@ -132,7 +131,7 @@ class AutoLearner:
     def _check_daily_reset(self):
         today = date.today().isoformat()
         if self._today != today:
-            if self._today is not None and (self.weights or self.paused):
+            if self._today is not None and self.weights:
                 self._send(
                     f"<b>AUTO-LEARN: Daily reset</b>\n"
                     f"Previous adjustments cleared. Starting fresh."
@@ -140,7 +139,6 @@ class AutoLearner:
             self.weights.clear()
             self.sl_adjust.clear()
             self.tp_adjust.clear()
-            self.paused.clear()
             self.streak.clear()
             self.trade_count.clear()
             self.win_count.clear()
@@ -158,14 +156,6 @@ class AutoLearner:
         if not self._enabled:
             return raw_confidence
         self._check_daily_reset()
-
-        if strategy in self.paused:
-            self._log_reasoning(strategy, "BLOCKED", [
-                f"Strategy is auto-paused (streak: {self.streak.get(strategy, 0)})",
-                f"PnL today: {self.pnl_today.get(strategy, 0):+.0f}pts",
-                "Signal rejected — paused for rest of day",
-            ], {"raw_confidence": raw_confidence})
-            return 0.0
 
         weight = self.weights.get(strategy, 1.0)
         adjusted = raw_confidence * weight
@@ -217,11 +207,8 @@ class AutoLearner:
         return new_sl, new_tp
 
     def is_paused(self, strategy: str) -> bool:
-        """Check if a strategy is auto-paused."""
-        if not self._enabled:
-            return False
-        self._check_daily_reset()
-        return strategy in self.paused
+        """Never fully blocks — strategies get weight penalty instead."""
+        return False
 
     def on_trade_closed(self, strategy: str, result: str, pnl_pts: float,
                         exit_reason: str = "", session: str = "",
@@ -249,22 +236,20 @@ class AutoLearner:
 
         cur_streak = self.streak[strategy]
 
-        # ── Auto-pause on losing streak ──
-        paused_now = False
-        if cur_streak <= -PAUSE_AFTER_LOSSES and strategy not in self.paused:
-            self.paused.add(strategy)
-            paused_now = True
-            self._log_reasoning(strategy, "PAUSED", [
-                f"{abs(cur_streak)} consecutive losses hit pause threshold ({PAUSE_AFTER_LOSSES})",
+        # ── Heavy penalty on losing streak (never fully blocks) ──
+        streak_penalized = False
+        if cur_streak <= -STREAK_HEAVY_PENALTY:
+            streak_penalized = True
+            self._log_reasoning(strategy, "HEAVY_PENALTY", [
+                f"{abs(cur_streak)} consecutive losses — applying heavy weight penalty",
                 f"PnL today: {self.pnl_today.get(strategy, 0):+.0f}pts",
-                "Strategy disabled for rest of day to stop bleeding",
+                "Strategy stays active but deprioritized (next correct signal still fires)",
             ])
             self._send(
-                f"<b>AUTO-LEARN: {strategy} PAUSED</b>\n"
-                f"{abs(cur_streak)} consecutive losses today\n"
+                f"<b>🧠 AUTO-LEARN: {strategy} DEPRIORITIZED</b>\n"
+                f"{abs(cur_streak)} consecutive losses — weight heavily penalized\n"
                 f"PnL today: {self.pnl_today.get(strategy, 0):+.0f}pts\n"
-                f"Auto-paused for rest of day. Resets tomorrow.\n"
-                f"<i>Override: set AUTO_LEARN=false in settings.env</i>"
+                f"Strategy still active — next signal fires if it's the best available"
             )
 
         # ── Adjust weights based on performance ──
@@ -306,8 +291,8 @@ class AutoLearner:
             actions_taken.append(f"SL adjust: {old_sl_adj:+d}→{new_sl_adj:+d}pts")
         if new_tp_adj != old_tp_adj:
             actions_taken.append(f"TP adjust: {old_tp_adj:+d}→{new_tp_adj:+d}pts")
-        if paused_now:
-            actions_taken.append("PAUSED for rest of day")
+        if streak_penalized:
+            actions_taken.append(f"HEAVY PENALTY: {abs(cur_streak)} losses → deprioritized (still active)")
         if not actions_taken:
             actions_taken.append("No adjustment (insufficient data or within normal range)")
 
@@ -322,7 +307,7 @@ class AutoLearner:
 
         # ── Send thinking summary to Telegram ──
         has_changes = (new_weight != old_weight or new_sl_adj != old_sl_adj
-                       or new_tp_adj != old_tp_adj or paused_now)
+                       or new_tp_adj != old_tp_adj or streak_penalized)
         if has_changes:
             emoji = "🟢" if is_win else "🔴"
             lines = [
@@ -367,6 +352,8 @@ class AutoLearner:
         streak = self.streak.get(strategy, 0)
         if streak >= 2:
             weight += 0.1
+        elif streak <= -STREAK_HEAVY_PENALTY:
+            weight -= 0.25  # heavy penalty but still fires if best signal
         elif streak <= -2:
             weight -= 0.1
 
@@ -531,7 +518,7 @@ class AutoLearner:
             "weights": dict(self.weights),
             "sl_adjust": dict(self.sl_adjust),
             "tp_adjust": dict(self.tp_adjust),
-            "paused": list(self.paused),
+            "heavy_penalty_streaks": {k: v for k, v in self.streak.items() if v <= -STREAK_HEAVY_PENALTY},
             "streaks": dict(self.streak),
             "trades_today": dict(self.trade_count),
         }

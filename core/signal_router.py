@@ -152,10 +152,6 @@ class SignalRouter:
         for name, r in results.items():
             if r["signal"] == 2:
                 continue
-            # Auto-learner: skip paused strategies
-            if self.auto_learner and self.auto_learner.is_paused(name):
-                logger.info(f"{name}: auto-paused by AutoLearner (losing streak)")
-                continue
             budget = self.budgets.get(name)
             if budget:
                 if budget.trades_today >= budget.max_trades_per_day:
