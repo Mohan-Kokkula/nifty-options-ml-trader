@@ -46,11 +46,13 @@ class SignalRouter:
 
     TOTAL_MAX_DAILY_LOSS = -10000.0  # hard cap across all strategies
 
-    def __init__(self, engines: dict, budgets: dict = None):
+    def __init__(self, engines: dict, budgets: dict = None,
+                 auto_learner=None):
         """
         Args:
             engines: {"PSAR": psar_engine, "MACD": macd_engine, ...}
             budgets: {"PSAR": StrategyBudget(...), ...} — optional overrides
+            auto_learner: AutoLearner instance for self-improving weights
         """
         self.engines = engines
         self.budgets: dict[str, StrategyBudget] = {}
@@ -64,6 +66,7 @@ class SignalRouter:
         self._total_pnl_today = 0.0
         self._today_date = ""
         self._signal_log: list = []
+        self.auto_learner = auto_learner
 
     def reset_daily(self):
         """Reset all daily counters. Called at start of each trading day."""
@@ -149,6 +152,10 @@ class SignalRouter:
         for name, r in results.items():
             if r["signal"] == 2:
                 continue
+            # Auto-learner: skip paused strategies
+            if self.auto_learner and self.auto_learner.is_paused(name):
+                logger.info(f"{name}: auto-paused by AutoLearner (losing streak)")
+                continue
             budget = self.budgets.get(name)
             if budget:
                 if budget.trades_today >= budget.max_trades_per_day:
@@ -157,6 +164,11 @@ class SignalRouter:
                 if budget.pnl_today <= budget.max_daily_loss:
                     logger.debug(f"{name}: daily loss cap hit ({budget.pnl_today:.0f})")
                     continue
+            # Auto-learner: adjust confidence weight
+            if self.auto_learner:
+                r["confidence"] = self.auto_learner.adjust_confidence(
+                    name, r["confidence"]
+                )
             actionable.append((name, r))
 
         if not actionable:

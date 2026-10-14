@@ -472,6 +472,22 @@ class ClaudePilot:
         except Exception as e:
             logger.warning(f"TradeLearner init failed: {e}")
 
+        # Auto-learning engine (true self-improvement — modifies live behavior)
+        self._auto_learner = None
+        try:
+            from core.auto_learner import AutoLearner
+            _tg = None
+            if hasattr(self, "notifier") and self.notifier and hasattr(self.notifier, "telegram"):
+                _tg = self.notifier.telegram
+            self._auto_learner = AutoLearner(
+                journal_path=str(self._journal.path) if self._journal else "logs/trade_journal.jsonl",
+                notifier=_tg,
+            )
+            self._auto_learner.initialize_from_history()
+            logger.info("AutoLearner initialized (self-improving weights active)")
+        except Exception as e:
+            logger.warning(f"AutoLearner init failed: {e}")
+
         # Multi-strategy SignalRouter (opt-in via MULTI_STRATEGY=true)
         # Router A: S1-S5 (PSAR, MACD, OI, VWAP, Supertrend)
         # Router B: S6-S13 (ORB, RSI2, HolyGrail, RangeReversal, MomConf, MktEnergy, EnergyFlow, Donchian) — independent positions
@@ -500,7 +516,7 @@ class ClaudePilot:
                 engines_a["OI"] = OIEngine()
                 engines_a["VWAP"] = VWAPReversionEngine()
                 engines_a["ST"] = SupertrendEngine()
-                self._signal_router = SignalRouter(engines_a)
+                self._signal_router = SignalRouter(engines_a, auto_learner=self._auto_learner)
                 engines_b = {
                     "ORB": ORBEngine(),
                     "RSI2": RSI2Engine(),
@@ -511,7 +527,7 @@ class ClaudePilot:
                     "EF": EnergyFlowEngine(),
                     "DONCH": DonchianEngine(),
                 }
-                self._signal_router_b = SignalRouter(engines_b)
+                self._signal_router_b = SignalRouter(engines_b, auto_learner=self._auto_learner)
                 logger.info(
                     f"SignalRouter A (S1-S5): {list(engines_a.keys())} | "
                     f"SignalRouter B (S6-S13): {list(engines_b.keys())}"
@@ -1164,6 +1180,39 @@ class ClaudePilot:
                 })
             except Exception as _e:
                 logger.debug(f"TradeLearner post-trade failed: {_e}")
+
+        # ── Auto-learner (true self-improvement — modifies live weights) ──
+        if self._auto_learner and _known_outcome:
+            try:
+                _strat_name = ""
+                for _rtr in (self._signal_router, self._signal_router_b):
+                    if _rtr and _rtr.active_position:
+                        _strat_name = _rtr.active_position.strategy
+                        break
+                _result = "WIN" if pnl_pts > 3 else ("LOSS" if pnl_pts < -3 else "BREAKEVEN")
+                _dur = 0
+                if hasattr(pos, "entry_time") and pos.entry_time:
+                    _dur = int((datetime.now() - pos.entry_time).total_seconds())
+                _session = ""
+                _hh = datetime.now().hour
+                if _hh < 10:
+                    _session = "morning"
+                elif _hh < 12:
+                    _session = "midday"
+                elif _hh < 14:
+                    _session = "afternoon"
+                else:
+                    _session = "closing"
+                self._auto_learner.on_trade_closed(
+                    strategy=_strat_name or getattr(pos, "_strategy_name", ""),
+                    result=_result,
+                    pnl_pts=pnl_pts,
+                    exit_reason=reason,
+                    session=_session,
+                    duration_sec=_dur,
+                )
+            except Exception as _e:
+                logger.debug(f"AutoLearner post-trade failed: {_e}")
 
     def _reconcile_broker_position(self) -> None:
         """
@@ -5440,6 +5489,10 @@ class ClaudePilot:
                         vix=vix_val, max_loss_budget=_budget, lot_size=_lot_sz,
                         atr=atr_val
                     )
+                    if self._auto_learner:
+                        sl_pts, tp_pts = self._auto_learner.adjust_sl_tp(
+                            strat_name, sl_pts, tp_pts
+                        )
                     logger.info(
                         f"{strat_name} dynamic SL/TP: SL={sl_pts}pts TP={tp_pts}pts "
                         f"(ATR={atr_val:.1f} VIX={vix_val:.1f})"
