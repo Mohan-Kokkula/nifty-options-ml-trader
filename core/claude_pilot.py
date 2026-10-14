@@ -4743,6 +4743,44 @@ class ClaudePilot:
                         self._live_position.trail_after_tp = True
                         self._live_position.trail_after_tp_step = getattr(
                             _winning_eng, "TRAIL_AFTER_TP_STEP", 20.0)
+                    # Compute S/R levels from recent price data
+                    _sr_levels = {}
+                    try:
+                        from core.tv_fetcher import get_tv_fetcher
+                        _tv = get_tv_fetcher()
+                        _df5_sr = _tv.get_nifty_5min(n_bars=60)
+                        if _df5_sr is not None and len(_df5_sr) > 10:
+                            _highs = _df5_sr["high"].values
+                            _lows = _df5_sr["low"].values
+                            _closes = _df5_sr["close"].values
+                            # Swing highs/lows (local max/min in 5-bar window)
+                            _swing_highs = []
+                            _swing_lows = []
+                            for _i in range(2, len(_highs) - 2):
+                                if _highs[_i] >= max(_highs[_i-2:_i]) and _highs[_i] >= max(_highs[_i+1:_i+3]):
+                                    _swing_highs.append(float(_highs[_i]))
+                                if _lows[_i] <= min(_lows[_i-2:_i]) and _lows[_i] <= min(_lows[_i+1:_i+3]):
+                                    _swing_lows.append(float(_lows[_i]))
+                            # Daily pivot from today's range so far
+                            _day_high = float(_highs.max())
+                            _day_low = float(_lows.min())
+                            _day_close = float(_closes[-1])
+                            _pivot = round((_day_high + _day_low + _day_close) / 3, 2)
+                            _r1 = round(2 * _pivot - _day_low, 2)
+                            _s1 = round(2 * _pivot - _day_high, 2)
+                            _sr_levels = {
+                                "swing_highs": sorted(_swing_highs[-5:], reverse=True),
+                                "swing_lows": sorted(_swing_lows[-5:]),
+                                "day_high": _day_high,
+                                "day_low": _day_low,
+                                "pivot": _pivot,
+                                "r1": _r1,
+                                "s1": _s1,
+                                "nearest_resistance": min((h for h in _swing_highs if h > spot), default=0),
+                                "nearest_support": max((l for l in _swing_lows if l < spot), default=0),
+                            }
+                    except Exception as _sr_e:
+                        logger.debug(f"S/R calculation failed: {_sr_e}")
                     self._live_position.entry_context = {
                         "strategy": _strategy_name,
                         "confidence": round((router_result or {}).get("confidence", 0), 3),
@@ -4753,6 +4791,7 @@ class ClaudePilot:
                         "session": "morning" if datetime.now().hour < 10 else "midday" if datetime.now().hour < 12 else "afternoon" if datetime.now().hour < 14 else "closing",
                         "indicators": {k: v for k, v in (ml_indicators or {}).items() if k not in ("router_all",)},
                         "entry_time_ist": datetime.now().strftime("%H:%M:%S"),
+                        "sr_levels": _sr_levels,
                     }
                     logger.info(
                         f"Cycle #{cycle}: [PAPER] Position tracker armed — "

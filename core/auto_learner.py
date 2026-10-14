@@ -398,6 +398,65 @@ class AutoLearner:
         if indicators.get("gap_override"):
             mistakes.append("GAP OVERRIDE was active at entry")
 
+        # 9. Support/Resistance analysis
+        sr = ctx.get("sr_levels", {})
+        direction = ctx.get("indicators", {}).get("router_action", "")
+        entry_dir = "CALL" if pnl_pts < 0 else "PUT"  # infer from loss
+        # Check direction from indicators
+        for k in ("direction", "router_strategy"):
+            pass
+        if sr:
+            nr = sr.get("nearest_resistance", 0)
+            ns = sr.get("nearest_support", 0)
+            pivot = sr.get("pivot", 0)
+            r1 = sr.get("r1", 0)
+            s1 = sr.get("s1", 0)
+            day_high = sr.get("day_high", 0)
+            day_low = sr.get("day_low", 0)
+
+            if entry_price and nr and ns:
+                dist_to_resistance = nr - entry_price
+                dist_to_support = entry_price - ns
+
+                # CALL entry near resistance — price likely to reject
+                if dist_to_resistance > 0 and dist_to_resistance < 15:
+                    mistakes.append(
+                        f"S/R CONFLICT: CALL entry at {entry_price:.0f}, "
+                        f"resistance at {nr:.0f} (only {dist_to_resistance:.0f}pts away)"
+                    )
+                    lessons.append("Entered CALL too close to resistance — wait for breakout above or skip")
+
+                # PUT entry near support — price likely to bounce
+                if dist_to_support > 0 and dist_to_support < 15:
+                    mistakes.append(
+                        f"S/R CONFLICT: PUT entry at {entry_price:.0f}, "
+                        f"support at {ns:.0f} (only {dist_to_support:.0f}pts away)"
+                    )
+                    lessons.append("Entered PUT too close to support — wait for breakdown below or skip")
+
+                # Entry near day high (CALL) or day low (PUT) — risky reversal zone
+                if day_high and abs(entry_price - day_high) < 10:
+                    mistakes.append(f"DAY HIGH ENTRY: Entered at {entry_price:.0f}, day high was {day_high:.0f}")
+                    lessons.append("Entering at day high is risky — often a reversal zone")
+                if day_low and abs(entry_price - day_low) < 10:
+                    mistakes.append(f"DAY LOW ENTRY: Entered at {entry_price:.0f}, day low was {day_low:.0f}")
+                    lessons.append("Entering at day low is risky — often a bounce zone")
+
+                # Entry against pivot direction
+                if pivot:
+                    if entry_price < pivot and exit_reason == "SL":
+                        mistakes.append(f"BELOW PIVOT: Entry {entry_price:.0f} below pivot {pivot:.0f}")
+                        lessons.append("Price below pivot suggests bearish bias — CALL entries are counter-trend")
+
+            # Log S/R context in reasoning
+            self._log_reasoning(strategy, "SR_ANALYSIS", [
+                f"Entry: {entry_price:.0f}",
+                f"Nearest resistance: {nr:.0f} ({nr - entry_price:+.0f}pts)" if nr else "No resistance found",
+                f"Nearest support: {ns:.0f} ({entry_price - ns:+.0f}pts)" if ns else "No support found",
+                f"Pivot: {pivot:.0f} | R1: {r1:.0f} | S1: {s1:.0f}" if pivot else "No pivot data",
+                f"Day range: {day_low:.0f} — {day_high:.0f}" if day_high else "",
+            ], {"sr_levels": sr, "entry_price": entry_price})
+
         if not mistakes:
             mistakes.append("No obvious mistake detected — may be normal market noise")
             lessons.append("Not every loss is a mistake — check if entry followed all rules correctly")
@@ -421,13 +480,28 @@ class AutoLearner:
             "",
             "<b>What went wrong:</b>",
         ]
-        for m in mistakes[:3]:
+        for m in mistakes[:4]:
             lines.append(f"  ⚠ {m}")
         if lessons:
             lines.append("")
             lines.append("<b>Lesson:</b>")
             for l in lessons[:2]:
                 lines.append(f"  💡 {l}")
+
+        # Add S/R context to Telegram message
+        if sr:
+            nr = sr.get("nearest_resistance", 0)
+            ns = sr.get("nearest_support", 0)
+            pivot = sr.get("pivot", 0)
+            if nr or ns or pivot:
+                lines.append("")
+                lines.append("<b>S/R Levels at entry:</b>")
+                if nr:
+                    lines.append(f"  R: {nr:.0f} ({nr - entry_price:+.0f}pts)")
+                if pivot:
+                    lines.append(f"  P: {pivot:.0f}")
+                if ns:
+                    lines.append(f"  S: {ns:.0f} ({entry_price - ns:+.0f}pts)")
 
         # Track mistake patterns persistently
         self._track_mistake_pattern(strategy, mistakes, ctx)
