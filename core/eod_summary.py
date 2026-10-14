@@ -232,6 +232,16 @@ def send_eod_summary(notifier=None, risk_cap: float = 3000.0) -> str:
             notifier.telegram.send_message(summary)
     except Exception as e:
         logger.warning(f"EOD telegram send failed: {e}")
+
+    # Self-improving trade learner — daily analysis after EOD summary
+    try:
+        from core.trade_learner import TradeLearner
+        _tg = notifier.telegram if (notifier and hasattr(notifier, "telegram")) else None
+        learner = TradeLearner(notifier=_tg)
+        learner.daily_analysis()
+    except Exception as e:
+        logger.warning(f"TradeLearner daily analysis failed: {e}")
+
     return summary
 
 

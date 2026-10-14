@@ -460,6 +460,18 @@ class ClaudePilot:
             logger.warning(f"Trade journal init failed: {e}")
             self._journal = None
 
+        # Self-improving trade learner (Hermes-style)
+        self._trade_learner = None
+        try:
+            from core.trade_learner import TradeLearner
+            self._trade_learner = TradeLearner(
+                journal_path=str(self._journal.path) if self._journal else "logs/trade_journal.jsonl",
+                notifier=self.notifier if hasattr(self, "notifier") else None,
+            )
+            logger.info("TradeLearner initialized (self-improving mode)")
+        except Exception as e:
+            logger.warning(f"TradeLearner init failed: {e}")
+
         # Multi-strategy SignalRouter (opt-in via MULTI_STRATEGY=true)
         # Router A: S1-S5 (PSAR, MACD, OI, VWAP, Supertrend)
         # Router B: S6-S13 (ORB, RSI2, HolyGrail, RangeReversal, MomConf, MktEnergy, EnergyFlow, Donchian) — independent positions
@@ -1133,6 +1145,25 @@ class ClaudePilot:
                 )
         except Exception as _e:
             logger.debug(f"Exit notification failed: {_e}")
+
+        # ── Self-improving learner (post-trade analysis) ──────────────
+        if self._trade_learner and _known_outcome:
+            try:
+                _strat_name = ""
+                for _rtr in (self._signal_router, self._signal_router_b):
+                    if _rtr and _rtr.active_position:
+                        _strat_name = _rtr.active_position.strategy
+                        break
+                self._trade_learner.on_trade_closed({
+                    "strategy_name": _strat_name or getattr(pos, "_strategy_name", ""),
+                    "result": "WIN" if pnl_pts > 3 else ("LOSS" if pnl_pts < -3 else "BREAKEVEN"),
+                    "pnl_pts": pnl_pts,
+                    "direction": pos.direction,
+                    "exit_reason": reason,
+                    "duration_sec": int((datetime.now() - pos.entry_time).total_seconds()) if hasattr(pos, "entry_time") and pos.entry_time else 0,
+                })
+            except Exception as _e:
+                logger.debug(f"TradeLearner post-trade failed: {_e}")
 
     def _reconcile_broker_position(self) -> None:
         """
