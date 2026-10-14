@@ -338,6 +338,8 @@ class LivePosition:
     # no premium-based exchange SL can be computed (skip placement).
     exchange_sl_trigger: float = 0.0
     exchange_sl_limit: float = 0.0
+    # Auto-learner entry context (for post-mortem analysis on exit)
+    entry_context: dict = field(default_factory=dict)
     # Trail-after-TP: for strategies (S10/S11) that trail 20 pts behind peak
     # once TP is reached, instead of exiting at fixed TP.
     trail_after_tp: bool = False
@@ -1203,6 +1205,7 @@ class ClaudePilot:
                     _session = "afternoon"
                 else:
                     _session = "closing"
+                _entry_ctx = getattr(pos, "entry_context", {}) or {}
                 self._auto_learner.on_trade_closed(
                     strategy=_strat_name or getattr(pos, "_strategy_name", ""),
                     result=_result,
@@ -1210,6 +1213,9 @@ class ClaudePilot:
                     exit_reason=reason,
                     session=_session,
                     duration_sec=_dur,
+                    entry_context=_entry_ctx,
+                    exit_price=spot,
+                    peak_unrealized=getattr(pos, "peak_unrealized", 0),
                 )
             except Exception as _e:
                 logger.debug(f"AutoLearner post-trade failed: {_e}")
@@ -4737,6 +4743,17 @@ class ClaudePilot:
                         self._live_position.trail_after_tp = True
                         self._live_position.trail_after_tp_step = getattr(
                             _winning_eng, "TRAIL_AFTER_TP_STEP", 20.0)
+                    self._live_position.entry_context = {
+                        "strategy": _strategy_name,
+                        "confidence": round((router_result or {}).get("confidence", 0), 3),
+                        "vix": self._current_vix,
+                        "atr": round(self._current_atr, 1),
+                        "sl_pts": sl_pts, "tp_pts": tp_pts,
+                        "spot": spot,
+                        "session": "morning" if datetime.now().hour < 10 else "midday" if datetime.now().hour < 12 else "afternoon" if datetime.now().hour < 14 else "closing",
+                        "indicators": {k: v for k, v in (ml_indicators or {}).items() if k not in ("router_all",)},
+                        "entry_time_ist": datetime.now().strftime("%H:%M:%S"),
+                    }
                     logger.info(
                         f"Cycle #{cycle}: [PAPER] Position tracker armed — "
                         f"[{_strategy_name}] {direction} entry={spot:.0f} "

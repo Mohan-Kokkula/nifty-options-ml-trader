@@ -212,7 +212,8 @@ class AutoLearner:
 
     def on_trade_closed(self, strategy: str, result: str, pnl_pts: float,
                         exit_reason: str = "", session: str = "",
-                        duration_sec: int = 0):
+                        duration_sec: int = 0, entry_context: dict = None,
+                        exit_price: float = 0, peak_unrealized: float = 0):
         """Update learning state after a trade closes.
         This is where the actual learning happens."""
         if not self._enabled or not strategy:
@@ -323,6 +324,137 @@ class AutoLearner:
             for a in actions_taken:
                 lines.append(f"  → {a}")
             self._send("\n".join(lines))
+
+        # ── Post-mortem: analyze WHY this trade failed/succeeded ──
+        if entry_context and not is_win:
+            self._post_mortem(strategy, pnl_pts, exit_reason, duration_sec,
+                              entry_context, exit_price, peak_unrealized, session)
+
+    # ------------------------------------------------------------------
+    # Post-mortem analysis — "what went wrong" thinking
+    # ------------------------------------------------------------------
+
+    def _post_mortem(self, strategy: str, pnl_pts: float, exit_reason: str,
+                     duration_sec: int, ctx: dict, exit_price: float,
+                     peak_unrealized: float, session: str):
+        """Analyze a losing trade to identify what went wrong.
+        Examines entry conditions and finds the likely mistake."""
+        mistakes = []
+        lessons = []
+
+        entry_price = ctx.get("spot", 0)
+        entry_conf = ctx.get("confidence", 0)
+        entry_vix = ctx.get("vix", 0) or 0
+        entry_atr = ctx.get("atr", 0) or 0
+        sl_pts = ctx.get("sl_pts", 0)
+        tp_pts = ctx.get("tp_pts", 0)
+        indicators = ctx.get("indicators", {})
+        entry_session = ctx.get("session", "")
+
+        # 1. Quick SL hit — entered at bad timing
+        if exit_reason == "SL" and duration_sec < 120:
+            mistakes.append("QUICK SL HIT: Price reversed within 2 minutes of entry")
+            lessons.append("Signal may have been a false breakout or chop zone entry")
+            if entry_atr > 0 and sl_pts < entry_atr * 0.8:
+                mistakes.append(f"SL ({sl_pts:.0f}pts) was tighter than ATR ({entry_atr:.1f}pts)")
+                lessons.append("Consider widening SL to at least 1x ATR for this strategy")
+
+        # 2. Low confidence entry
+        if entry_conf > 0 and entry_conf < 0.55:
+            mistakes.append(f"LOW CONFIDENCE ENTRY: Confidence was only {entry_conf:.0%}")
+            lessons.append("Strategy fired on weak signal — consider higher confidence threshold")
+
+        # 3. High VIX without wider SL
+        if entry_vix > 18 and exit_reason == "SL":
+            mistakes.append(f"HIGH VIX ({entry_vix:.1f}) with standard SL")
+            lessons.append("In high VIX, price swings are wider — SL may need VIX-based widening")
+
+        # 4. Late session entry that lost
+        if entry_session in ("afternoon", "closing") and exit_reason == "SL":
+            mistakes.append(f"LATE SESSION ENTRY: Entered during {entry_session}")
+            lessons.append("Late entries have less time for target + more theta decay")
+
+        # 5. Profit leak — had unrealized profit but lost it
+        if peak_unrealized > 10 and pnl_pts < 0:
+            leak = peak_unrealized - pnl_pts
+            mistakes.append(f"PROFIT LEAK: Peak unrealized was +{peak_unrealized:.0f}pts but exited at {pnl_pts:+.0f}pts")
+            lessons.append(f"Had +{peak_unrealized:.0f}pts profit but gave it all back — trail stop could have locked some in")
+
+        # 6. Wrong direction — big adverse move
+        if abs(pnl_pts) > 40 and exit_reason == "SL":
+            mistakes.append(f"LARGE LOSS ({pnl_pts:+.0f}pts): Strong adverse move against position")
+            lessons.append("Market moved sharply opposite — check if counter-trend indicators were ignored")
+
+        # 7. ADX/trend filter analysis
+        adx = indicators.get("adx") or indicators.get("adx_15m") or 0
+        if adx and adx < 15 and exit_reason == "SL":
+            mistakes.append(f"WEAK TREND: ADX was {adx:.0f} at entry (below 15)")
+            lessons.append("Low ADX indicates choppy market — trend strategies underperform in chop")
+
+        # 8. Recovery mode or gap override entry
+        if indicators.get("recovery_mode"):
+            mistakes.append("RECOVERY MODE was active at entry")
+            lessons.append("Entered during recovery from previous loss — may compound losses")
+        if indicators.get("gap_override"):
+            mistakes.append("GAP OVERRIDE was active at entry")
+
+        if not mistakes:
+            mistakes.append("No obvious mistake detected — may be normal market noise")
+            lessons.append("Not every loss is a mistake — check if entry followed all rules correctly")
+
+        # Log the full post-mortem
+        self._log_reasoning(strategy, "POST_MORTEM", mistakes + lessons, {
+            "entry_context": ctx,
+            "exit_price": exit_price,
+            "peak_unrealized": peak_unrealized,
+            "pnl_pts": pnl_pts,
+            "exit_reason": exit_reason,
+            "duration_sec": duration_sec,
+        })
+
+        # Send condensed post-mortem to Telegram
+        lines = [
+            f"<b>🔍 POST-MORTEM: {strategy} ({pnl_pts:+.0f}pts)</b>",
+            "",
+            f"Entry: {entry_price:.0f} at {ctx.get('entry_time_ist', '?')} | Exit: {exit_reason}",
+            f"VIX={entry_vix:.1f} ATR={entry_atr:.1f} Conf={entry_conf:.0%}",
+            "",
+            "<b>What went wrong:</b>",
+        ]
+        for m in mistakes[:3]:
+            lines.append(f"  ⚠ {m}")
+        if lessons:
+            lines.append("")
+            lines.append("<b>Lesson:</b>")
+            for l in lessons[:2]:
+                lines.append(f"  💡 {l}")
+
+        # Track mistake patterns persistently
+        self._track_mistake_pattern(strategy, mistakes, ctx)
+
+        self._send("\n".join(lines))
+
+    def _track_mistake_pattern(self, strategy: str, mistakes: list, ctx: dict):
+        """Track recurring mistake patterns across days."""
+        patterns = self._persistent.setdefault("mistake_patterns", {})
+        if strategy not in patterns:
+            patterns[strategy] = {}
+        for m in mistakes:
+            tag = m.split(":")[0].strip() if ":" in m else m[:30]
+            if tag not in patterns[strategy]:
+                patterns[strategy][tag] = {"count": 0, "last_seen": ""}
+            patterns[strategy][tag]["count"] += 1
+            patterns[strategy][tag]["last_seen"] = date.today().isoformat()
+
+        # Alert if same mistake keeps repeating
+        for tag, info in patterns.get(strategy, {}).items():
+            if info["count"] >= 3 and info["count"] % 3 == 0:
+                self._send(
+                    f"<b>🧠 RECURRING PATTERN: {strategy}</b>\n"
+                    f"'{tag}' has happened {info['count']} times\n"
+                    f"This is a systematic issue worth investigating"
+                )
+        self._save_persistent()
 
     # ------------------------------------------------------------------
     # Internal learning algorithms
