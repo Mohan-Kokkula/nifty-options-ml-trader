@@ -485,6 +485,7 @@ class ClaudePilot:
                 journal_path=str(self._journal.path) if self._journal else "logs/trade_journal.jsonl",
                 notifier=_tg,
             )
+            self._auto_learner.bootstrap_from_journal()
             self._auto_learner.initialize_from_history()
             logger.info("AutoLearner initialized (self-improving weights active)")
         except Exception as e:

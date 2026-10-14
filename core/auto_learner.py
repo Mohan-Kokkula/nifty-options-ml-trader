@@ -675,6 +675,203 @@ class AutoLearner:
     # Morning initialization — use persistent data for starting weights
     # ------------------------------------------------------------------
 
+    def bootstrap_from_journal(self):
+        """Read ALL historical trades and learn from them on startup.
+        Called once — builds persistent state from the trade journal so
+        the AutoLearner starts smart, not blank."""
+        if not self._enabled:
+            return
+        if not self.journal_path.exists():
+            logger.info("AutoLearner: no journal to bootstrap from")
+            return
+
+        # Skip if already bootstrapped with data
+        hist = self._persistent.get("strategy_history", {})
+        if sum(h.get("total_trades", 0) for h in hist.values()) > 5:
+            logger.info("AutoLearner: already bootstrapped — skipping journal scan")
+            return
+
+        trades = []
+        try:
+            with open(self.journal_path, "r") as f:
+                for line in f:
+                    try:
+                        trades.append(json.loads(line))
+                    except Exception:
+                        pass
+        except Exception as e:
+            logger.warning(f"AutoLearner bootstrap read failed: {e}")
+            return
+
+        if not trades:
+            return
+
+        n_wins = 0
+        n_losses = 0
+
+        for t in trades:
+            result = t.get("result", "")
+            if result not in ("WIN", "LOSS"):
+                continue
+
+            strategy = t.get("strategy_name", "ML")
+            pnl_pts = t.get("pnl_pts", 0) or 0
+            is_win = result == "WIN"
+            session = t.get("session", "?")
+            exit_reason = t.get("exit_reason", "")
+            duration_sec = t.get("duration_sec", 0) or 0
+            conf = t.get("confidence", 0) or 0
+            vix = t.get("vix", 0) or 0
+            atr = t.get("atr_5m", 0) or 0
+            peak = t.get("peak_profit_pts", 0) or 0
+            vix_regime = t.get("vix_regime", "")
+
+            if is_win:
+                n_wins += 1
+            else:
+                n_losses += 1
+
+            # Build strategy history
+            sh = self._persistent.setdefault("strategy_history", {})
+            if strategy not in sh:
+                sh[strategy] = {"total_trades": 0, "total_wins": 0, "total_pnl": 0.0, "best_session": {}}
+            sh[strategy]["total_trades"] += 1
+            if is_win:
+                sh[strategy]["total_wins"] += 1
+            sh[strategy]["total_pnl"] += pnl_pts
+
+            # Session performance
+            sess = sh[strategy].setdefault("best_session", {})
+            if session not in sess:
+                sess[session] = {"trades": 0, "wins": 0}
+            sess[session]["trades"] += 1
+            if is_win:
+                sess[session]["wins"] += 1
+
+            # Time patterns
+            tp = self._persistent.setdefault("time_patterns", {})
+            if strategy not in tp:
+                tp[strategy] = {}
+            s_key = session.lower() if session else "unknown"
+            if s_key not in tp[strategy]:
+                tp[strategy][s_key] = {"trades": 0, "wins": 0, "pnl": 0.0}
+            tp[strategy][s_key]["trades"] += 1
+            if is_win:
+                tp[strategy][s_key]["wins"] += 1
+            tp[strategy][s_key]["pnl"] += pnl_pts
+
+            # SL/TP history
+            slh = self._persistent.setdefault("sl_tp_history", {})
+            if strategy not in slh:
+                slh[strategy] = {"quick_sl_count": 0, "sl_count": 0, "tp_count": 0, "trail_count": 0, "total": 0}
+            slh[strategy]["total"] += 1
+            if exit_reason == "SL":
+                slh[strategy]["sl_count"] += 1
+                if duration_sec < 120:
+                    slh[strategy]["quick_sl_count"] += 1
+            elif exit_reason in ("TP", "TRAIL_SL"):
+                slh[strategy]["tp_count"] += 1
+                if exit_reason == "TRAIL_SL":
+                    slh[strategy]["trail_count"] += 1
+
+            # VIX regime stats
+            if vix_regime:
+                vr_key = f"{strategy}_{vix_regime}"
+                vrs = self._persistent.setdefault("vix_regime_stats", {})
+                if vr_key not in vrs:
+                    vrs[vr_key] = {"trades": 0, "wins": 0, "pnl": 0.0}
+                vrs[vr_key]["trades"] += 1
+                if is_win:
+                    vrs[vr_key]["wins"] += 1
+                vrs[vr_key]["pnl"] += pnl_pts
+
+            # Analyze losing trades for mistake patterns
+            if not is_win:
+                mp = self._persistent.setdefault("mistake_patterns", {})
+                if strategy not in mp:
+                    mp[strategy] = {}
+
+                if exit_reason == "SL" and duration_sec < 120:
+                    tag = "QUICK SL HIT"
+                    mp[strategy].setdefault(tag, {"count": 0, "last_seen": ""})
+                    mp[strategy][tag]["count"] += 1
+                    mp[strategy][tag]["last_seen"] = t.get("trade_date", "")
+
+                if conf and conf < 55:
+                    tag = "LOW CONFIDENCE ENTRY"
+                    mp[strategy].setdefault(tag, {"count": 0, "last_seen": ""})
+                    mp[strategy][tag]["count"] += 1
+                    mp[strategy][tag]["last_seen"] = t.get("trade_date", "")
+
+                if vix and vix > 18 and exit_reason == "SL":
+                    tag = "HIGH VIX"
+                    mp[strategy].setdefault(tag, {"count": 0, "last_seen": ""})
+                    mp[strategy][tag]["count"] += 1
+                    mp[strategy][tag]["last_seen"] = t.get("trade_date", "")
+
+                if session in ("AFTERNOON", "CLOSING") and exit_reason == "SL":
+                    tag = "LATE SESSION ENTRY"
+                    mp[strategy].setdefault(tag, {"count": 0, "last_seen": ""})
+                    mp[strategy][tag]["count"] += 1
+                    mp[strategy][tag]["last_seen"] = t.get("trade_date", "")
+
+                if peak > 10 and pnl_pts < 0:
+                    tag = "PROFIT LEAK"
+                    mp[strategy].setdefault(tag, {"count": 0, "last_seen": ""})
+                    mp[strategy][tag]["count"] += 1
+                    mp[strategy][tag]["last_seen"] = t.get("trade_date", "")
+
+                if vix_regime == "CHOP" and exit_reason == "SL":
+                    tag = "CHOP REGIME LOSS"
+                    mp[strategy].setdefault(tag, {"count": 0, "last_seen": ""})
+                    mp[strategy][tag]["count"] += 1
+                    mp[strategy][tag]["last_seen"] = t.get("trade_date", "")
+
+        self._save_persistent()
+
+        total_trades = n_wins + n_losses
+        if total_trades == 0:
+            return
+
+        # Build and send bootstrap summary
+        sh = self._persistent.get("strategy_history", {})
+        mp = self._persistent.get("mistake_patterns", {})
+
+        lines = [
+            f"<b>🧠 AUTO-LEARN: Bootstrapped from {total_trades} historical trades</b>",
+            f"",
+            f"Overall: {n_wins}W/{n_losses}L ({n_wins/total_trades*100:.0f}% WR)",
+            "",
+            "<b>Strategy Performance:</b>",
+        ]
+        for strat, h in sh.items():
+            total = h["total_trades"]
+            wins = h["total_wins"]
+            wr = wins / total * 100 if total else 0
+            lines.append(f"  {strat}: {wins}W/{total-wins}L ({wr:.0f}%) PnL={h['total_pnl']:+.0f}pts")
+
+        # Show detected patterns
+        all_patterns = []
+        for strat, patterns in mp.items():
+            for tag, info in patterns.items():
+                if info["count"] >= 2:
+                    all_patterns.append((info["count"], strat, tag))
+        if all_patterns:
+            all_patterns.sort(reverse=True)
+            lines.append("")
+            lines.append("<b>Recurring Mistakes Found:</b>")
+            for count, strat, tag in all_patterns[:5]:
+                lines.append(f"  ⚠ {tag}: {count}x ({strat})")
+
+        self._send("\n".join(lines))
+        self._log_reasoning("ALL", "BOOTSTRAP", [
+            f"Loaded {total_trades} trades from journal",
+            f"WR: {n_wins}/{total_trades}",
+            f"Strategies: {list(sh.keys())}",
+            f"Patterns found: {len(all_patterns)}",
+        ])
+        logger.info(f"AutoLearner: bootstrapped from {total_trades} historical trades")
+
     def initialize_from_history(self):
         """Set initial weights from persistent history.
         Called at start of day to pre-weight strategies based on
