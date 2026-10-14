@@ -129,11 +129,15 @@ def get_bar_permutation(df: pd.DataFrame, start_index: int = 0) -> pd.DataFrame:
 
 
 def backtest_donchian(df: pd.DataFrame, lookback: int = DEFAULT_LOOKBACK,
-                      walkforward: bool = False) -> dict:
+                      walkforward: bool = False,
+                      sl: int = None, tp: int = None, trail: int = None) -> dict:
     """Backtest Donchian breakout with SL/TP/Trail on 5min bars.
 
     Returns dict with trades list and summary stats.
     """
+    sl = sl if sl is not None else SL
+    tp = tp if tp is not None else TP
+    trail = trail if trail is not None else TRAIL_AFTER_TP_STEP
     closes = df["close"]
     ema = closes.ewm(span=EMA_PERIOD, adjust=False).mean()
     adx = compute_adx(df, ADX_PERIOD)
@@ -200,7 +204,7 @@ def backtest_donchian(df: pd.DataFrame, lookback: int = DEFAULT_LOOKBACK,
                     else:
                         if high > trail_high:
                             trail_high = high
-                        trail_sl = trail_high - TRAIL_AFTER_TP_STEP
+                        trail_sl = trail_high - trail
                         if low <= trail_sl:
                             pnl = trail_sl - entry_price
                             trades.append({"entry": entry_price, "exit": trail_sl,
@@ -224,7 +228,7 @@ def backtest_donchian(df: pd.DataFrame, lookback: int = DEFAULT_LOOKBACK,
                     else:
                         if low < trail_low:
                             trail_low = low
-                        trail_sl = trail_low + TRAIL_AFTER_TP_STEP
+                        trail_sl = trail_low + trail
                         if high >= trail_sl:
                             pnl = entry_price - trail_sl
                             trades.append({"entry": entry_price, "exit": trail_sl,
@@ -261,8 +265,8 @@ def backtest_donchian(df: pd.DataFrame, lookback: int = DEFAULT_LOOKBACK,
             if cur_sig == 1 and price > ema_val:
                 entry_price = price
                 direction = 1
-                sl_price = entry_price - SL
-                tp_price = entry_price + TP
+                sl_price = entry_price - sl
+                tp_price = entry_price + tp
                 in_trade = True
                 trailing = False
                 trail_high = price
@@ -270,8 +274,8 @@ def backtest_donchian(df: pd.DataFrame, lookback: int = DEFAULT_LOOKBACK,
             elif cur_sig == -1 and price < ema_val:
                 entry_price = price
                 direction = -1
-                sl_price = entry_price + SL
-                tp_price = entry_price - TP
+                sl_price = entry_price + sl
+                tp_price = entry_price - tp
                 in_trade = True
                 trailing = False
                 trail_low = price
@@ -317,7 +321,8 @@ def backtest_donchian(df: pd.DataFrame, lookback: int = DEFAULT_LOOKBACK,
 
 
 def run_mcpt(df: pd.DataFrame, real_pf: float, n_perms: int = 200,
-             walkforward: bool = False) -> float:
+             walkforward: bool = False,
+             sl: int = None, tp: int = None, trail: int = None) -> float:
     """Run Monte Carlo Permutation Test.
     Returns p-value: fraction of permutations that achieved >= real PF."""
     perm_better = 1  # start at 1 (includes the real data)
@@ -325,7 +330,8 @@ def run_mcpt(df: pd.DataFrame, real_pf: float, n_perms: int = 200,
 
     for i in range(1, n_perms):
         perm_df = get_bar_permutation(df, start_index=TRAIN_BARS if walkforward else 0)
-        result = backtest_donchian(perm_df, walkforward=walkforward)
+        result = backtest_donchian(perm_df, walkforward=walkforward,
+                                   sl=sl, tp=tp, trail=trail)
         perm_pf = result["pf"]
         perm_pfs.append(perm_pf)
         if perm_pf >= real_pf:
@@ -348,6 +354,9 @@ def main():
                         help="Run MCPT validation after backtest")
     parser.add_argument("--perms", type=int, default=200,
                         help="Number of MCPT permutations")
+    parser.add_argument("--sl", type=int, default=None, help="Stop loss points")
+    parser.add_argument("--tp", type=int, default=None, help="Target points")
+    parser.add_argument("--trail", type=int, default=None, help="Trail step points")
     args = parser.parse_args()
 
     data_path = Path(args.data)
@@ -356,15 +365,20 @@ def main():
         print("Expected CSV with columns: datetime,open,high,low,close,volume")
         sys.exit(1)
 
+    _sl = args.sl if args.sl is not None else SL
+    _tp = args.tp if args.tp is not None else TP
+    _trail = args.trail if args.trail is not None else TRAIL_AFTER_TP_STEP
+
     df = load_data(str(data_path))
     print(f"Loaded {len(df)} bars from {df.index[0]} to {df.index[-1]}")
-    print(f"Config: SL={SL} TP={TP} Trail={TRAIL_AFTER_TP_STEP} "
+    print(f"Config: SL={_sl} TP={_tp} Trail={_trail} "
           f"Lookback={args.lookback} EMA={EMA_PERIOD}")
     print()
 
     # Run backtest
     result = backtest_donchian(df, lookback=args.lookback,
-                                walkforward=args.walkforward)
+                                walkforward=args.walkforward,
+                                sl=_sl, tp=_tp, trail=_trail)
     print("=" * 50)
     print("S13 DONCHIAN BREAKOUT BACKTEST RESULTS")
     print("=" * 50)
@@ -383,7 +397,8 @@ def main():
         print("=" * 50)
         p_value, perm_pfs = run_mcpt(
             df, result["pf"], n_perms=args.perms,
-            walkforward=args.walkforward
+            walkforward=args.walkforward,
+            sl=_sl, tp=_tp, trail=_trail
         )
         print(f"\n  Real PF:    {result['pf']:.3f}")
         print(f"  Perm Mean:  {np.mean(perm_pfs):.3f}")
