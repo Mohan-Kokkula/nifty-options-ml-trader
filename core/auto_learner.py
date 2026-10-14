@@ -29,6 +29,7 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 LEARNER_STATE_PATH = Path("data/auto_learner_state.json")
+REASONING_LOG_PATH = Path("logs/auto_learner_reasoning.jsonl")
 
 # Safety limits
 WEIGHT_MIN = 0.5
@@ -105,6 +106,25 @@ class AutoLearner:
                 pass
         logger.info(f"AutoLearner: {text[:300]}")
 
+    def _log_reasoning(self, strategy: str, action: str, reasons: list,
+                       data: dict = None):
+        """Write a structured reasoning entry — the 'thinking' log.
+        Every decision the AutoLearner makes is recorded with WHY."""
+        entry = {
+            "timestamp": datetime.now().isoformat(),
+            "strategy": strategy,
+            "action": action,
+            "reasons": reasons,
+            "data": data or {},
+        }
+        try:
+            REASONING_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+            with open(REASONING_LOG_PATH, "a") as f:
+                f.write(json.dumps(entry, default=str) + "\n")
+        except Exception:
+            pass
+        logger.info(f"AutoLearner THINKING: [{strategy}] {action} — {'; '.join(reasons)}")
+
     # ------------------------------------------------------------------
     # Daily reset
     # ------------------------------------------------------------------
@@ -140,15 +160,30 @@ class AutoLearner:
         self._check_daily_reset()
 
         if strategy in self.paused:
+            self._log_reasoning(strategy, "BLOCKED", [
+                f"Strategy is auto-paused (streak: {self.streak.get(strategy, 0)})",
+                f"PnL today: {self.pnl_today.get(strategy, 0):+.0f}pts",
+                "Signal rejected — paused for rest of day",
+            ], {"raw_confidence": raw_confidence})
             return 0.0
 
         weight = self.weights.get(strategy, 1.0)
         adjusted = raw_confidence * weight
         if weight != 1.0:
-            logger.debug(
-                f"AutoLearner: {strategy} conf {raw_confidence:.2f} "
-                f"* weight {weight:.2f} = {adjusted:.2f}"
-            )
+            hist = self._persistent.get("strategy_history", {}).get(strategy, {})
+            reasons = [f"Weight {weight:.2f}x applied to confidence"]
+            if weight > 1.0:
+                reasons.append(f"Boosted: WR {hist.get('total_wins', 0)}/{hist.get('total_trades', 0)} historically")
+            else:
+                reasons.append(f"Penalized: WR {hist.get('total_wins', 0)}/{hist.get('total_trades', 0)} historically")
+            streak = self.streak.get(strategy, 0)
+            if streak != 0:
+                reasons.append(f"Current streak: {streak:+d}")
+            self._log_reasoning(strategy, "WEIGHT_APPLIED", reasons, {
+                "raw_confidence": round(raw_confidence, 2),
+                "weight": weight,
+                "adjusted_confidence": round(adjusted, 2),
+            })
         return adjusted
 
     def adjust_sl_tp(self, strategy: str, sl: float, tp: float) -> tuple:
@@ -165,10 +200,20 @@ class AutoLearner:
         new_tp = max(20, tp + tp_adj)
 
         if sl_adj != 0 or tp_adj != 0:
-            logger.debug(
-                f"AutoLearner: {strategy} SL {sl:.0f}→{new_sl:.0f} "
-                f"TP {tp:.0f}→{new_tp:.0f}"
-            )
+            h = self._persistent.get("sl_tp_history", {}).get(strategy, {})
+            reasons = []
+            if sl_adj > 0:
+                reasons.append(f"SL widened +{sl_adj}pts: quick SL ratio {h.get('quick_sl_count', 0)}/{h.get('total', 0)}")
+            elif sl_adj < 0:
+                reasons.append(f"SL tightened {sl_adj}pts")
+            if tp_adj < 0:
+                reasons.append(f"TP tightened {tp_adj}pts: SL ratio {h.get('sl_count', 0)}/{h.get('total', 0)} too high")
+            elif tp_adj > 0:
+                reasons.append(f"TP widened +{tp_adj}pts: trailing working well")
+            self._log_reasoning(strategy, "SL_TP_ADJUSTED", reasons, {
+                "original_sl": sl, "new_sl": new_sl,
+                "original_tp": tp, "new_tp": new_tp,
+            })
         return new_sl, new_tp
 
     def is_paused(self, strategy: str) -> bool:
@@ -205,8 +250,15 @@ class AutoLearner:
         cur_streak = self.streak[strategy]
 
         # ── Auto-pause on losing streak ──
+        paused_now = False
         if cur_streak <= -PAUSE_AFTER_LOSSES and strategy not in self.paused:
             self.paused.add(strategy)
+            paused_now = True
+            self._log_reasoning(strategy, "PAUSED", [
+                f"{abs(cur_streak)} consecutive losses hit pause threshold ({PAUSE_AFTER_LOSSES})",
+                f"PnL today: {self.pnl_today.get(strategy, 0):+.0f}pts",
+                "Strategy disabled for rest of day to stop bleeding",
+            ])
             self._send(
                 f"<b>AUTO-LEARN: {strategy} PAUSED</b>\n"
                 f"{abs(cur_streak)} consecutive losses today\n"
@@ -216,25 +268,76 @@ class AutoLearner:
             )
 
         # ── Adjust weights based on performance ──
+        old_weight = self.weights.get(strategy, 1.0)
         self._update_weight(strategy)
+        new_weight = self.weights.get(strategy, 1.0)
 
         # ── Learn SL/TP adjustments ──
+        old_sl_adj = self.sl_adjust.get(strategy, 0)
+        old_tp_adj = self.tp_adjust.get(strategy, 0)
         self._learn_sl_tp(strategy, pnl_pts, exit_reason, duration_sec)
+        new_sl_adj = self.sl_adjust.get(strategy, 0)
+        new_tp_adj = self.tp_adjust.get(strategy, 0)
 
         # ── Update persistent history ──
         self._update_persistent(strategy, is_win, pnl_pts, session)
 
-        # ── Notify on significant changes ──
-        new_weight = self.weights.get(strategy, 1.0)
-        if abs(new_weight - 1.0) >= 0.15:
-            direction = "BOOSTED" if new_weight > 1.0 else "PENALIZED"
-            self._send(
-                f"<b>AUTO-LEARN: {strategy} {direction}</b>\n"
-                f"Weight: {new_weight:.2f}x "
-                f"({self.win_count.get(strategy, 0)}W/"
-                f"{self.trade_count.get(strategy, 0) - self.win_count.get(strategy, 0)}L today)\n"
-                f"PnL: {self.pnl_today.get(strategy, 0):+.0f}pts"
-            )
+        # ── Build thinking summary ──
+        hist = self._persistent.get("strategy_history", {}).get(strategy, {})
+        total_t = hist.get("total_trades", 0)
+        total_w = hist.get("total_wins", 0)
+        total_wr = (total_w / total_t * 100) if total_t else 0
+
+        thinking_reasons = [
+            f"Trade result: {result} ({pnl_pts:+.0f}pts, exit={exit_reason})",
+            f"Streak now: {cur_streak:+d}",
+            f"Today: {self.win_count.get(strategy, 0)}W/{self.trade_count[strategy] - self.win_count.get(strategy, 0)}L, PnL {self.pnl_today[strategy]:+.0f}pts",
+            f"All-time: {total_w}W/{total_t - total_w}L ({total_wr:.0f}% WR)",
+        ]
+
+        actions_taken = []
+        if new_weight != old_weight:
+            actions_taken.append(f"Weight: {old_weight:.2f}→{new_weight:.2f}x")
+            if new_weight > old_weight:
+                thinking_reasons.append(f"DECISION: Boost weight — winning pattern detected")
+            else:
+                thinking_reasons.append(f"DECISION: Penalize weight — losing pattern detected")
+        if new_sl_adj != old_sl_adj:
+            actions_taken.append(f"SL adjust: {old_sl_adj:+d}→{new_sl_adj:+d}pts")
+        if new_tp_adj != old_tp_adj:
+            actions_taken.append(f"TP adjust: {old_tp_adj:+d}→{new_tp_adj:+d}pts")
+        if paused_now:
+            actions_taken.append("PAUSED for rest of day")
+        if not actions_taken:
+            actions_taken.append("No adjustment (insufficient data or within normal range)")
+
+        thinking_reasons.append(f"Actions: {', '.join(actions_taken)}")
+
+        self._log_reasoning(strategy, "POST_TRADE_ANALYSIS", thinking_reasons, {
+            "result": result, "pnl_pts": pnl_pts, "exit_reason": exit_reason,
+            "session": session, "duration_sec": duration_sec,
+            "streak": cur_streak, "weight": new_weight,
+            "sl_adjust": new_sl_adj, "tp_adjust": new_tp_adj,
+        })
+
+        # ── Send thinking summary to Telegram ──
+        has_changes = (new_weight != old_weight or new_sl_adj != old_sl_adj
+                       or new_tp_adj != old_tp_adj or paused_now)
+        if has_changes:
+            emoji = "🟢" if is_win else "🔴"
+            lines = [
+                f"<b>🧠 AUTO-LEARN THINKING: {strategy}</b>",
+                f"",
+                f"{emoji} {result} {pnl_pts:+.0f}pts ({exit_reason})",
+                f"Streak: {cur_streak:+d} | Session: {session}",
+                f"Today: {self.win_count.get(strategy, 0)}W/{self.trade_count[strategy] - self.win_count.get(strategy, 0)}L ({self.pnl_today[strategy]:+.0f}pts)",
+                f"All-time: {total_wr:.0f}% WR over {total_t} trades",
+                f"",
+                f"<b>Decisions:</b>",
+            ]
+            for a in actions_taken:
+                lines.append(f"  → {a}")
+            self._send("\n".join(lines))
 
     # ------------------------------------------------------------------
     # Internal learning algorithms
@@ -403,10 +506,15 @@ class AutoLearner:
             if abs(weight - 1.0) >= 0.05:
                 self.weights[strategy] = round(weight, 2)
                 adjustments.append(f"  {strategy}: {weight:.2f}x (WR={wr:.0%} over {total}T)")
+                self._log_reasoning(strategy, "MORNING_WEIGHT", [
+                    f"Historical WR: {wins}W/{total - wins}L ({wr:.0%})",
+                    f"Starting weight: {weight:.2f}x",
+                    f"Total PnL: {h.get('total_pnl', 0):+.0f}pts",
+                ], {"weight": weight, "total_trades": total, "win_rate": round(wr, 2)})
 
         if adjustments:
             self._send(
-                f"<b>AUTO-LEARN: Morning initialization</b>\n"
+                f"<b>🧠 AUTO-LEARN: Morning Thinking</b>\n"
                 f"Starting weights from historical performance:\n"
                 + "\n".join(adjustments)
             )
