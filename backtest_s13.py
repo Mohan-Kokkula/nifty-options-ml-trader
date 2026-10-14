@@ -37,8 +37,8 @@ ADX_MIN = 15
 
 def load_data(path: str) -> pd.DataFrame:
     """Load 5min OHLCV CSV."""
-    df = pd.read_csv(path, parse_dates=["datetime"])
-    df = df.set_index("datetime").sort_index()
+    df = pd.read_csv(path, parse_dates=["date"])
+    df = df.set_index("date").sort_index()
     for col in ("open", "high", "low", "close"):
         df[col] = pd.to_numeric(df[col], errors="coerce")
     df = df.dropna(subset=["open", "high", "low", "close"])
