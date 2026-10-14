@@ -37,8 +37,9 @@ SL_ADJUST_MIN = -15
 SL_ADJUST_MAX = 15
 TP_ADJUST_MIN = -15
 TP_ADJUST_MAX = 15
-PAUSE_AFTER_LOSSES = 3
-MIN_TRADES_FOR_ADJUST = 3
+PAUSE_AFTER_LOSSES = 2
+MIN_TRADES_FOR_ADJUST = 2
+MIN_PERSISTENT_TRADES = 5  # cross-day minimum before using history for weights
 
 
 def _clamp(val, lo, hi):
@@ -240,24 +241,36 @@ class AutoLearner:
     # ------------------------------------------------------------------
 
     def _update_weight(self, strategy: str):
-        """Recalculate strategy weight from today's performance."""
-        trades = self.trade_count.get(strategy, 0)
-        if trades < MIN_TRADES_FOR_ADJUST:
+        """Recalculate strategy weight from today + persistent history.
+        Uses cross-day data since most strategies fire 0-1 trades/day."""
+        today_trades = self.trade_count.get(strategy, 0)
+        today_wins = self.win_count.get(strategy, 0)
+
+        # Combine today with persistent history for a meaningful sample
+        hist = self._persistent.get("strategy_history", {}).get(strategy, {})
+        total_trades = hist.get("total_trades", 0) + today_trades
+        total_wins = hist.get("total_wins", 0) + today_wins
+
+        if total_trades < MIN_PERSISTENT_TRADES:
             return
 
-        wins = self.win_count.get(strategy, 0)
-        wr = wins / trades
+        wr = total_wins / total_trades
 
         # Weight formula: starts at 1.0, adjusts based on win rate
         # WR=50% → 1.0 (neutral), WR=70% → 1.2 (boost), WR=30% → 0.8 (penalty)
-        weight = 1.0 + (wr - 0.5) * 1.0
+        weight = 1.0 + (wr - 0.5) * 0.8
 
-        # Factor in streak — amplify adjustment for hot/cold streaks
+        # Factor in today's streak — amplify for hot/cold runs
         streak = self.streak.get(strategy, 0)
-        if streak >= 3:
-            weight += 0.1  # winning streak bonus
+        if streak >= 2:
+            weight += 0.1
         elif streak <= -2:
-            weight -= 0.1  # losing streak penalty
+            weight -= 0.1
+
+        # Today's PnL bias — penalize if bleeding today
+        today_pnl = self.pnl_today.get(strategy, 0)
+        if today_trades >= 2 and today_pnl < -50:
+            weight -= 0.1
 
         weight = _clamp(weight, WEIGHT_MIN, WEIGHT_MAX)
         self.weights[strategy] = round(weight, 2)
@@ -288,7 +301,7 @@ class AutoLearner:
                 h["trail_count"] += 1
 
         # Adjust SL if too many quick SL hits (within 2 min)
-        if h["total"] >= 8:
+        if h["total"] >= MIN_PERSISTENT_TRADES:
             quick_ratio = h["quick_sl_count"] / h["total"]
             if quick_ratio > 0.3:
                 # SL is too tight — widen it
@@ -379,7 +392,7 @@ class AutoLearner:
 
         for strategy, h in hist.items():
             total = h.get("total_trades", 0)
-            if total < 10:
+            if total < MIN_PERSISTENT_TRADES:
                 continue
 
             wins = h.get("total_wins", 0)
