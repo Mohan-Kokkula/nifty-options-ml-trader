@@ -216,11 +216,15 @@ class SupertrendEngine(StrategyEngine):
         indicators["day_open"] = round(day_open, 2)
         indicators["is_flat"] = is_flat
 
-        # ── Dual confirmation: PSAR flip + Supertrend consensus + EMA40 ──
+        # ── Signal: PSAR direction + Supertrend consensus ──
+        # EMA40 used for confidence boost only, not as gate
+        ema_agrees_bull = spot > ema_val
+        ema_agrees_bear = spot < ema_val
+
         if psar_d == 1 and bull_pct >= self.CONSENSUS_THRESHOLD:
-            if spot < ema_val:
-                return self._skip(f"ema_side_call (spot={spot:.0f} < EMA={ema_val:.0f})", indicators)
             confidence = self._calc_confidence(bull_pct, stable_dir == 1, vix)
+            if ema_agrees_bull:
+                confidence = min(0.85, confidence + 0.05)
             p_call = confidence
             p_put = (1.0 - confidence) * 0.2
             p_skip = 1.0 - p_call - p_put
@@ -229,9 +233,9 @@ class SupertrendEngine(StrategyEngine):
         if psar_d == -1 and bear_pct >= self.CONSENSUS_THRESHOLD:
             if is_flat:
                 return self._skip(f"flat_day_put (diff={abs(spot-day_open):.0f}pts)", indicators)
-            if spot > ema_val:
-                return self._skip(f"ema_side_put (spot={spot:.0f} > EMA={ema_val:.0f})", indicators)
             confidence = self._calc_confidence(bear_pct, stable_dir == -1, vix)
+            if ema_agrees_bear:
+                confidence = min(0.85, confidence + 0.05)
             p_put = confidence
             p_call = (1.0 - confidence) * 0.2
             p_skip = 1.0 - p_call - p_put

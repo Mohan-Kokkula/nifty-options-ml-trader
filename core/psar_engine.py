@@ -271,13 +271,11 @@ class PSAREngine:
 
         d5 = sig5["direction"]
         d15 = sig15["direction"]
-        both_bull = d5 == 1 and d15 == 1
-        both_bear = d5 == -1 and d15 == -1
 
         indicators["d5"] = d5
         indicators["d15"] = d15
         indicators["psar_30m"] = sig30
-        indicators["alignment"] = "bull" if both_bull else ("bear" if both_bear else "none")
+        indicators["alignment"] = "bull" if d5 == 1 else ("bear" if d5 == -1 else "none")
 
         # ── Pre-signal filters ──
 
@@ -291,9 +289,9 @@ class PSAREngine:
             indicators["skip_reason"] = f"no_5m_flip (bars={sig5['bars_since_flip']})"
             return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
 
-        # ── Signal: 5m + 15m must both agree ──
+        # ── Signal: 5m PSAR direction (15m used for confidence only) ──
 
-        if both_bull:
+        if d5 == 1:
             confidence = self._calc_confidence(sig5, sig15, sig30, vix)
             indicators["sl_pts"] = round(sl_pts, 1)
             indicators["tp_pts"] = round(tp_pts, 1)
@@ -302,7 +300,7 @@ class PSAREngine:
             p_skip = 1.0 - p_call - p_put
             return 0, np.array([p_call, p_put, p_skip]), confidence, indicators
 
-        if both_bear:
+        if d5 == -1:
             if is_flat:
                 indicators["skip_reason"] = f"flat_day_put (spot={spot:.0f} open={day_open:.0f} diff={abs(spot-day_open):.0f}pts)"
                 return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
@@ -314,7 +312,7 @@ class PSAREngine:
             p_skip = 1.0 - p_call - p_put
             return 1, np.array([p_call, p_put, p_skip]), confidence, indicators
 
-        indicators["skip_reason"] = "5m_15m_disagree"
+        indicators["skip_reason"] = "no_5m_direction"
         return 2, np.array([0.0, 0.0, 1.0]), 0.0, indicators
 
     def record_trade(self):
