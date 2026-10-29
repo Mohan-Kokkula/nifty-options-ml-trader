@@ -54,16 +54,14 @@ NIFTY_SYMBOL = "NIFTY"
 
 
 def get_nifty_spot() -> float:
-    """Get current Nifty spot from NSE."""
+    """Get current Nifty spot from NSE using the shared session."""
     url = "https://www.nseindia.com/api/allIndices"
-    headers = {
-        "User-Agent": "Mozilla/5.0",
-        "Accept": "application/json",
-    }
     try:
-        session = requests.Session()
-        session.get("https://www.nseindia.com", headers=headers, timeout=10)
-        r = session.get(url, headers=headers, timeout=10)
+        session = _get_nse_session()
+        r = session.get(url, timeout=10)
+        if r.status_code != 200:
+            log.warning(f"Spot fetch HTTP {r.status_code}")
+            return 0.0
         data = r.json()
         for idx in data.get("data", []):
             if idx.get("index") == "NIFTY 50":
@@ -73,49 +71,103 @@ def get_nifty_spot() -> float:
     return 0.0
 
 
-def scrape_options_chain() -> pd.DataFrame:
-    """Scrape NSE options chain for NIFTY."""
-    url = "https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY"
+_nse_session = None
+
+def _get_nse_session():
+    """Create or reuse an NSE session with proper cookies."""
+    global _nse_session
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-        "Accept": "application/json",
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/120.0.0.0 Safari/537.36"
+        ),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,"
+                  "image/avif,image/webp,*/*;q=0.8",
         "Accept-Language": "en-US,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Connection": "keep-alive",
+        "Referer": "https://www.nseindia.com/option-chain",
     }
-    try:
-        session = requests.Session()
-        session.get("https://www.nseindia.com", headers=headers, timeout=10)
-        r = session.get(url, headers=headers, timeout=10)
-        data = r.json()
+    if _nse_session is None:
+        _nse_session = requests.Session()
+        _nse_session.headers.update(headers)
+        # Hit the main page first to get cookies (nseappid, nsit, etc.)
+        _nse_session.get("https://www.nseindia.com", timeout=10)
+        time.sleep(1)
+        # Hit the option chain page to get the right cookies
+        _nse_session.get(
+            "https://www.nseindia.com/option-chain",
+            timeout=10,
+        )
+        time.sleep(0.5)
+    return _nse_session
 
-        records = data.get("records", {})
-        rows = []
-        for rec in records.get("data", []):
-            ce = rec.get("CE", {})
-            pe = rec.get("PE", {})
-            if not ce and not pe:
-                continue
-            strike = rec.get("strikePrice", ce.get("strikePrice", pe.get("strikePrice")))
-            rows.append({
-                "strike": strike,
-                "call_oi": ce.get("openInterest", 0),
-                "call_chg_oi": ce.get("changeinOpenInterest", 0),
-                "call_vol": ce.get("totalTradedVolume", 0),
-                "call_iv": ce.get("impliedVolatility", 0),
-                "call_ltp": ce.get("lastPrice", 0),
-                "put_oi": pe.get("openInterest", 0),
-                "put_chg_oi": pe.get("changeinOpenInterest", 0),
-                "put_vol": pe.get("totalTradedVolume", 0),
-                "put_iv": pe.get("impliedVolatility", 0),
-                "put_ltp": pe.get("lastPrice", 0),
-            })
 
-        df = pd.DataFrame(rows)
-        if not df.empty:
-            df = df.sort_values("strike").reset_index(drop=True)
-        return df
-    except Exception as e:
-        log.error(f"Failed to scrape options chain: {e}")
-        return pd.DataFrame()
+def scrape_options_chain() -> pd.DataFrame:
+    """Scrape NSE options chain for NIFTY with proper session handling."""
+    global _nse_session
+    url = "https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY"
+    max_retries = 2
+
+    for attempt in range(max_retries + 1):
+        try:
+            session = _get_nse_session()
+            r = session.get(url, timeout=10)
+
+            if r.status_code == 401 or r.status_code == 403:
+                log.warning(f"NSE auth failed ({r.status_code}), refreshing session...")
+                _nse_session = None
+                if attempt < max_retries:
+                    time.sleep(2)
+                    continue
+                return pd.DataFrame()
+
+            if r.status_code != 200:
+                log.error(f"NSE returned HTTP {r.status_code}")
+                return pd.DataFrame()
+
+            data = r.json()
+            records = data.get("records", {})
+            rows = []
+            for rec in records.get("data", []):
+                ce = rec.get("CE", {})
+                pe = rec.get("PE", {})
+                if not ce and not pe:
+                    continue
+                strike = rec.get("strikePrice",
+                                 ce.get("strikePrice", pe.get("strikePrice")))
+                rows.append({
+                    "strike": strike,
+                    "call_oi": ce.get("openInterest", 0),
+                    "call_chg_oi": ce.get("changeinOpenInterest", 0),
+                    "call_vol": ce.get("totalTradedVolume", 0),
+                    "call_iv": ce.get("impliedVolatility", 0),
+                    "call_ltp": ce.get("lastPrice", 0),
+                    "put_oi": pe.get("openInterest", 0),
+                    "put_chg_oi": pe.get("changeinOpenInterest", 0),
+                    "put_vol": pe.get("totalTradedVolume", 0),
+                    "put_iv": pe.get("impliedVolatility", 0),
+                    "put_ltp": pe.get("lastPrice", 0),
+                })
+
+            df = pd.DataFrame(rows)
+            if not df.empty:
+                df = df.sort_values("strike").reset_index(drop=True)
+                log.info(f"Chain scraped: {len(df)} strikes")
+                # Save to file as backup
+                today = date.today().strftime("%Y%m%d")
+                save_path = PROJECT / "data" / f"nifty_options_chain_{today}.csv"
+                df.to_csv(save_path, index=False)
+            return df
+
+        except Exception as e:
+            log.error(f"Chain scrape attempt {attempt+1} failed: {e}")
+            _nse_session = None
+            if attempt < max_retries:
+                time.sleep(3)
+
+    return pd.DataFrame()
 
 
 def load_chain_from_file() -> pd.DataFrame:
