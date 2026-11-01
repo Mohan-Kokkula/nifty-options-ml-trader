@@ -409,9 +409,14 @@ def main():
 
             dte = compute_dte()
             gex = compute_gex_from_chain(chain_df, spot, dte)
+
+            # For Gift Nifty sessions, use a virtual time within NSE's
+            # allowed window so the strategy's time filters don't block.
+            strat_hhmm = hhmm if session == "market" else 1000
+
             signal = strat.analyze(
                 chain_df, spot, gex, dte,
-                day_open, day_high, day_low, hhmm
+                day_open, day_high, day_low, strat_hhmm
             )
 
             regime_short = signal["regime"][0].upper()
