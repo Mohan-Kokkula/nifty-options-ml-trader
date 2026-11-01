@@ -61,6 +61,7 @@ GIFT_SESSION2_START = 1635  # Gift Nifty session 2
 GIFT_SESSION2_END = 2645    # 02:45 next day -> represented as 26:45
 
 _cached_nse_spot = 0.0
+_gift_nifty_ltp = 0.0
 
 
 # ── Gift Nifty Price Feed ──────────────────────────────────────────
@@ -266,7 +267,13 @@ def format_telegram_signal(signal, spot, session):
         f"<b>[{session_tag}]</b>",
         "",
         f"<b>Strike:</b> {signal['strike']:.0f}",
-        f"<b>Spot:</b> {spot:.2f}",
+        f"<b>Implied Nifty:</b> {spot:.2f}",
+    ]
+
+    if session != "market" and _gift_nifty_ltp > 0:
+        lines.append(f"<b>Gift Nifty:</b> {_gift_nifty_ltp:.2f}")
+
+    lines += [
         f"<b>Confidence:</b> {signal['confidence']}%",
         f"<b>SL:</b> {signal['sl_pct']}% | <b>TP:</b> {signal['tp_pct']}%",
         "",
@@ -368,16 +375,26 @@ def main():
                     chain_df = load_chain_from_file()
 
             elif session in ("pre_market", "post_market"):
-                # Gift Nifty hours: use Gift Nifty spot + stored/prev chain
+                # Gift Nifty hours: convert Gift Nifty to implied Nifty spot.
+                # Gift Nifty = futures with premium over Nifty cash.
+                # implied_nifty = last_nse_close + (gift_ltp - gift_prev_close)
                 gift = get_gift_nifty_price()
                 if gift:
-                    spot = gift["ltp"]
-                    log.info(f"Gift Nifty: {spot:.1f} (O={gift['open']:.1f} "
-                             f"H={gift['high']:.1f} L={gift['low']:.1f})")
+                    _gift_nifty_ltp = gift["ltp"]
+                    gift_change = gift["ltp"] - gift["prev_close"]
 
-                # During market hours we already have chain_df from NSE.
-                # Pre/post market: try to refresh chain (NSE may still serve stale data)
-                # but primarily rely on the last saved chain.
+                    # Use last NSE spot from chain; if not available, estimate
+                    nse_base = _cached_nse_spot
+                    if nse_base == 0:
+                        # Estimate from chain's ATM strikes
+                        if not chain_df.empty:
+                            nse_base = chain_df["strike"].median()
+
+                    spot = nse_base + gift_change
+                    log.info(f"Gift Nifty: {gift['ltp']:.1f} (chg={gift_change:+.1f}) "
+                             f"-> Implied Nifty: {spot:.1f} "
+                             f"(base={nse_base:.1f})")
+
                 if chain_df.empty:
                     chain_df = load_chain_from_file()
                     if not chain_df.empty:
